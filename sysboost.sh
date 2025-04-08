@@ -4,8 +4,7 @@
 # Version 1.2.0
 # License: GPL v3.0
 
-VERSION="1.2.0"
-
+VERSION="1.2.3"
 set -e
 
 ### Helper Functions ###
@@ -30,7 +29,6 @@ detect_machine_type() {
   fi
 }
 
-### Prompts ###
 confirm() {
   read -rp "$1 [y/N]: " response
   [[ "$response" =~ ^[Yy]$ ]]
@@ -64,22 +62,31 @@ remove_temp_files() {
 
 disable_telemetry() {
   echo "🚫 Disabling telemetry and background reporting..."
-  echo "🚫 Decline explicit telemetry"
-  # Disabled due its removal can break script logic, fixing later.
-  # dryrun ubuntu-report -f send no
-  # dryrun sudo ubuntu-report -f send no
-  dryrun sudo systemctl disable apport.service --now
-  dryrun sudo systemctl disable whoopsie.service --now
-  dryrun sudo systemctl disable motd-news.timer --now
-  dryrun sudo sed -i 's/ENABLED=1/ENABLED=0/' /etc/default/motd-news
-  dryrun sudo sed -i 's/ubuntu\.com/#ubuntu.com/' /etc/update-motd.d/90-updates-available
-  echo "[*] Resolving \"metrics.ubuntu.com\" to localhost"
-  dryrun sudo echo 127.0.0.1 www.metrics.ubuntu.com >>/etc/hosts
-  dryrun sudo echo 127.0.0.1 metrics.ubuntu.com >>/etc/hosts
-  echo "[*] Resolving \"popcon.ubuntu.com\" to localhost"
-  dryrun sudo echo 127.0.0.1 www.popcon.ubuntu.com >>/etc/hosts
-  dryrun sudo echo 127.0.0.1 popcon.ubuntu.com >>/etc/hosts
-  dryrun sudo apt purge -y ubuntu-report popularity-contest apport whoopsie apport-symptoms >/dev/null 2>&1 && dryrun sudo apt-mark hold ubuntu-report popularity-contest apport whoopsie apport-symptoms
+  
+  # Safe disable: check if service exists before disabling
+  for service in apport whoopsie motd-news.timer; do
+    if systemctl list-unit-files | grep -q "${service}"; then
+      dryrun sudo systemctl disable "$service" --now || true
+    fi
+  done
+
+  dryrun sudo sed -i 's/ENABLED=1/ENABLED=0/' /etc/default/motd-news || true
+  dryrun sudo sed -i 's/ubuntu\.com/#ubuntu.com/' /etc/update-motd.d/90-updates-available || true
+
+  # Host entries
+  {
+    grep -q "metrics.ubuntu.com" /etc/hosts || echo "127.0.0.1 metrics.ubuntu.com" | sudo tee -a /etc/hosts
+    grep -q "popcon.ubuntu.com" /etc/hosts || echo "127.0.0.1 popcon.ubuntu.com" | sudo tee -a /etc/hosts
+  } || true
+
+  # Purge only if installed
+  pkgs="ubuntu-report popularity-contest apport whoopsie apport-symptoms"
+  for pkg in $pkgs; do
+    if dpkg -l | grep -q "^ii\s*$pkg"; then
+      dryrun sudo apt purge -y "$pkg"
+      dryrun sudo apt-mark hold "$pkg"
+    fi
+  done
 }
 
 setup_firewall() {
@@ -125,7 +132,7 @@ enable_cpu_performance_mode() {
   if confirm "⚙️ Set CPU governor to 'performance'? (Better for desktops/sockets, may reduce battery life)"; then
     dryrun sudo apt install cpufrequtils -y
     echo 'GOVERNOR="performance"' | sudo tee /etc/default/cpufrequtils
-    dryrun sudo systemctl disable ondemand
+    dryrun sudo systemctl disable ondemand || true
     dryrun sudo systemctl enable cpufrequtils
   fi
 }
@@ -155,8 +162,8 @@ print_help() {
   echo "  --extras        Offer VM/gaming/SSD/cpu governor options"
   echo "  --store         Add Snap/Flatpak/GNOME store support"
   echo "  --librewolf     Replace Snap Firefox with LibreWolf"
-  echo "  --all           Run all modules"
   echo "  --dryrun        Show what would happen without executing"
+  echo "  --all           Run all modules"
   echo "  -v, --version   Show script version"
   echo "  -h, --help      Show help"
 }
