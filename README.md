@@ -1,5 +1,5 @@
 # sysboost
-**Version:** 1.2.3  
+**Version:** 1.3.1  
 **Author:** Vítor Cruz de Souza  
 **License:** GPL v3.0  
 **Tagline:** Optimize. Harden. Dominate.  
@@ -42,6 +42,8 @@ chmod +x sysboost.sh
 ./sysboost.sh --extras      # Gaming, VMs, TRIM, CPU governor
 ./sysboost.sh --librewolf   # Replace Snap Firefox with LibreWolf
 ./sysboost.sh --dryrun --all
+
+AND MORE...
 
 📦 Modular Options
 Option	Action
