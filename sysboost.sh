@@ -18,7 +18,7 @@ dryrun() {
 print_banner() {
   echo "╔══════════════════════════════════════════════╗"
   echo "║     🔧 sysboost.sh v$VERSION - Ubuntu Boost      ║"
-  echo "║  ⚡ By Víior Cruz de Souza | GPL 3.0 ⚡  ║"
+  echo "║  ⚡ By Vitor Cruz de Souza | GPL 3.0 ⚡  ║"
   echo "╚══════════════════════════════════════════════╝"
 }
 
@@ -75,6 +75,7 @@ disable_telemetry() {
   echo "[*] Resolving \"popcon.ubuntu.com\" to localhost"
   dryrun sudo echo 127.0.0.1 www.popcon.ubuntu.com >>/etc/hosts
   dryrun sudo echo 127.0.0.1 popcon.ubuntu.com >>/etc/hosts
+  dryrun sudo apt purge -y ubuntu-report popularity-contest apport whoopsie apport-symptoms >/dev/null 2>&1 && dryrun sudo apt-mark hold ubuntu-report popularity-contest apport whoopsie apport-symptoms
 }
 
 setup_firewall() {
