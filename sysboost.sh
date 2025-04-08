@@ -65,8 +65,9 @@ remove_temp_files() {
 disable_telemetry() {
   echo "🚫 Disabling telemetry and background reporting..."
   echo "🚫 Decline explicit telemetry"
-  dryrun ubuntu-report -f send no
-  dryrun sudo ubuntu-report -f send no
+  # Disabled due its removal can break script logic, fixing later.
+  # dryrun ubuntu-report -f send no
+  # dryrun sudo ubuntu-report -f send no
   dryrun sudo systemctl disable apport.service --now
   dryrun sudo systemctl disable whoopsie.service --now
   dryrun sudo systemctl disable motd-news.timer --now
