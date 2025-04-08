@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # Vitor Cruz de Souza's General Purpose System Boost Script
-# Version 1.2.3
+# Version 1.3.1
 # License: GPL v3.0
 
-VERSION="1.2.3"
+VERSION="1.3.1"
 set -e
 
 ### Helper Functions ###
@@ -50,6 +50,14 @@ system_cleanup() {
   dryrun sudo snap refresh
   dryrun sudo flatpak update
 }
+
+install_restricted_packages() {
+  if confirm "🎵 Do you want to install multimedia support (ubuntu-restricted-extras & addons)?"; then
+    echo "🎶 Installing ubuntu-restricted-extras and ubuntu-restricted-addons..."
+    dryrun sudo apt install ubuntu-restricted-extras ubuntu-restricted-addons -y
+  fi
+}
+
 
 remove_temp_files() {
   if confirm "🧹 Do you want to remove temp files in /tmp and ~/.cache?"; then
@@ -182,7 +190,8 @@ main() {
       --store) install_flatpak_snap_store ;;
       --librewolf) replace_firefox_with_librewolf ;;
       --dryrun) is_dryrun=true ;;
-      --all) system_cleanup; disable_telemetry; setup_firewall; install_flatpak_snap_store; replace_firefox_with_librewolf; install_vm_tools; install_gaming_tools; enable_trim; enable_cpu_performance_mode; remove_temp_files ;;
+      --extras) install_vm_tools; install_gaming_tools; enable_trim; enable_cpu_performance_mode; remove_temp_files; install_restricted_packages ;;
+      --all) system_cleanup; disable_telemetry; setup_firewall; install_flatpak_snap_store; replace_firefox_with_librewolf; install_vm_tools; install_gaming_tools; enable_trim; enable_cpu_performance_mode; remove_temp_files; install_restricted_packages ;;
       -v|--version) show_version; exit 0 ;;
       -h|--help) print_help; exit 0 ;;
       *) echo "❌ Unknown option: $1"; print_help; exit 1 ;;
