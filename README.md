@@ -3,7 +3,7 @@
 **Version:** 1.3.8  
 **Author:** Vitor Cruz  
 **License:** GPL v3.0  
-**Scope:** Ubuntu 24.04+ (GNOME) — Laptops & Desktops
+**Scope:** Ubuntu 24.04+ (GNOME) — Laptops & Desktops (due reliance on GUI apps, it's not suggested to be used in servers)
 
 ---
 
