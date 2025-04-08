@@ -3,7 +3,7 @@
 # Vitor Cruz's General Purpose System Boost Script
 # License: GPL v3.0
 
-VERSION="1.3.9"
+VERSION="1.4.0"
 set -e
 
 ### Helper Functions ###
@@ -191,6 +191,24 @@ suggest_preload() {
   fi
 }
 
+show_donation_info() {
+  echo ""
+  echo "     .-. .-.   "
+  echo "    (   |   )  💖 Thanks for using sysboost.sh!"
+  echo "     \     /   If you'd like to support this project,"
+  echo "      \   /    visit my Linktree below:"
+  echo "       `-'     "
+  echo ""
+  echo "🔗 https://linktr.ee/vitorcruzcode"
+  echo ""
+
+  if ! $is_dryrun; then
+    xdg-open "https://linktr.ee/vitorcruzcode" >/dev/null 2>&1 &
+  else
+    echo "[dryrun] xdg-open https://linktr.ee/vitorcruzcode"
+  fi
+}
+
 show_version() {
   echo "sysboost.sh version $VERSION"
 }
@@ -211,6 +229,7 @@ print_help() {
   echo "  --librewolf       Replace Snap Firefox with LibreWolf"
   echo "  --compression     Install archive format support (zip, rar, 7z, xz, etc)"
   echo "  --preload         Suggest and optionally install preload based on system RAM"
+  echo "  --donate          Show donation info and open Linktree in browser"
   echo "  --dryrun          Show commands without executing"
   echo "  --all             Run all modules"
   echo "  -v, --version     Show script version"
@@ -242,6 +261,7 @@ main() {
       --librewolf) replace_firefox_with_librewolf ;;
       --compression) install_compression_tools ;;
       --preload) suggest_preload ;;
+      --donate) show_donation_info ;;
       --dryrun) is_dryrun=true ;;
       --all)
         system_cleanup
