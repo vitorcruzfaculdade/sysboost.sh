@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # Vitor Cruz de Souza's General Purpose System Boost Script
-# Version 1.3.3
+# Version 1.3.4
 # License: GPL v3.0
 
-VERSION="1.3.3"
+VERSION="1.3.4"
 set -e
 
 ### Helper Functions ###
@@ -114,7 +114,7 @@ replace_firefox_with_librewolf() {
     echo "🌎 Adding LibreWolf repo and installing..."
     dryrun sudo apt update
     dryrun sudo apt install extrepo -y
-    dryrun extrepo enable librewolf
+    dryrun sudo extrepo enable librewolf
     dryrun sudo apt update
     dryrun sudo apt install librewolf -y
   fi
