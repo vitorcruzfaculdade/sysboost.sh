@@ -10,15 +10,15 @@ set -e
 ### Helper Functions ###
 is_dryrun=false
 dryrun() {
-  \$is_dryrun && echo "[dryrun] \$*"
-  ! \$is_dryrun && eval "\$@"
+  $is_dryrun && echo "[dryrun] $*"
+  ! $is_dryrun && eval "$@"
 }
 
 print_banner() {
-  echo "╔════════════════════════════════════════════════════════════════╗"
-  echo "║     🔧 sysboost.sh v\$VERSION - Ubuntu Boost      ║"
+  echo "╔══════════════════════════════════════════════╗"
+  echo "║     🔧 sysboost.sh v$VERSION - Ubuntu Boost      ║"
   echo "║  ⚡ By Vitor Cruz de Souza | GPL 3.0 ⚡  ║"
-  echo "╚════════════════════════════════════════════════════════════════╝"
+  echo "╚══════════════════════════════════════════════╝"
 }
 
 detect_machine_type() {
@@ -70,16 +70,16 @@ remove_temp_files() {
 }
 
 disable_telemetry() {
-  echo "🛛 Disabling telemetry and background reporting..."
+  echo "🚫 Disabling telemetry and background reporting..."
 
   for service in apport whoopsie motd-news.timer; do
-    if systemctl list-unit-files | grep -q "\${service}"; then
+    if systemctl list-unit-files | grep -q "${service}"; then
       dryrun sudo systemctl disable "$service" --now || true
     fi
   done
 
   dryrun sudo sed -i 's/ENABLED=1/ENABLED=0/' /etc/default/motd-news || true
-  dryrun sudo sed -i 's/ubuntu\\.com/#ubuntu.com/' /etc/update-motd.d/90-updates-available || true
+  dryrun sudo sed -i 's/ubuntu\.com/#ubuntu.com/' /etc/update-motd.d/90-updates-available || true
 
   {
     grep -q "metrics.ubuntu.com" /etc/hosts || echo "127.0.0.1 metrics.ubuntu.com" | sudo tee -a /etc/hosts
@@ -87,10 +87,10 @@ disable_telemetry() {
   } || true
 
   pkgs="ubuntu-report popularity-contest apport whoopsie apport-symptoms"
-  for pkg in \$pkgs; do
-    if dpkg -l | grep -q "^ii\s*\$pkg"; then
-      dryrun sudo apt purge -y "\$pkg"
-      dryrun sudo apt-mark hold "\$pkg"
+  for pkg in $pkgs; do
+    if dpkg -l | grep -q "^ii\s*$pkg"; then
+      dryrun sudo apt purge -y "$pkg"
+      dryrun sudo apt-mark hold "$pkg"
     fi
   done
 }
@@ -114,7 +114,7 @@ replace_firefox_with_librewolf() {
     echo "🌎 Adding LibreWolf repo and installing..."
     dryrun sudo apt update
     dryrun sudo apt install extrepo -y
-    dryrun sudo extrepo enable librewolf
+    dryrun extrepo enable librewolf
     dryrun sudo apt update
     dryrun sudo apt install librewolf -y
   fi
@@ -129,7 +129,7 @@ install_flatpak_snap_store() {
 }
 
 enable_trim() {
-  if confirm "🖿️ Enable periodic TRIM for SSDs (recommended)?"; then
+  if confirm "💾 Enable periodic TRIM for SSDs (recommended)?"; then
     dryrun sudo systemctl enable fstrim.timer
   fi
 }
@@ -156,27 +156,27 @@ install_vm_tools() {
 }
 
 show_version() {
-  echo "sysboost.sh version \$VERSION"
+  echo "sysboost.sh version $VERSION"
 }
 
 print_help() {
   echo "Usage: ./sysboost.sh [options]"
   echo ""
   echo "Options:"
-  echo "  --clean         Run full cleanup & update steps"
-  echo "  --harden        Apply security tweaks, telemetry disable, and firewall"
-  echo "  --store         Add Snap/Flatpak/GNOME store support"
-  echo "  --librewolf     Replace Snap Firefox with LibreWolf"
-  echo "  --gaming        Install GameMode and MangoHUD"
-  echo "  --vm            Install VirtualBox and related support"
-  echo "  --trim          Enable SSD TRIM via fstrim.timer"
-  echo "  --governor      Set CPU governor to performance"
-  echo "  --multimedia    Install ubuntu-restricted-extras and addons"
-  echo "  --tempclean     Remove /tmp and ~/.cache contents"
-  echo "  --dryrun        Show what would happen without executing"
-  echo "  --all           Run all modules"
-  echo "  -v, --version   Show script version"
-  echo "  -h, --help      Show help"
+  echo "  --clean           Run full cleanup & update steps"
+  echo "  --harden          Apply security tweaks, disable telemetry, enable firewall"
+  echo "  --vm              Install VirtualBox tools"
+  echo "  --gaming          Install GameMode and MangoHUD"
+  echo "  --trim            Enable SSD TRIM"
+  echo "  --performance     Set CPU governor to 'performance'"
+  echo "  --clean-temp      Remove temp/cache files and offer BleachBit"
+  echo "  --media           Install multimedia codecs (restricted-extras)"
+  echo "  --store           Add Flatpak, Snap, and GNOME Software support"
+  echo "  --librewolf       Replace Snap Firefox with LibreWolf"
+  echo "  --dryrun          Show commands without executing"
+  echo "  --all             Run all modules"
+  echo "  -v, --version     Show script version"
+  echo "  -h, --help        Show help"
 }
 
 ### Main Entry Point ###
