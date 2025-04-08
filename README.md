@@ -16,13 +16,13 @@ From disabling telemetry to adding gaming performance tools and virtualization s
 
 ---
 
-### 🔥 Features (Optional, can be choosen per run basis)
+### 🔥 Features (Optional, can be chosen per run):
 
 - 🧼 **Deep Clean**: Updates, removes junk, purges leftovers, and trims the fat.  
 - 🔐 **Privacy First**: Nukes telemetry, crash reports, and background data leeches.  
 - 🛡️ **Firewall Setup**: UFW configured to allow outgoing and deny incoming by default.  
 - 🌐 **App Store Boost**: Full Flatpak + Snap + GNOME Software support (optional).  
-- 🦊 **Firefox Rebellion**: Replace Snap Firefox with LibreWolf from official APT repo.  
+- 🦊 **Firefox Rebellion**: Replace Snap Firefox with LibreWolf from its official APT repo.  
 - 🎮 **Gaming-Ready**: Installs GameMode, MangoHUD & tweaks for max FPS.  
 - 💾 **SSD Friendly**: Enable `fstrim.timer` for disk health.  
 - 🖥️ **VM Beast Mode**: Full VirtualBox support for devs and tinkerers.  
