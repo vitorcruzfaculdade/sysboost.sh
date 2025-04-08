@@ -77,7 +77,7 @@ See the LICENSE file or visit:
 👉 https://www.gnu.org/licenses/gpl-3.0.html
 
 ### 👤 Credits
-Crafted with 💻 + ☕ by Vítor Cruz de Souza
+Crafted with 💻 + ☕ by Vitor Cruz
 Pull requests, forks, and stars are always welcome 🌟
 
 ### ⚠️ Disclaimer
