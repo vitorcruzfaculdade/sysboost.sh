@@ -83,7 +83,7 @@ disable_telemetry() {
 
 setup_firewall() {
   echo "🛡️ Setting up UFW firewall rules..."
-  dryrun sudo apt install ufw -y
+  dryrun sudo apt install ufw gufw -y
   dryrun sudo systemctl enable ufw
   dryrun sudo systemctl restart ufw
   dryrun sudo ufw --force reset
