@@ -61,7 +61,7 @@ This project is licensed under the GNU GPL v3.0.
 See LICENSE file or visit: [https://www.gnu.org/licenses/gpl-3.0.html]
 
 👤 Credits
-Crafted with care by José Vítor Cruz de Souza
+Crafted with care by Vitor Cruz de Souza
 Pull requests, forks and stars welcome 🌟
 
 ⚠️ Disclaimer
