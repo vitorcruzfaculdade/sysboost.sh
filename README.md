@@ -53,21 +53,21 @@ chmod +x sysboost.sh
 ## 📦 Modular Options
 Option	Description
 ```bash
---clean	Clean junk, update, remove Snap, fix broken packages
---harden	Disable telemetry, crash reports, and enable firewall
---store	Enable Flatpak, Snap, and GNOME Software
---librewolf	Replace Snap Firefox with LibreWolf
---vm	Install VirtualBox guest additions and kernel modules
---gaming	GameMode, MangoHUD, and gaming tools
---cpuperf	Set CPU governor to performance
---trim	Enable SSD TRIM support
---codecs	Install Ubuntu-restricted-extras & media codecs
---compression	Install zip, unzip, rar, unrar, 7z, xz-utils, bzip2, etc.
---tempclean	Clean temp files/cache (installs BleachBit)
---dryrun	Preview changes without running commands
---all	Run all modules (except dryrun)
--v, --version	Show script version
--h, --help	Show help message
+--clean        Clean junk, update, remove Snap, fix broken packages
+--harden       Disable telemetry, crash reports, and enable firewall
+--store        Enable Flatpak, Snap, and GNOME Software
+--librewolf    Replace Snap Firefox with LibreWolf
+--vm           Install VirtualBox guest additions and kernel modules
+--gaming       GameMode, MangoHUD, and gaming tools
+--cpuperf      Set CPU governor to performance
+--trim         Enable SSD TRIM support
+--codecs       Install Ubuntu-restricted-extras & media codecs
+--compression  Install zip, unzip, rar, unrar, 7z, xz-utils, bzip2, etc.
+--tempclean	   Clean temp files/cache (installs BleachBit)
+--dryrun	     Preview changes without running commands
+--all	         Run all modules (except dryrun)
+-v, --version	 Show script version
+-h, --help	   Show help message
 ```
 
 
