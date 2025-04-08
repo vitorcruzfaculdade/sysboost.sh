@@ -158,7 +158,7 @@ install_vm_tools() {
 install_compression_tools() {
   if confirm "🗜️ Install support for common compressed file formats (zip, rar, 7z, xz, bz2, etc)?"; then
     echo "📦 Installing archive tools..."
-    dryrun sudo apt install -y zip unzip rar unrar p7zip-full xz-utils bzip2 lzma
+    dryrun sudo apt install -y zip unzip rar unrar p7zip-full xz-utils bzip2 lzma 7zip-rar
   fi
 }
 show_version() {
