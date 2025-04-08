@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # Vitor Cruz de Souza's General Purpose System Boost Script
-# Version 1.3.2
+# Version 1.3.3
 # License: GPL v3.0
 
-VERSION="1.3.2"
+VERSION="1.3.3"
 set -e
 
 ### Helper Functions ###
@@ -15,10 +15,10 @@ dryrun() {
 }
 
 print_banner() {
-  echo "╔══════════════════════════════════════════════╗"
+  echo "╔═════════════════════════════════════════════════════════════╗"
   echo "║     🔧 sysboost.sh v$VERSION - Ubuntu Boost      ║"
   echo "║  ⚡ By Vitor Cruz de Souza | GPL 3.0 ⚡  ║"
-  echo "╚══════════════════════════════════════════════╝"
+  echo "╚═════════════════════════════════════════════════════════════╝"
 }
 
 detect_machine_type() {
@@ -60,7 +60,6 @@ install_restricted_packages() {
   fi
 }
 
-
 remove_temp_files() {
   if confirm "🧹 Do you want to remove temp files in /tmp and ~/.cache?"; then
     echo "🗑️ Cleaning temp files..."
@@ -72,24 +71,17 @@ remove_temp_files() {
 
 disable_telemetry() {
   echo "🚫 Disabling telemetry and background reporting..."
-  
-  # Safe disable: check if service exists before disabling
   for service in apport whoopsie motd-news.timer; do
-    if systemctl list-unit-files | grep -q "${service}"; then
+    if systemctl list-unit-files | grep -q "$service"; then
       dryrun sudo systemctl disable "$service" --now || true
     fi
   done
-
   dryrun sudo sed -i 's/ENABLED=1/ENABLED=0/' /etc/default/motd-news || true
-  dryrun sudo sed -i 's/ubuntu\.com/#ubuntu.com/' /etc/update-motd.d/90-updates-available || true
-
-  # Host entries
+  dryrun sudo sed -i 's/ubuntu\\.com/#ubuntu.com/' /etc/update-motd.d/90-updates-available || true
   {
     grep -q "metrics.ubuntu.com" /etc/hosts || echo "127.0.0.1 metrics.ubuntu.com" | sudo tee -a /etc/hosts
     grep -q "popcon.ubuntu.com" /etc/hosts || echo "127.0.0.1 popcon.ubuntu.com" | sudo tee -a /etc/hosts
   } || true
-
-  # Purge only if installed
   pkgs="ubuntu-report popularity-contest apport whoopsie apport-symptoms"
   for pkg in $pkgs; do
     if dpkg -l | grep -q "^ii\s*$pkg"; then
@@ -116,26 +108,17 @@ replace_firefox_with_librewolf() {
   if confirm "🌐 Replace Firefox Snap with LibreWolf from official repo?"; then
     dryrun sudo snap remove firefox || true
     echo "🌎 Adding LibreWolf repo and installing..."
-    # Disabled this part because Librewolf's oficial instalation method changed.
-    # dryrun sudo apt install curl gnupg -y
-    # curl https://deb.librewolf.net/keyring.gpg | gpg --dearmor | sudo tee /usr/share/keyrings/librewolf.gpg > /dev/null
-    # echo "deb [signed-by=/usr/share/keyrings/librewolf.gpg arch=amd64] http://deb.librewolf.net $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/librewolf.list > /dev/null
-    # dryrun sudo apt update
-    # dryrun sudo apt install librewolf -y
-
-    #Now it looks like this:
     dryrun sudo apt update
     dryrun sudo apt install extrepo -y
     dryrun extrepo enable librewolf
     dryrun sudo apt update
     dryrun sudo apt install librewolf -y
-     
   fi
 }
 
 install_flatpak_snap_store() {
   if confirm "📦 Do you want full Flatpak, Snap and GNOME Software support?"; then
-    echo "🛍️ Installing Snap/Flatpak support with GNOME Software..."
+    echo "🛜️ Installing Snap/Flatpak support with GNOME Software..."
     dryrun sudo apt install gnome-software gnome-software-plugin-flatpak gnome-software-plugin-snap flatpak -y
     dryrun sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
   fi
@@ -176,18 +159,22 @@ print_help() {
   echo "Usage: ./sysboost.sh [options]"
   echo ""
   echo "Options:"
-  echo "  --clean         Run full cleanup & update steps"
-  echo "  --harden        Apply security tweaks, telemetry disable, and firewall"
-  echo "  --extras        Offer VM/gaming/SSD/cpu governor options"
-  echo "  --store         Add Snap/Flatpak/GNOME store support"
-  echo "  --librewolf     Replace Snap Firefox with LibreWolf"
-  echo "  --dryrun        Show what would happen without executing"
-  echo "  --all           Run all modules"
-  echo "  -v, --version   Show script version"
-  echo "  -h, --help      Show help"
+  echo "  --clean         🔄 Run full cleanup & update steps"
+  echo "  --harden        🛡️ Disable telemetry & enable firewall"
+  echo "  --vm            💾 Install VirtualBox support for VMs"
+  echo "  --gaming        🎮 Install GameMode and MangoHUD"
+  echo "  --trim          💾 Enable periodic TRIM for SSDs"
+  echo "  --cpuperf       ⚙️ Set CPU governor to 'performance'"
+  echo "  --cleantemp     🧹 Remove temp files from /tmp and ~/.cache"
+  echo "  --multimedia    🎵 Install multimedia codecs and extras"
+  echo "  --store         🛜️ Add Snap/Flatpak/GNOME Software support"
+  echo "  --librewolf     🌐 Replace Snap Firefox with LibreWolf"
+  echo "  --dryrun        🧪 Show what would happen without executing"
+  echo "  --all           ⚡ Run all modules"
+  echo "  -v, --version   🔢 Show script version"
+  echo "  -h, --help      📖 Show this help message"
 }
 
-### Main Entry Point ###
 main() {
   print_banner
   machine_type=$(detect_machine_type)
@@ -197,12 +184,28 @@ main() {
     case $1 in
       --clean) system_cleanup ;;
       --harden) disable_telemetry; setup_firewall ;;
-      --extras) install_vm_tools; install_gaming_tools; enable_trim; enable_cpu_performance_mode; remove_temp_files ;;
+      --vm) install_vm_tools ;;
+      --gaming) install_gaming_tools ;;
+      --trim) enable_trim ;;
+      --cpuperf) enable_cpu_performance_mode ;;
+      --cleantemp) remove_temp_files ;;
+      --multimedia) install_restricted_packages ;;
       --store) install_flatpak_snap_store ;;
       --librewolf) replace_firefox_with_librewolf ;;
       --dryrun) is_dryrun=true ;;
-      --extras) install_vm_tools; install_gaming_tools; enable_trim; enable_cpu_performance_mode; remove_temp_files; install_restricted_packages ;;
-      --all) system_cleanup; disable_telemetry; setup_firewall; install_flatpak_snap_store; replace_firefox_with_librewolf; install_vm_tools; install_gaming_tools; enable_trim; enable_cpu_performance_mode; remove_temp_files; install_restricted_packages ;;
+      --all)
+        system_cleanup
+        disable_telemetry
+        setup_firewall
+        install_flatpak_snap_store
+        replace_firefox_with_librewolf
+        install_vm_tools
+        install_gaming_tools
+        enable_trim
+        enable_cpu_performance_mode
+        remove_temp_files
+        install_restricted_packages
+        ;;
       -v|--version) show_version; exit 0 ;;
       -h|--help) print_help; exit 0 ;;
       *) echo "❌ Unknown option: $1"; print_help; exit 1 ;;
