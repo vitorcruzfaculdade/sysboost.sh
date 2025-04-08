@@ -11,7 +11,7 @@
 
 `sysboost.sh` is your open-source all-in-one command-line ally to clean, speed up, secure, and enhance your Ubuntu GNOME experience — without breaking stuff.
 
-From disabling telemetry to adding gaming performance tools and virtualization support, this script adapts to you.  
+From disabling telemetry to adding gaming performance tools and virtualization support, compressed file support, multimedia codecs and fonts, this script adapts to you.  
 **Note**: It's based on my preferences — use with awareness and make backups!
 
 ---
