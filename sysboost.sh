@@ -1,24 +1,24 @@
 #!/bin/bash
 
 # Vitor Cruz de Souza's General Purpose System Boost Script
-# Version 1.3.3
+# Version 1.3.2
 # License: GPL v3.0
 
-VERSION="1.3.3"
+VERSION="1.3.2"
 set -e
 
 ### Helper Functions ###
 is_dryrun=false
 dryrun() {
-  $is_dryrun && echo "[dryrun] $*"
-  ! $is_dryrun && eval "$@"
+  \$is_dryrun && echo "[dryrun] \$*"
+  ! \$is_dryrun && eval "\$@"
 }
 
 print_banner() {
-  echo "╔═════════════════════════════════════════════════════════════╗"
-  echo "║     🔧 sysboost.sh v$VERSION - Ubuntu Boost      ║"
+  echo "╔════════════════════════════════════════════════════════════════╗"
+  echo "║     🔧 sysboost.sh v\$VERSION - Ubuntu Boost      ║"
   echo "║  ⚡ By Vitor Cruz de Souza | GPL 3.0 ⚡  ║"
-  echo "╚═════════════════════════════════════════════════════════════╝"
+  echo "╚════════════════════════════════════════════════════════════════╝"
 }
 
 detect_machine_type() {
@@ -70,23 +70,27 @@ remove_temp_files() {
 }
 
 disable_telemetry() {
-  echo "🚫 Disabling telemetry and background reporting..."
+  echo "🛛 Disabling telemetry and background reporting..."
+
   for service in apport whoopsie motd-news.timer; do
-    if systemctl list-unit-files | grep -q "$service"; then
+    if systemctl list-unit-files | grep -q "\${service}"; then
       dryrun sudo systemctl disable "$service" --now || true
     fi
   done
+
   dryrun sudo sed -i 's/ENABLED=1/ENABLED=0/' /etc/default/motd-news || true
   dryrun sudo sed -i 's/ubuntu\\.com/#ubuntu.com/' /etc/update-motd.d/90-updates-available || true
+
   {
     grep -q "metrics.ubuntu.com" /etc/hosts || echo "127.0.0.1 metrics.ubuntu.com" | sudo tee -a /etc/hosts
     grep -q "popcon.ubuntu.com" /etc/hosts || echo "127.0.0.1 popcon.ubuntu.com" | sudo tee -a /etc/hosts
   } || true
+
   pkgs="ubuntu-report popularity-contest apport whoopsie apport-symptoms"
-  for pkg in $pkgs; do
-    if dpkg -l | grep -q "^ii\s*$pkg"; then
-      dryrun sudo apt purge -y "$pkg"
-      dryrun sudo apt-mark hold "$pkg"
+  for pkg in \$pkgs; do
+    if dpkg -l | grep -q "^ii\s*\$pkg"; then
+      dryrun sudo apt purge -y "\$pkg"
+      dryrun sudo apt-mark hold "\$pkg"
     fi
   done
 }
@@ -110,7 +114,7 @@ replace_firefox_with_librewolf() {
     echo "🌎 Adding LibreWolf repo and installing..."
     dryrun sudo apt update
     dryrun sudo apt install extrepo -y
-    dryrun extrepo enable librewolf
+    dryrun sudo extrepo enable librewolf
     dryrun sudo apt update
     dryrun sudo apt install librewolf -y
   fi
@@ -118,14 +122,14 @@ replace_firefox_with_librewolf() {
 
 install_flatpak_snap_store() {
   if confirm "📦 Do you want full Flatpak, Snap and GNOME Software support?"; then
-    echo "🛜️ Installing Snap/Flatpak support with GNOME Software..."
+    echo "🛍️ Installing Snap/Flatpak support with GNOME Software..."
     dryrun sudo apt install gnome-software gnome-software-plugin-flatpak gnome-software-plugin-snap flatpak -y
     dryrun sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
   fi
 }
 
 enable_trim() {
-  if confirm "💾 Enable periodic TRIM for SSDs (recommended)?"; then
+  if confirm "🖿️ Enable periodic TRIM for SSDs (recommended)?"; then
     dryrun sudo systemctl enable fstrim.timer
   fi
 }
@@ -152,46 +156,53 @@ install_vm_tools() {
 }
 
 show_version() {
-  echo "sysboost.sh version $VERSION"
+  echo "sysboost.sh version \$VERSION"
 }
 
 print_help() {
   echo "Usage: ./sysboost.sh [options]"
   echo ""
   echo "Options:"
-  echo "  --clean         🔄 Run full cleanup & update steps"
-  echo "  --harden        🛡️ Disable telemetry & enable firewall"
-  echo "  --vm            💾 Install VirtualBox support for VMs"
-  echo "  --gaming        🎮 Install GameMode and MangoHUD"
-  echo "  --trim          💾 Enable periodic TRIM for SSDs"
-  echo "  --cpuperf       ⚙️ Set CPU governor to 'performance'"
-  echo "  --cleantemp     🧹 Remove temp files from /tmp and ~/.cache"
-  echo "  --multimedia    🎵 Install multimedia codecs and extras"
-  echo "  --store         🛜️ Add Snap/Flatpak/GNOME Software support"
-  echo "  --librewolf     🌐 Replace Snap Firefox with LibreWolf"
-  echo "  --dryrun        🧪 Show what would happen without executing"
-  echo "  --all           ⚡ Run all modules"
-  echo "  -v, --version   🔢 Show script version"
-  echo "  -h, --help      📖 Show this help message"
+  echo "  --clean         Run full cleanup & update steps"
+  echo "  --harden        Apply security tweaks, telemetry disable, and firewall"
+  echo "  --store         Add Snap/Flatpak/GNOME store support"
+  echo "  --librewolf     Replace Snap Firefox with LibreWolf"
+  echo "  --gaming        Install GameMode and MangoHUD"
+  echo "  --vm            Install VirtualBox and related support"
+  echo "  --trim          Enable SSD TRIM via fstrim.timer"
+  echo "  --governor      Set CPU governor to performance"
+  echo "  --multimedia    Install ubuntu-restricted-extras and addons"
+  echo "  --tempclean     Remove /tmp and ~/.cache contents"
+  echo "  --dryrun        Show what would happen without executing"
+  echo "  --all           Run all modules"
+  echo "  -v, --version   Show script version"
+  echo "  -h, --help      Show help"
 }
 
+### Main Entry Point ###
 main() {
   print_banner
   machine_type=$(detect_machine_type)
-  echo "💻 Detected machine type: $machine_type"
+  echo "💻 Detected machine type: \$machine_type"
 
-  while [[ "$1" != "" ]]; do
-    case $1 in
+  if [ \$# -eq 0 ]; then
+    echo "ℹ️  No options provided. Here's how to use sysboost:"
+    print_help
+    exit 0
+  fi
+
+  while [[ "\$1" != "" ]]; do
+    case \$1 in
       --clean) system_cleanup ;;
       --harden) disable_telemetry; setup_firewall ;;
-      --vm) install_vm_tools ;;
-      --gaming) install_gaming_tools ;;
-      --trim) enable_trim ;;
-      --cpuperf) enable_cpu_performance_mode ;;
-      --cleantemp) remove_temp_files ;;
-      --multimedia) install_restricted_packages ;;
       --store) install_flatpak_snap_store ;;
       --librewolf) replace_firefox_with_librewolf ;;
+      --gaming) install_gaming_tools ;;
+      --vm) install_vm_tools ;;
+      --trim) enable_trim ;;
+      --governor) enable_cpu_performance_mode ;;
+      --multimedia) install_restricted_packages ;;
+      --tempclean) remove_temp_files ;;
       --dryrun) is_dryrun=true ;;
       --all)
         system_cleanup
@@ -199,16 +210,16 @@ main() {
         setup_firewall
         install_flatpak_snap_store
         replace_firefox_with_librewolf
-        install_vm_tools
         install_gaming_tools
+        install_vm_tools
         enable_trim
         enable_cpu_performance_mode
-        remove_temp_files
         install_restricted_packages
+        remove_temp_files
         ;;
       -v|--version) show_version; exit 0 ;;
       -h|--help) print_help; exit 0 ;;
-      *) echo "❌ Unknown option: $1"; print_help; exit 1 ;;
+      *) echo "❌ Unknown option: \$1"; print_help; exit 1 ;;
     esac
     shift
   done
