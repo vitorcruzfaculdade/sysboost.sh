@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # Vitor Cruz de Souza's General Purpose System Boost Script
-# Version 1.3.2
+# Version 1.3.3
 # License: GPL v3.0
 
-VERSION="1.3.2"
+VERSION="1.3.3"
 set -e
 
 ### Helper Functions ###
