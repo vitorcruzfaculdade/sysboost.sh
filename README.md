@@ -36,18 +36,23 @@ From disabling telemetry to adding gaming performance tools and virtualization s
 ---
 
 ## 🧪 Usage
-
 ```bash
 chmod +x sysboost.sh
+```
 
 # Run everything
+```bash
 ./sysboost.sh --all
+```
 
 # Example: Targeted Boost for Gaming Laptop
+```bash
 ./sysboost.sh --clean --harden --gaming --trim --codecs --compression
+```
 
 📦 Modular Options
 Option	Description
+```bash
 --clean	Clean junk, update, remove Snap, fix broken packages
 --harden	Disable telemetry, crash reports, and enable firewall
 --store	Enable Flatpak, Snap, and GNOME Software
@@ -63,7 +68,7 @@ Option	Description
 --all	Run all modules (except dryrun)
 -v, --version	Show script version
 -h, --help	Show help message
-
+```
 
 
 🛡️ License
