@@ -41,6 +41,7 @@ chmod +x sysboost.sh
 ./sysboost.sh --extras      # Gaming, VMs, TRIM, CPU governor
 ./sysboost.sh --librewolf   # Replace Snap Firefox with LibreWolf
 ./sysboost.sh --dryrun --all
+
 📦 Modular Options
 Option	Action
 --clean	Clean junk, update packages
@@ -52,6 +53,8 @@ Option	Action
 --dryrun	Show commands without executing
 -v, --version	Show version info
 -h, --help	Show help info
+
+
 🛡️ License
 This project is licensed under the GNU GPL v3.0.
 See LICENSE file or visit: [https://www.gnu.org/licenses/gpl-3.0.html]
