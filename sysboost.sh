@@ -15,10 +15,13 @@ dryrun() {
 }
 
 print_banner() {
-  echo "╔════════════════════════════════════════════════════════╗"
-  echo "║ 🛠️  sysboost.sh v$VERSION — The Ultimate Ubuntu Booster  ║"
-  echo "║ ⚡ By Vitor Cruz · License: GPL v3.0           ║"
-  echo "╚════════════════════════════════════════════════════════╝"
+  echo ""
+  echo "┌─────────────────────────────────────────────────────────────┐"
+  echo "│ 🛠️  sysboost.sh v$VERSION                                    "
+  echo "│ 🚀 The Ultimate Ubuntu Booster for 24.04+                     "
+  echo "│ 🔧 By Vitor Cruz · License: GPL v3.0                          "
+  echo "└─────────────────────────────────────────────────────────────┘"
+  echo ""
 }
 
 detect_machine_type() {
