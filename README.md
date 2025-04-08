@@ -18,7 +18,7 @@ From disabling telemetry to adding gaming performance tools and virtualization s
 
 ### 🔥 Features (Optional, can be chosen per run):
 
-- 🧼 **Deep Clean**: Updates, removes junk, purges leftovers, and trims the fat.  
+- 🧼 **Deep Clean**: Updates **EVERYTHING**, removes junk, purges leftovers, and trims the fat.  
 - 🔐 **Privacy First**: Nukes telemetry, crash reports, and background data leeches.  
 - 🛡️ **Firewall Setup**: UFW configured to allow outgoing and deny incoming by default.  
 - 🌐 **App Store Boost**: Full Flatpak + Snap + GNOME Software support (optional).  
