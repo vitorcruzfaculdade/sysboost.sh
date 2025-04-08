@@ -183,26 +183,25 @@ print_help() {
 main() {
   print_banner
   machine_type=$(detect_machine_type)
-  echo "💻 Detected machine type: \$machine_type"
+  echo "💻 Detected machine type: $machine_type"
 
-  if [ \$# -eq 0 ]; then
-    echo "ℹ️  No options provided. Here's how to use sysboost:"
+  if [ $# -eq 0 ]; then
     print_help
     exit 0
   fi
 
-  while [[ "\$1" != "" ]]; do
-    case \$1 in
+  while [[ "$1" != "" ]]; do
+    case $1 in
       --clean) system_cleanup ;;
       --harden) disable_telemetry; setup_firewall ;;
+      --vm) install_vm_tools ;;
+      --gaming) install_gaming_tools ;;
+      --trim) enable_trim ;;
+      --performance) enable_cpu_performance_mode ;;
+      --clean-temp) remove_temp_files ;;
+      --media) install_restricted_packages ;;
       --store) install_flatpak_snap_store ;;
       --librewolf) replace_firefox_with_librewolf ;;
-      --gaming) install_gaming_tools ;;
-      --vm) install_vm_tools ;;
-      --trim) enable_trim ;;
-      --governor) enable_cpu_performance_mode ;;
-      --multimedia) install_restricted_packages ;;
-      --tempclean) remove_temp_files ;;
       --dryrun) is_dryrun=true ;;
       --all)
         system_cleanup
@@ -210,16 +209,16 @@ main() {
         setup_firewall
         install_flatpak_snap_store
         replace_firefox_with_librewolf
-        install_gaming_tools
         install_vm_tools
+        install_gaming_tools
         enable_trim
         enable_cpu_performance_mode
-        install_restricted_packages
         remove_temp_files
+        install_restricted_packages
         ;;
       -v|--version) show_version; exit 0 ;;
       -h|--help) print_help; exit 0 ;;
-      *) echo "❌ Unknown option: \$1"; print_help; exit 1 ;;
+      *) echo "❌ Unknown option: $1"; print_help; exit 1 ;;
     esac
     shift
   done
