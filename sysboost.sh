@@ -83,11 +83,15 @@ disable_telemetry() {
 
 setup_firewall() {
   echo "🛡️ Setting up UFW firewall rules..."
+  dryrun sudo apt install ufw -y
+  dryrun sudo systemctl enable ufw
+  dryrun sudo systemctl restart ufw
   dryrun sudo ufw --force reset
   dryrun sudo ufw default allow outgoing
   dryrun sudo ufw default deny incoming
   dryrun sudo ufw logging off
   dryrun sudo ufw enable
+  dryrun sudo ufw reload
 }
 
 replace_firefox_with_librewolf() {
