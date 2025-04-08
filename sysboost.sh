@@ -69,6 +69,12 @@ disable_telemetry() {
   dryrun sudo systemctl disable motd-news.timer --now
   dryrun sudo sed -i 's/ENABLED=1/ENABLED=0/' /etc/default/motd-news
   dryrun sudo sed -i 's/ubuntu\.com/#ubuntu.com/' /etc/update-motd.d/90-updates-available
+  echo "[*] Resolving \"metrics.ubuntu.com\" to localhost"
+  dryrun sudo echo 127.0.0.1 www.metrics.ubuntu.com >>/etc/hosts
+  dryrun sudo echo 127.0.0.1 metrics.ubuntu.com >>/etc/hosts
+  echo "[*] Resolving \"popcon.ubuntu.com\" to localhost"
+  dryrun sudo echo 127.0.0.1 www.popcon.ubuntu.com >>/etc/hosts
+  dryrun sudo echo 127.0.0.1 popcon.ubuntu.com >>/etc/hosts
 }
 
 setup_firewall() {
