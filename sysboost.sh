@@ -150,8 +150,14 @@ install_gaming_tools() {
 }
 
 install_vm_tools() {
-  if confirm "📦 Install VirtualBox support for VMs?"; then
-    dryrun sudo apt install virtualbox virtualbox-ext-pack virtualbox-guest-additions-iso -y
+   if confirm "📦 Install latest VirtualBox from Oracle's official repo?"; then
+    echo "🌐 Setting up Oracle VirtualBox repository..."
+    dryrun wget -q https://www.virtualbox.org/download/oracle_vbox_2016.asc -O- | sudo gpg --dearmor -o /usr/share/keyrings/oracle-virtualbox.gpg
+    codename=$(lsb_release -cs)
+    echo "deb [arch=amd64 signed-by=/usr/share/keyrings/oracle-virtualbox.gpg] https://download.virtualbox.org/virtualbox/debian $codename contrib" | sudo tee /etc/apt/sources.list.d/virtualbox.list
+    dryrun sudo apt update
+    echo "📥 Installing latest VirtualBox and Extension Pack..."
+    dryrun sudo apt install -y virtualbox-7.1
   fi
 }
 
