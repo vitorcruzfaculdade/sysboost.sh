@@ -1,4 +1,4 @@
-# ⚡ sysboost.sh - Optimize. Harden. Dominate.
+# ⚡ sysboost.sh - Optimize. Harden.
 
 **Version:** 1.3.8  
 **Author:** Vitor Cruz  
