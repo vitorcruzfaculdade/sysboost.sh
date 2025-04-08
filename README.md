@@ -16,7 +16,7 @@ From disabling telemetry to adding gaming performance tools and virtualization s
 
 ---
 
-### 🔥 Features
+### 🔥 Features (Optional, can be choosen per run basis)
 
 - 🧼 **Deep Clean**: Updates, removes junk, purges leftovers, and trims the fat.  
 - 🔐 **Privacy First**: Nukes telemetry, crash reports, and background data leeches.  
