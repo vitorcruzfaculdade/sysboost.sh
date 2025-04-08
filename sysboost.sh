@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # Vitor Cruz's General Purpose System Boost Script
-# Version 1.3.7
+# Version 1.3.8
 # License: GPL v3.0
 
-VERSION="1.3.7"
+VERSION="1.3.8"
 set -e
 
 ### Helper Functions ###
@@ -170,6 +170,28 @@ install_compression_tools() {
     dryrun sudo apt install -y zip unzip rar unrar p7zip-full xz-utils bzip2 lzma 7zip-rar
   fi
 }
+
+suggest_preload() {
+  total_ram_gb=$(free -g | awk '/^Mem:/{print $2}')
+  echo "🧠 Detected RAM: ${total_ram_gb} GB"
+
+  if [ "$total_ram_gb" -le 4 ]; then
+    echo "⚠️  Your system has ${total_ram_gb} GB of RAM. Installing preload is not recommended as it might consume resources needed elsewhere."
+  elif [ "$total_ram_gb" -le 8 ]; then
+    if confirm "✅ Your system has ${total_ram_gb} GB RAM. Preload is likely to improve responsiveness. Install it?"; then
+      dryrun sudo apt install preload -y
+    fi
+  elif [ "$total_ram_gb" -le 16 ]; then
+    if confirm "ℹ️  Your system has ${total_ram_gb} GB RAM. Preload is optional and may help with app launch times. Install it?"; then
+      dryrun sudo apt install preload -y
+    fi
+  else
+    if confirm "💡 You have ${total_ram_gb} GB RAM. Preload is not necessary but harmless. Install anyway?"; then
+      dryrun sudo apt install preload -y
+    fi
+  fi
+}
+
 show_version() {
   echo "sysboost.sh version $VERSION"
 }
@@ -189,6 +211,7 @@ print_help() {
   echo "  --store           Add Flatpak, Snap, and GNOME Software support"
   echo "  --librewolf       Replace Snap Firefox with LibreWolf"
   echo "  --compression     Install archive format support (zip, rar, 7z, xz, etc)"
+  echo "  --preload         Suggest and optionally install preload based on system RAM"
   echo "  --dryrun          Show commands without executing"
   echo "  --all             Run all modules"
   echo "  -v, --version     Show script version"
@@ -219,6 +242,7 @@ main() {
       --store) install_flatpak_snap_store ;;
       --librewolf) replace_firefox_with_librewolf ;;
       --compression) install_compression_tools ;;
+      --preload) suggest_preload ;;
       --dryrun) is_dryrun=true ;;
       --all)
         system_cleanup
@@ -232,6 +256,7 @@ main() {
         enable_cpu_performance_mode
         remove_temp_files
         install_restricted_packages
+        suggest_preload
         ;;
       -v|--version) show_version; exit 0 ;;
       -h|--help) print_help; exit 0 ;;
