@@ -40,17 +40,17 @@ From disabling telemetry to adding gaming performance tools and virtualization s
 chmod +x sysboost.sh
 ```
 
-## Run everything
+### Run everything
 ```bash
 ./sysboost.sh --all
 ```
 
-## Example: Targeted Boost for Gaming Laptop
+#### Example: Targeted Boost for Gaming Laptop
 ```bash
 ./sysboost.sh --clean --harden --gaming --trim --codecs --compression
 ```
 
-##📦 Modular Options
+## 📦 Modular Options
 Option	Description
 ```bash
 --clean	Clean junk, update, remove Snap, fix broken packages
@@ -71,16 +71,16 @@ Option	Description
 ```
 
 
-##🛡️ License
+### 🛡️ License
 This project is licensed under the GNU GPL v3.0.
 See the LICENSE file or visit:
 👉 https://www.gnu.org/licenses/gpl-3.0.html
 
-##👤 Credits
+### 👤 Credits
 Crafted with 💻 + ☕ by Vítor Cruz de Souza
 Pull requests, forks, and stars are always welcome 🌟
 
-⚠️ Disclaimer
+### ⚠️ Disclaimer
 This script changes system-level settings and installs packages.
 Use at your own risk and always make backups or snapshots beforehand.
 No guarantees — just results.
