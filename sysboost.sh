@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Vitor Cruz de Souza's General Purpose System Boost Script
+# Vitor Cruz's General Purpose System Boost Script
 # Version 1.3.7
 # License: GPL v3.0
 
@@ -17,7 +17,7 @@ dryrun() {
 print_banner() {
   echo "╔════════════════════════════════════════════════════════╗"
   echo "║ 🛠️  sysboost.sh v$VERSION — The Ultimate Ubuntu Booster  ║"
-  echo "║ ⚡ By Vitor Cruz de Souza · License: GPL v3.0           ║"
+  echo "║ ⚡ By Vitor Cruz · License: GPL v3.0           ║"
   echo "╚════════════════════════════════════════════════════════╝"
 }
 
