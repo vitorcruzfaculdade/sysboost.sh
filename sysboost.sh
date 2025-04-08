@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # Vitor Cruz de Souza's General Purpose System Boost Script
-# Version 1.3.4
+# Version 1.3.5
 # License: GPL v3.0
 
-VERSION="1.3.4"
+VERSION="1.3.5"
 set -e
 
 ### Helper Functions ###
@@ -155,6 +155,12 @@ install_vm_tools() {
   fi
 }
 
+install_compression_tools() {
+  if confirm "🗜️ Install support for common compressed file formats (zip, rar, 7z, xz, bz2, etc)?"; then
+    echo "📦 Installing archive tools..."
+    dryrun sudo apt install -y zip unzip rar unrar p7zip-full xz-utils bzip2 lzma
+  fi
+}
 show_version() {
   echo "sysboost.sh version $VERSION"
 }
@@ -173,6 +179,7 @@ print_help() {
   echo "  --media           Install multimedia codecs (restricted-extras)"
   echo "  --store           Add Flatpak, Snap, and GNOME Software support"
   echo "  --librewolf       Replace Snap Firefox with LibreWolf"
+  echo "  --compression     Install archive format support (zip, rar, 7z, xz, etc)"
   echo "  --dryrun          Show commands without executing"
   echo "  --all             Run all modules"
   echo "  -v, --version     Show script version"
@@ -202,6 +209,7 @@ main() {
       --media) install_restricted_packages ;;
       --store) install_flatpak_snap_store ;;
       --librewolf) replace_firefox_with_librewolf ;;
+      --compression) install_compression_tools ;;
       --dryrun) is_dryrun=true ;;
       --all)
         system_cleanup
