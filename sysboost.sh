@@ -40,10 +40,12 @@ system_cleanup() {
   dryrun sudo apt-get update
   dryrun sudo apt update
   dryrun sudo apt-get check
+  dryrun sudo apt-get -f install
   dryrun sudo apt-get --purge autoremove -y
   dryrun sudo apt-get dist-upgrade -y
   dryrun sudo apt-get upgrade -y
   dryrun sudo apt upgrade -y
+  dryrun sudo apt full-upgrade -y
   dryrun sudo apt-get check
   dryrun sudo apt-get autoclean
   dryrun sudo apt-get clean
