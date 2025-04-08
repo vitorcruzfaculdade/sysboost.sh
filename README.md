@@ -1,5 +1,5 @@
 # sysboost
-**Version:** 1.2.0  
+**Version:** 1.2.3  
 **Author:** Vítor Cruz de Souza  
 **License:** GPL v3.0  
 **Tagline:** Optimize. Harden. Dominate.  
