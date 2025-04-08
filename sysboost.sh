@@ -58,7 +58,7 @@ remove_temp_files() {
     echo "🗑️ Cleaning temp files..."
     dryrun sudo rm -rf /tmp/*
     dryrun rm -rf ~/.cache/*
-	dryrun sudo apt install bleachbit -y
+    dryrun sudo apt install bleachbit -y
   fi
 }
 
