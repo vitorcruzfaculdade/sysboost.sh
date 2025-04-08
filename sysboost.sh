@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Vitor Cruz de Souza's General Purpose System Boost Script
-# Version 1.2.0
+# Version 1.2.3
 # License: GPL v3.0
 
 VERSION="1.2.3"
