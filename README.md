@@ -1,7 +1,7 @@
 # ⚡ sysboost.sh - Optimize. Harden. Dominate.
 
 **Version:** 1.3.7  
-**Author:** Vítor Cruz de Souza  
+**Author:** Vitor Cruz
 **License:** [GPL v3.0](https://www.gnu.org/licenses/gpl-3.0.html)  
 **Scope:** Ubuntu 24.04+ (GNOME) - Laptops & Desktops
 
