@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # Vitor Cruz de Souza's General Purpose System Boost Script
-# Version 1.3.1
+# Version 1.3.2
 # License: GPL v3.0
 
-VERSION="1.3.1"
+VERSION="1.3.2"
 set -e
 
 ### Helper Functions ###
@@ -116,11 +116,20 @@ replace_firefox_with_librewolf() {
   if confirm "🌐 Replace Firefox Snap with LibreWolf from official repo?"; then
     dryrun sudo snap remove firefox || true
     echo "🌎 Adding LibreWolf repo and installing..."
-    dryrun sudo apt install curl gnupg -y
-    curl https://deb.librewolf.net/keyring.gpg | gpg --dearmor | sudo tee /usr/share/keyrings/librewolf.gpg > /dev/null
-    echo "deb [signed-by=/usr/share/keyrings/librewolf.gpg arch=amd64] http://deb.librewolf.net $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/librewolf.list > /dev/null
+    # Disabled this part because Librewolf's oficial instalation method changed.
+    # dryrun sudo apt install curl gnupg -y
+    # curl https://deb.librewolf.net/keyring.gpg | gpg --dearmor | sudo tee /usr/share/keyrings/librewolf.gpg > /dev/null
+    # echo "deb [signed-by=/usr/share/keyrings/librewolf.gpg arch=amd64] http://deb.librewolf.net $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/librewolf.list > /dev/null
+    # dryrun sudo apt update
+    # dryrun sudo apt install librewolf -y
+
+    #Now it looks like this:
+    dryrun sudo apt update
+    dryrun sudo apt install extrepo -y
+    dryrun extrepo enable librewolf
     dryrun sudo apt update
     dryrun sudo apt install librewolf -y
+     
   fi
 }
 
