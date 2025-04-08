@@ -7,7 +7,7 @@
 
 ---
 
-## 🧰 What is sysboost?
+### 🧰 What is sysboost?
 
 `sysboost.sh` is your open-source all-in-one command-line ally to clean, speed up, secure, and enhance your Ubuntu GNOME experience — without breaking stuff.
 
@@ -16,7 +16,7 @@ From disabling telemetry to adding gaming performance tools and virtualization s
 
 ---
 
-## 🔥 Features
+### 🔥 Features
 
 - 🧼 **Deep Clean**: Updates, removes junk, purges leftovers, and trims the fat.  
 - 🔐 **Privacy First**: Nukes telemetry, crash reports, and background data leeches.  
@@ -35,22 +35,22 @@ From disabling telemetry to adding gaming performance tools and virtualization s
 
 ---
 
-## 🧪 Usage
+### 🧪 Usage
 ```bash
 chmod +x sysboost.sh
 ```
 
-# Run everything
+## Run everything
 ```bash
 ./sysboost.sh --all
 ```
 
-# Example: Targeted Boost for Gaming Laptop
+## Example: Targeted Boost for Gaming Laptop
 ```bash
 ./sysboost.sh --clean --harden --gaming --trim --codecs --compression
 ```
 
-📦 Modular Options
+##📦 Modular Options
 Option	Description
 ```bash
 --clean	Clean junk, update, remove Snap, fix broken packages
@@ -71,12 +71,12 @@ Option	Description
 ```
 
 
-🛡️ License
+##🛡️ License
 This project is licensed under the GNU GPL v3.0.
 See the LICENSE file or visit:
 👉 https://www.gnu.org/licenses/gpl-3.0.html
 
-👤 Credits
+##👤 Credits
 Crafted with 💻 + ☕ by Vítor Cruz de Souza
 Pull requests, forks, and stars are always welcome 🌟
 
