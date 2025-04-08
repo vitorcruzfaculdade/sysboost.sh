@@ -1,6 +1,6 @@
 # ⚡ sysboost.sh - Optimize. Harden.
 
-**Version:** 1.3.8  
+**Version:** 1.4.0  
 **Author:** Vitor Cruz  
 **License:** GPL v3.0  
 **Scope:** Ubuntu 24.04+ (GNOME) — Laptops & Desktops (due reliance on GUI apps, it's not suggested to be used in servers)
@@ -66,6 +66,7 @@ Option	Description
 --codecs       Install Ubuntu-restricted-extras & media codecs
 --compression  Install zip, unzip, rar, unrar, 7z, xz-utils, bzip2, etc.
 --tempclean	   Clean temp files/cache (installs BleachBit)
+--donate       Donate to support the project
 --dryrun	     Preview changes without running commands
 --all	         Run all modules (except dryrun)
 -v, --version	 Show script version
