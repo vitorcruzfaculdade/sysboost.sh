@@ -54,7 +54,7 @@ chmod +x sysboost.sh
 ```
 
 ## 📦 Modular Options
-Option	Description
+  Option	                      Description
 --clean	Clean junk, update packages, fix broken deps, remove Snap leftovers
 --harden	Disable telemetry, crash reports, and enable UFW with GUI
 --store	Enable Flatpak, Snap, and GNOME Software
@@ -63,7 +63,7 @@ Option	Description
 --gaming	Install GameMode, MangoHUD, and check if GameMode is active
 --cpuperf	Set CPU governor to "performance" (recommended for desktops)
 --trim	Enable SSD TRIM support with fstrim.timer
---media	Install ubuntu-restricted-extras, codecs, Microsoft fonts
+--media	Install ubuntu-restricted-extras, codecs, Microsoft fonts 
 --compression	Install zip, unzip, rar, unrar, 7z, xz-utils, bzip2, and lzma
 --tempclean	Clean /tmp, ~/.cache, and install BleachBit
 --preload	Detect RAM and hardware to suggest preload or configure ZRAM
