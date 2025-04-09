@@ -33,7 +33,7 @@ From disabling telemetry and deep cleaning your system, to enabling gaming optim
 - 🖥️ **VM Beast Mode**: Full VirtualBox support with kernel modules and guest additions.
 - 🌐 **App Store Boost**: Enable Flatpak + Snap + GNOME Software.
 - 🦊 **Firefox Rebellion**: Replace Snap Firefox with LibreWolf from its official APT repo.
-- 🎮 **Gaming-Ready**: Installs GameMode, MangoHUD, and tweaks for maximum FPS.
+- 🎮 **Gaming-Ready**: GameMode, MangoHUD, Vulkan, drivers for Intel/AMD/NVIDIA, Steam — and tweaks for maximum FPS.
 - 🎵 **Multimedia Support**: Install `ubuntu-restricted-extras` and codecs.
 - 📦 **Compression Support**: Install support for ZIP, RAR, 7z, tar.xz, bzip2, and more.
 
