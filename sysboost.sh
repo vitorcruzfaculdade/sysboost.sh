@@ -117,7 +117,6 @@ setup_firewall() {
   dryrun sudo ufw logging off
   dryrun sudo ufw reload
   echo "🛡️G/UFW firewall🔥🧱 configured and enabled✅ — logging disabled, incoming connections denied🚫."
-"
 }
 
 replace_firefox_with_librewolf() {
