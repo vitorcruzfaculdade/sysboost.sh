@@ -3,7 +3,7 @@
 # Vitor Cruz's General Purpose System Boost Script
 # License: GPL v3.0
 
-VERSION="1.6.0"
+VERSION="1.6.1"
 set -e
 
 ### Helper Functions ###
@@ -242,6 +242,15 @@ install_compression_tools() {
   fi
 }
 
+install_remmina() {
+  if confirm "🖥️ Install Remmina (remote desktop client with full plugin support)?"; then
+    echo "📦 Installing Remmina and plugins..."
+    dryrun sudo apt update
+    dryrun sudo apt install remmina remmina-plugin-rdp remmina-plugin-vnc remmina-plugin-secret remmina-plugin-spice remmina-plugin-exec -y
+    echo "✅ Remmina installed with full client support — no server components."
+  fi
+}
+
 suggest_preload_and_zram() {
   total_ram_gb=$(free -g | awk '/^Mem:/{print $2}')
   machine_type=$(detect_machine_type)
@@ -338,6 +347,7 @@ print_help() {
   echo "  --store           Add Flatpak, Snap, and GNOME Software support"
   echo "  --librewolf       Replace Snap Firefox with LibreWolf"
   echo "  --compression     Install archive format support (zip, rar, 7z, etc)"
+  echo "  --remmina         Install Remmina client with full plugin support (RDP, VNC, etc)"
   echo "  --preload         Suggest and optionally install preload & ZRAM"
   echo "  --donate          Show donation info and open Linktree in browser"
   echo "  --dryrun          Show commands without executing"
@@ -356,7 +366,7 @@ main() {
     exit 0
   fi
 
-  while [[ $# -gt 0 ]]; do
+    while [[ $# -gt 0 ]]; do
     case "$1" in
       --clean) full_cleanup ;;
       --update) system_update ;;
@@ -369,6 +379,7 @@ main() {
       --store) install_flatpak_snap_store ;;
       --librewolf) replace_firefox_with_librewolf ;;
       --compression) install_compression_tools ;;
+      --remmina) install_remmina_with_plugins ;;
       --preload) suggest_preload_and_zram ;;
       --donate) show_donation_info ;;
       --dryrun) is_dryrun=true ;;
@@ -381,6 +392,7 @@ main() {
         replace_firefox_with_librewolf
         install_vm_tools
         install_gaming_tools
+        install_remmina_with_plugins
         enable_trim
         enable_cpu_performance_mode
         install_restricted_packages
