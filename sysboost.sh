@@ -95,6 +95,18 @@ disable_telemetry() {
 
 setup_firewall() {
   echo "🛡️ Setting up UFW firewall rules..."
+
+  if sudo ufw status | grep -q "Status: active"; then
+    echo "🔒 UFW is already active."
+    read -rp "Do you want to reconfigure the firewall? [y/N]: " confirm
+    confirm=${confirm,,} # to lowercase
+    [[ $confirm != "y" ]] && echo "❌ Skipping firewall configuration." && return
+  else
+    read -rp "Firewall is inactive. Do you want to enable and configure it now? [y/N]: " confirm
+    confirm=${confirm,,}
+    [[ $confirm != "y" ]] && echo "❌ Skipping firewall setup." && return
+  fi
+
   dryrun sudo apt update
   dryrun sudo apt install ufw gufw -y
   dryrun sudo systemctl enable ufw
@@ -104,6 +116,8 @@ setup_firewall() {
   dryrun sudo ufw default deny incoming
   dryrun sudo ufw logging off
   dryrun sudo ufw reload
+  echo "🛡️G/UFW firewall🔥🧱 configured and enabled✅ — logging disabled, incoming connections denied🚫."
+"
 }
 
 replace_firefox_with_librewolf() {
