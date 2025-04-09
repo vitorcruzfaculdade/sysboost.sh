@@ -1,6 +1,6 @@
 # ⚡ sysboost.sh - Optimize. Harden.
 
-**Version:** 1.4.0  
+**Version:** 1.5.3  
 **Author:** Vitor Cruz  
 **License:** GPL v3.0  
 **Scope:** Ubuntu 24.04+ (GNOME) — Laptops & Desktops (due reliance on GUI apps, it's not suggested to be used in servers)
