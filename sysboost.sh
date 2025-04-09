@@ -165,24 +165,64 @@ enable_cpu_performance_mode() {
 }
 
 install_gaming_tools() {
+  # 🎮 Gaming Utilities
   if confirm "🎮 Enable gaming mode (GameMode, MangoHUD)?"; then
     dryrun sudo apt install gamemode mangohud -y
     echo "🧪 Checking if gamemoded is running..."
     if systemctl is-active --quiet gamemoded; then
       echo "✅ GameMode is active and running."
     else
-      echo "⚠️ GameMode is installed but not running. You may need to restart or check systemd services."
+      echo "⚠️  GameMode is installed but not running. You may need to restart or check systemd services."
     fi
   fi
 
-  if confirm "🕹️ Install Steam (official .deb from Valve)?"; then
-    echo "🌐 Downloading latest Steam .deb from Valve..."
-    dryrun wget -O steam.deb "https://cdn.fastly.steamstatic.com/client/installer/steam.deb"
-    dryrun sudo apt install ./steam.deb -y
-    dryrun rm steam.deb
+  # 🧠 GPU Detection
+  gpu_info=$(lspci | grep -E "VGA|3D")
+  if echo "$gpu_info" | grep -qi nvidia; then
+    echo "🟢 NVIDIA GPU detected."
+    if confirm "Install NVIDIA proprietary drivers?"; then
+      dryrun sudo ubuntu-drivers autoinstall
+      echo "✅ NVIDIA drivers installation triggered."
+    fi
+  elif echo "$gpu_info" | grep -qi amd; then
+    echo "🟥 AMD GPU detected."
+    if confirm "Install AMD Mesa graphics drivers?"; then
+      dryrun sudo apt install mesa-vulkan-drivers mesa-utils -y
+      echo "✅ AMD Mesa drivers installed."
+    fi
+  elif echo "$gpu_info" | grep -qi intel; then
+    echo "🔵 Intel GPU detected."
+    if confirm "Install Intel Mesa graphics drivers?"; then
+      dryrun sudo apt install mesa-vulkan-drivers mesa-utils -y
+      echo "✅ Intel Mesa drivers installed."
+    fi
+  else
+    echo "❓ GPU vendor not recognized: $gpu_info"
+  fi
+
+  # 🔌 Vulkan + 32-bit libs for Steam/Proton
+  if confirm "🧱 Install Vulkan packages for Proton/DXVK support?"; then
+    dryrun sudo apt install vulkan-tools mesa-vulkan-drivers vulkan-utils -y
+    echo "✅ Vulkan support installed."
+  fi
+
+  if confirm "📦 Install 32-bit libraries required for Steam & gaming?"; then
+    dryrun sudo dpkg --add-architecture i386
     dryrun sudo apt update
-    dryrun sudo apt-get -f install
-    echo "✅ Steam installed from official source. You can launch it from the application menu."
+    dryrun sudo apt install libc6:i386 libncurses6:i386 libstdc++6:i386 libgl1-mesa-glx:i386 libxss1:i386 libasound2:i386 -y
+    echo "✅ 32-bit libraries installed for compatibility."
+  fi
+
+  # 🎮 Steam
+  if confirm "🎮 Install Steam (official .deb release)?"; then
+    tmp_deb="/tmp/steam_latest.deb"
+    echo "🌐 Downloading Steam .deb from official servers..."
+    dryrun wget -O "$tmp_deb" https://cdn.fastly.steamstatic.com/client/installer/steam.deb
+    dryrun sudo apt install "$tmp_deb" -y
+    dryrun sudo apt update
+    dryrun sudo apt -f install -y
+    dryrun rm -f "$tmp_deb"
+    echo "✅ Steam installed from official .deb package (dependencies resolved)."
   fi
 }
 
