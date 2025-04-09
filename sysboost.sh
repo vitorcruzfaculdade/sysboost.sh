@@ -152,7 +152,7 @@ install_gaming_tools() {
 }
 
 install_vm_tools() {
-   if confirm "📦 Install latest VirtualBox from Oracle's official repo?"; then
+  if confirm "📦 Install latest VirtualBox from Oracle's official repo?"; then
     echo "🌐 Setting up Oracle VirtualBox repository..."
     dryrun wget -q https://www.virtualbox.org/download/oracle_vbox_2016.asc -O- | sudo gpg --dearmor -o /usr/share/keyrings/oracle-virtualbox.gpg
     codename=$(lsb_release -cs)
@@ -175,17 +175,17 @@ suggest_preload() {
   echo "🧠 Detected RAM: ${total_ram_gb} GB"
 
   if [ "$total_ram_gb" -le 4 ]; then
-    echo "⚠️  Your system has ${total_ram_gb} GB of RAM. Installing preload is not recommended as it might consume resources needed elsewhere."
+    echo "⚠️  Your system has ${total_ram_gb} GB of RAM. Installing preload is not recommended."
   elif [ "$total_ram_gb" -le 8 ]; then
-    if confirm "✅ Your system has ${total_ram_gb} GB RAM. Preload is likely to improve responsiveness. Install it?"; then
+    if confirm "✅ Your system has ${total_ram_gb} GB RAM. Install preload?"; then
       dryrun sudo apt install preload -y
     fi
   elif [ "$total_ram_gb" -le 16 ]; then
-    if confirm "ℹ️  Your system has ${total_ram_gb} GB RAM. Preload is optional and may help with app launch times. Install it?"; then
+    if confirm "ℹ️  Your system has ${total_ram_gb} GB RAM. Preload is optional. Install it?"; then
       dryrun sudo apt install preload -y
     fi
   else
-    if confirm "💡 You have ${total_ram_gb} GB RAM. Preload is not necessary but harmless. Install anyway?"; then
+    if confirm "💡 You have ${total_ram_gb} GB RAM. Install preload anyway?"; then
       dryrun sudo apt install preload -y
     fi
   fi
@@ -195,9 +195,9 @@ show_donation_info() {
   echo ""
   echo "     .-. .-.   "
   echo "    (   |   )  💖 Thanks for using sysboost.sh!"
-  echo "     \     /   If you'd like to support this project,"
-  echo "      \   /    visit my Linktree below:"
-  echo "       `-'     "
+  echo "     \\     /   If you'd like to support this project,"
+  echo "      \\   /    visit my Linktree below:"
+  echo "       \`-’     "
   echo ""
   echo "🔗 https://linktr.ee/vitorcruzcode"
   echo ""
@@ -275,7 +275,9 @@ main() {
         enable_cpu_performance_mode
         remove_temp_files
         install_restricted_packages
+        install_compression_tools
         suggest_preload
+        show_donation_info
         ;;
       -v|--version) show_version; exit 0 ;;
       -h|--help) print_help; exit 0 ;;
