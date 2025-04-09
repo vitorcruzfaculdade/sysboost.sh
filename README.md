@@ -56,24 +56,24 @@ chmod +x sysboost.sh
 ## 📦 Modular Options
 ```bash
   Option	                Description
---clean	Clean junk, update packages, fix broken deps, remove Snap leftovers
---harden	Disable telemetry, crash reports, and enable UFW with GUI
---store	Enable Flatpak, Snap, and GNOME Software
---librewolf	Replace Firefox Snap with LibreWolf via official APT repo
---vm	Install VirtualBox guest additions and DKMS modules
---gaming	Install GameMode, MangoHUD, and check if GameMode is active
---cpuperf	Set CPU governor to "performance" (recommended for desktops)
---trim	Enable SSD TRIM support with fstrim.timer
---media	Install ubuntu-restricted-extras, codecs, Microsoft fonts 
---compression	Install zip, unzip, rar, unrar, 7z, xz-utils, bzip2, and lzma
---tempclean	Clean /tmp, ~/.cache, and install BleachBit
---preload	Detect RAM and hardware to suggest preload or configure ZRAM
---update	Update package lists and upgrade system (safe apt update + upgrade)
---donate	Show donation options and author linktree
---dryrun	Preview what each option will do (no actual changes)
---all	Run all modules except --dryrun
--v, --version	Show current script version
--h, --help	Show help message
+--clean          Clean junk, fix broken deps, remove Snap leftovers
+--harden         Disable telemetry, crash reports, and enable UFW with GUI
+--store          Enable Flatpak, Snap, and GNOME Software
+--librewolf      Replace Firefox Snap with LibreWolf via official APT repo
+--vm             Install VirtualBox guest additions and DKMS modules
+--gaming         Install GameMode, MangoHUD, and check if GameMode is active
+--cpuperf        Set CPU governor to "performance" (recommended for desktops)
+--trim           Enable SSD TRIM support with fstrim.timer
+--media          Install ubuntu-restricted-extras, codecs, Microsoft fonts 
+--compression    Install zip, unzip, rar, unrar, 7z, xz-utils, bzip2, and lzma
+--tempclean      Clean /tmp, ~/.cache, and install BleachBit
+--preload        Detect RAM and hardware to suggest preload or configure ZRAM
+--update         Update package lists and upgrade system (safe apt update + upgrade)
+--donate         Show donation options and author linktree
+--dryrun         Preview what each option will do (no actual changes)
+--all            Run all modules except --dryrun
+-v,  --version	 Show current script version
+-h,  --help	     Show help message
 ```
 
 ## 🛡️ License
@@ -87,7 +87,7 @@ Pull requests, forks, and stars are always welcome 🌟
 
 ## 👋 Follow & Support
 Want to support my work, check more tools, or donate?
-## 👉 linktr.ee/vitorcruzcode
+## 👉 https://linktr.ee/vitorcruzcode
 
 ## ⚠️ Disclaimer
 This script modifies system-level settings and installs packages.
