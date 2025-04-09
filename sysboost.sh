@@ -180,6 +180,8 @@ install_gaming_tools() {
     dryrun wget -O steam.deb "https://cdn.fastly.steamstatic.com/client/installer/steam.deb"
     dryrun sudo apt install ./steam.deb -y
     dryrun rm steam.deb
+    dryrun sudo apt update
+    dryrun sudo apt-get -f install
     echo "✅ Steam installed from official source. You can launch it from the application menu."
   fi
 }
