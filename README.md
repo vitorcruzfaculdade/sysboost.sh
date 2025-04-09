@@ -54,7 +54,8 @@ chmod +x sysboost.sh
 ```
 
 ## 📦 Modular Options
-  Option	                      Description
+```bash
+  Option	                Description
 --clean	Clean junk, update packages, fix broken deps, remove Snap leftovers
 --harden	Disable telemetry, crash reports, and enable UFW with GUI
 --store	Enable Flatpak, Snap, and GNOME Software
@@ -73,6 +74,7 @@ chmod +x sysboost.sh
 --all	Run all modules except --dryrun
 -v, --version	Show current script version
 -h, --help	Show help message
+```
 
 ## 🛡️ License
 This project is licensed under the GNU GPL v3.0.
