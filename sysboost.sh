@@ -399,7 +399,6 @@ main() {
       --store) install_flatpak_snap_store ;;
       --librewolf) replace_firefox_with_librewolf ;;
       --compression) install_compression_tools ;;
-      --remmina) install_remmina_with_plugins ;;
       --remmina) install_remmina ;;
       --preload) suggest_preload_and_zram ;;
       --donate) show_donation_info ;;
