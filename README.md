@@ -1,6 +1,6 @@
 # ⚡ sysboost.sh - Optimize. Harden.
 
-**Version:** 1.5.3  
+**Version:** 1.6.1  
 **Author:** Vitor Cruz  
 **License:** GPL v3.0  
 **Scope:** Ubuntu 24.04+ (GNOME) — Laptops & Desktops  
@@ -28,7 +28,8 @@ From disabling telemetry and deep cleaning your system, to enabling gaming optim
 - 🔐 **Privacy First**: Disable telemetry, crash reports, and unnecessary background data.
 - 🔁 **Preload & ZRAM**: Suggests `preload` or sets up ZRAM based on system RAM & hardware.
 - 🛡️ **Firewall Setup**: Enable UFW with default allow-out/deny-in and a GUI for control.
-- 💾 **SSD Friendly**: Enable periodic TRIM with `fstrim.timer`
+- 🖥️ **SysAdmin Remote Access**: `--remmina` – Installs Remmina with full plugin support (remote desktop client).
+- 💾 **SSD Friendly**: Enable periodic TRIM with `fstrim.timer`.
 - ⚙️ **CPU Performance Mode**: Enable "performance" governor for desktops
 - 🖥️ **VM Beast Mode**: Full VirtualBox support with kernel modules and guest additions.
 - 🌐 **App Store Boost**: Enable Flatpak + Snap + GNOME Software.
