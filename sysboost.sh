@@ -3,7 +3,7 @@
 # Vitor Cruz's General Purpose System Boost Script
 # License: GPL v3.0
 
-VERSION="1.4.0"
+VERSION="1.5.3"
 set -e
 
 ### Helper Functions ###
@@ -37,20 +37,28 @@ confirm() {
 }
 
 ### Core Functions ###
-system_cleanup() {
-  echo "🔄 Updating and cleaning system..."
-  dryrun sudo apt-get update
+full_cleanup() {
+  echo "🗑️ Cleaning temp files..."
   dryrun sudo apt update
+  dryrun sudo apt install bleachbit -y
   dryrun sudo apt-get check
-  dryrun sudo apt-get -f install
+  dryrun sudo apt-get -f install -y
   dryrun sudo apt-get --purge autoremove -y
-  dryrun sudo apt-get dist-upgrade -y
-  dryrun sudo apt-get upgrade -y
-  dryrun sudo apt upgrade -y
-  dryrun sudo apt full-upgrade -y
-  dryrun sudo apt-get check
   dryrun sudo apt-get autoclean
   dryrun sudo apt-get clean
+  dryrun sudo rm -rf /tmp/*
+  dryrun rm -rf ~/.cache/*
+}
+
+system_update() {
+  echo "🔄 Performing full system update"
+  dryrun sudo apt update
+  dryrun sudo apt-get update
+  dryrun sudo apt-get check
+  dryrun sudo apt-get -f install
+  dryrun sudo apt-get dist-upgrade -y
+  dryrun sudo apt upgrade -y
+  dryrun sudo apt full-upgrade -y
   dryrun sudo snap refresh
   dryrun sudo flatpak update
 }
@@ -62,24 +70,13 @@ install_restricted_packages() {
   fi
 }
 
-remove_temp_files() {
-  if confirm "🧹 Do you want to remove temp files in /tmp and ~/.cache?"; then
-    echo "🗑️ Cleaning temp files..."
-    dryrun sudo rm -rf /tmp/*
-    dryrun rm -rf ~/.cache/*
-    dryrun sudo apt install bleachbit -y
-  fi
-}
-
 disable_telemetry() {
   echo "🚫 Disabling telemetry and background reporting..."
-
   for service in apport whoopsie motd-news.timer; do
     if systemctl list-unit-files | grep -q "${service}"; then
       dryrun sudo systemctl disable "$service" --now || true
     fi
   done
-
   dryrun sudo sed -i 's/ENABLED=1/ENABLED=0/' /etc/default/motd-news || true
   dryrun sudo sed -i 's/ubuntu\.com/#ubuntu.com/' /etc/update-motd.d/90-updates-available || true
 
@@ -88,8 +85,7 @@ disable_telemetry() {
     grep -q "popcon.ubuntu.com" /etc/hosts || echo "127.0.0.1 popcon.ubuntu.com" | sudo tee -a /etc/hosts
   } || true
 
-  pkgs="ubuntu-report popularity-contest apport whoopsie apport-symptoms"
-  for pkg in $pkgs; do
+  for pkg in ubuntu-report popularity-contest apport whoopsie apport-symptoms; do
     if dpkg -l | grep -q "^ii\s*$pkg"; then
       dryrun sudo apt purge -y "$pkg"
       dryrun sudo apt-mark hold "$pkg"
@@ -99,6 +95,7 @@ disable_telemetry() {
 
 setup_firewall() {
   echo "🛡️ Setting up UFW firewall rules..."
+  dryrun sudo apt update
   dryrun sudo apt install ufw gufw -y
   dryrun sudo systemctl enable ufw
   dryrun sudo systemctl restart ufw
@@ -106,7 +103,6 @@ setup_firewall() {
   dryrun sudo ufw default allow outgoing
   dryrun sudo ufw default deny incoming
   dryrun sudo ufw logging off
-  dryrun sudo ufw enable
   dryrun sudo ufw reload
 }
 
@@ -137,7 +133,7 @@ enable_trim() {
 }
 
 enable_cpu_performance_mode() {
-  if confirm "⚙️ Set CPU governor to 'performance'? (Better for desktops/sockets, may reduce battery life)"; then
+  if confirm "⚙️ Set CPU governor to 'performance'?"; then
     dryrun sudo apt install cpufrequtils -y
     echo 'GOVERNOR="performance"' | sudo tee /etc/default/cpufrequtils
     dryrun sudo systemctl disable ondemand || true
@@ -148,47 +144,88 @@ enable_cpu_performance_mode() {
 install_gaming_tools() {
   if confirm "🎮 Enable gaming mode (GameMode, MangoHUD)?"; then
     dryrun sudo apt install gamemode mangohud -y
+    echo "🧪 Checking if gamemoded is running..."
+    if systemctl is-active --quiet gamemoded; then
+      echo "✅ GameMode is active and running."
+    else
+      echo "⚠️  GameMode is installed but not running. You may need to restart or check systemd services."
+    fi
   fi
 }
 
 install_vm_tools() {
   if confirm "📦 Install latest VirtualBox from Oracle's official repo?"; then
-    echo "🌐 Setting up Oracle VirtualBox repository..."
     dryrun wget -q https://www.virtualbox.org/download/oracle_vbox_2016.asc -O- | sudo gpg --dearmor -o /usr/share/keyrings/oracle-virtualbox.gpg
     codename=$(lsb_release -cs)
     echo "deb [arch=amd64 signed-by=/usr/share/keyrings/oracle-virtualbox.gpg] https://download.virtualbox.org/virtualbox/debian $codename contrib" | sudo tee /etc/apt/sources.list.d/virtualbox.list
     dryrun sudo apt update
-    echo "📥 Installing latest VirtualBox and Extension Pack..."
     dryrun sudo apt install -y virtualbox-7.1
   fi
 }
 
 install_compression_tools() {
-  if confirm "🗜️ Install support for common compressed file formats (zip, rar, 7z, xz, bz2, etc)?"; then
-    echo "📦 Installing archive tools..."
+  if confirm "🗜️ Install support for compressed file formats (zip, rar, 7z, xz, bz2, etc)?"; then
     dryrun sudo apt install -y zip unzip rar unrar p7zip-full xz-utils bzip2 lzma 7zip-rar
   fi
 }
 
-suggest_preload() {
+suggest_preload_and_zram() {
   total_ram_gb=$(free -g | awk '/^Mem:/{print $2}')
+  machine_type=$(detect_machine_type)
   echo "🧠 Detected RAM: ${total_ram_gb} GB"
+  echo "💻 Machine type: $machine_type"
 
-  if [ "$total_ram_gb" -le 4 ]; then
-    echo "⚠️  Your system has ${total_ram_gb} GB of RAM. Installing preload is not recommended."
-  elif [ "$total_ram_gb" -le 8 ]; then
-    if confirm "✅ Your system has ${total_ram_gb} GB RAM. Install preload?"; then
-      dryrun sudo apt install preload -y
-    fi
-  elif [ "$total_ram_gb" -le 16 ]; then
-    if confirm "ℹ️  Your system has ${total_ram_gb} GB RAM. Preload is optional. Install it?"; then
-      dryrun sudo apt install preload -y
-    fi
-  else
-    if confirm "💡 You have ${total_ram_gb} GB RAM. Install preload anyway?"; then
-      dryrun sudo apt install preload -y
-    fi
-  fi
+  case $total_ram_gb in
+    [0-2])
+      echo "🟥 Low RAM detected (≤2GB): ZRAM is recommended. Preload is not advised."
+      if confirm "💾 Enable ZRAM (compressed RAM swap)?"; then
+        dryrun sudo apt install zram-tools -y
+        echo "ALGO=zstd" | sudo tee /etc/default/zramswap
+        echo "✅ ZRAM enabled. Reboot to apply."
+      fi
+      ;;
+    [3-4])
+      echo "🟧 Low RAM (3–4GB): ZRAM strongly recommended. Preload not advised."
+      if confirm "💾 Enable ZRAM (compressed RAM swap)?"; then
+        dryrun sudo apt install zram-tools -y
+        echo "ALGO=zstd" | sudo tee /etc/default/zramswap
+        echo "✅ ZRAM enabled. Reboot to apply."
+      fi
+      ;;
+    [5-8])
+      echo "🟨 Moderate RAM (5–8GB): Preload and ZRAM can both improve performance."
+      if confirm "📦 Install preload to speed up app launches?"; then
+        dryrun sudo apt install preload -y
+      fi
+      if confirm "💾 Enable ZRAM (compressed RAM swap)?"; then
+        dryrun sudo apt install zram-tools -y
+        echo "ALGO=zstd" | sudo tee /etc/default/zramswap
+        echo "✅ ZRAM enabled. Reboot to apply."
+      fi
+      ;;
+    [9-9]|1[0-6])
+      echo "🟩 High RAM (9–16GB): Preload may help, ZRAM is optional."
+      if confirm "📦 Install preload to speed up app launches?"; then
+        dryrun sudo apt install preload -y
+      fi
+      if confirm "💾 Enable ZRAM (optional)?"; then
+        dryrun sudo apt install zram-tools -y
+        echo "ALGO=zstd" | sudo tee /etc/default/zramswap
+        echo "✅ ZRAM enabled. Reboot to apply."
+      fi
+      ;;
+    *)
+      echo "🟦 Plenty of RAM (>16GB): Preload and ZRAM likely unnecessary, but optional."
+      if confirm "📦 Install preload anyway?"; then
+        dryrun sudo apt install preload -y
+      fi
+      if confirm "💾 Enable ZRAM anyway?"; then
+        dryrun sudo apt install zram-tools -y
+        echo "ALGO=zstd" | sudo tee /etc/default/zramswap
+        echo "✅ ZRAM enabled. Reboot to apply."
+      fi
+      ;;
+  esac
 }
 
 show_donation_info() {
@@ -217,18 +254,18 @@ print_help() {
   echo "Usage: ./sysboost.sh [options]"
   echo ""
   echo "Options:"
-  echo "  --clean           Run full cleanup & update steps"
+  echo "  --clean           Full cleanup and temp file clearing"
+  echo "  --update          Run update only (no cleanup)"
   echo "  --harden          Apply security tweaks, disable telemetry, enable firewall"
   echo "  --vm              Install VirtualBox tools"
   echo "  --gaming          Install GameMode and MangoHUD"
   echo "  --trim            Enable SSD TRIM"
   echo "  --performance     Set CPU governor to 'performance'"
-  echo "  --clean-temp      Remove temp/cache files and offer BleachBit"
   echo "  --media           Install multimedia codecs (restricted-extras)"
   echo "  --store           Add Flatpak, Snap, and GNOME Software support"
   echo "  --librewolf       Replace Snap Firefox with LibreWolf"
-  echo "  --compression     Install archive format support (zip, rar, 7z, xz, etc)"
-  echo "  --preload         Suggest and optionally install preload based on system RAM"
+  echo "  --compression     Install archive format support (zip, rar, 7z, etc)"
+  echo "  --preload         Suggest and optionally install preload & ZRAM"
   echo "  --donate          Show donation info and open Linktree in browser"
   echo "  --dryrun          Show commands without executing"
   echo "  --all             Run all modules"
@@ -239,32 +276,32 @@ print_help() {
 ### Main Entry Point ###
 main() {
   print_banner
-  machine_type=$(detect_machine_type)
-  echo "💻 Detected machine type: $machine_type"
+  echo "💻 Detected machine type: $(detect_machine_type)"
 
-  if [ $# -eq 0 ]; then
+  if [[ $# -eq 0 ]]; then
     print_help
     exit 0
   fi
 
-  while [[ "$1" != "" ]]; do
-    case $1 in
-      --clean) system_cleanup ;;
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      --clean) full_cleanup ;;
+      --update) system_update ;;
       --harden) disable_telemetry; setup_firewall ;;
       --vm) install_vm_tools ;;
       --gaming) install_gaming_tools ;;
       --trim) enable_trim ;;
       --performance) enable_cpu_performance_mode ;;
-      --clean-temp) remove_temp_files ;;
       --media) install_restricted_packages ;;
       --store) install_flatpak_snap_store ;;
       --librewolf) replace_firefox_with_librewolf ;;
       --compression) install_compression_tools ;;
-      --preload) suggest_preload ;;
+      --preload) suggest_preload_and_zram ;;
       --donate) show_donation_info ;;
       --dryrun) is_dryrun=true ;;
       --all)
-        system_cleanup
+        full_cleanup
+        system_update
         disable_telemetry
         setup_firewall
         install_flatpak_snap_store
@@ -273,10 +310,9 @@ main() {
         install_gaming_tools
         enable_trim
         enable_cpu_performance_mode
-        remove_temp_files
         install_restricted_packages
         install_compression_tools
-        suggest_preload
+        suggest_preload_and_zram
         show_donation_info
         ;;
       -v|--version) show_version; exit 0 ;;
