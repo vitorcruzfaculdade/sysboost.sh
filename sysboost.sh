@@ -431,4 +431,5 @@ main() {
   echo "✅ Done. Don't forget to reboot if major updates or kernel upgrades were installed."
 }
 
+# Run main function
 main "$@"
