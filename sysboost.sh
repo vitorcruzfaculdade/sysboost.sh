@@ -400,6 +400,7 @@ main() {
       --librewolf) replace_firefox_with_librewolf ;;
       --compression) install_compression_tools ;;
       --remmina) install_remmina_with_plugins ;;
+      --remmina) install_remmina ;;
       --preload) suggest_preload_and_zram ;;
       --donate) show_donation_info ;;
       --dryrun) is_dryrun=true ;;
@@ -410,14 +411,14 @@ main() {
         remove_remote_access_servers
         setup_firewall
         install_flatpak_snap_store
-        replace_firefox_with_librewolf
         install_vm_tools
         install_gaming_tools
-        install_remmina_with_plugins
+        install_remmina
         enable_trim
         enable_cpu_performance_mode
         install_restricted_packages
         install_compression_tools
+        replace_firefox_with_librewolf
         suggest_preload_and_zram
         show_donation_info
         ;;
