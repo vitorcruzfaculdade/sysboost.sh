@@ -171,8 +171,16 @@ install_gaming_tools() {
     if systemctl is-active --quiet gamemoded; then
       echo "✅ GameMode is active and running."
     else
-      echo "⚠️  GameMode is installed but not running. You may need to restart or check systemd services."
+      echo "⚠️ GameMode is installed but not running. You may need to restart or check systemd services."
     fi
+  fi
+
+  if confirm "🕹️ Install Steam (official .deb from Valve)?"; then
+    echo "🌐 Downloading latest Steam .deb from Valve..."
+    dryrun wget -O steam.deb "https://cdn.fastly.steamstatic.com/client/installer/steam.deb"
+    dryrun sudo apt install ./steam.deb -y
+    dryrun rm steam.deb
+    echo "✅ Steam installed from official source. You can launch it from the application menu."
   fi
 }
 
