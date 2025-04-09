@@ -55,7 +55,8 @@ chmod +x sysboost.sh
 
 ## 📦 Modular Options
 ```bash
-  Option	                Description
+  Option	       Description
+
 --clean          Clean junk, fix broken deps, remove Snap leftovers
 --harden         Disable telemetry, crash reports, and enable UFW with GUI
 --store          Enable Flatpak, Snap, and GNOME Software
