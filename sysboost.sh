@@ -331,7 +331,7 @@ print_help() {
   echo "  --update          Run update only (no cleanup)"
   echo "  --harden          Apply security tweaks, disable telemetry, enable firewall"
   echo "  --vm              Install VirtualBox tools"
-  echo "  --gaming          Install GameMode and MangoHUD"
+  echo "  --gaming          Gaming tools, Vulkan, drivers, Steam & FPS tweaks"
   echo "  --trim            Enable SSD TRIM"
   echo "  --performance     Set CPU governor to 'performance'"
   echo "  --media           Install multimedia codecs (restricted-extras)"
