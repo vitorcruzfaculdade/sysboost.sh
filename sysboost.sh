@@ -213,7 +213,7 @@ install_gaming_tools() {
   elif echo "$gpu_info" | grep -qi intel; then
     echo "🔵 Intel GPU detected."
     if confirm "Install Intel Mesa graphics drivers?"; then
-      dryrun sudo apt install mesa-vulkan-drivers mesa-utils -y
+      dryrun sudo apt install mesa-vulkan-drivers mesa-utils vulkan-tools -y
       echo "✅ Intel Mesa drivers installed."
     fi
   else
@@ -221,7 +221,7 @@ install_gaming_tools() {
   fi
  
   if confirm "🧱 Install Vulkan packages for Proton/DXVK support?"; then
-    dryrun sudo apt install vulkan-tools mesa-vulkan-drivers vulkan-utils -y
+    dryrun sudo apt install vulkan-tools mesa-vulkan-drivers -y
     echo "✅ Vulkan support installed."
   fi
 
