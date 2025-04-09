@@ -229,7 +229,7 @@ install_gaming_tools() {
   if confirm "📦 Install 32-bit libraries required for Steam & gaming?"; then
     dryrun sudo dpkg --add-architecture i386
     dryrun sudo apt update
-    dryrun sudo apt install libc6:i386 libncurses6:i386 libstdc++6:i386 libgl1-mesa-glx:i386 libxss1:i386 libasound2:i386 -y
+    dryrun sudo apt install libc6:i386 libncurses6:i386 libstdc++6:i386 libxss1:i386 libasound2:i386 -y
     echo "✅ 32-bit libraries installed for compatibility."
   fi
 
