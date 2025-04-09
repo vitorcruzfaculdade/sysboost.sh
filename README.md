@@ -22,22 +22,21 @@ From disabling telemetry and deep cleaning your system, to enabling gaming optim
 
 ## 🔥 Features (Optional & Modular)
 - ✅ **Dry-Run Mode**: Preview actions before execution.
-- 🧠 **Smart Detection**: Detects desktop/laptop and adapts behavior.
 - 🧼 **Update & Deep Clean**: Update everything, remove junk, purge leftovers, and trim system fat.
 - 🧹 **Temp File Cleaner**: Wipe `/tmp`, `~/.cache`, and install BleachBit GUI.
 - 🔐 **Privacy First**: Disable telemetry, crash reports, and unnecessary background data.
-- 🔁 **Preload & ZRAM**: Suggests `preload` or sets up ZRAM based on system RAM & hardware.
 - 🛡️ **Firewall Setup**: Enable UFW with default allow-out/deny-in and a GUI for control.
-- 🖥️ **SysAdmin Remote Access**: `--remmina` – Installs Remmina with full plugin support (remote desktop client).
-- 💾 **SSD Friendly**: Enable periodic TRIM with `fstrim.timer`.
-- ⚙️ **CPU Performance Mode**: Enable "performance" governor for desktops
 - 🖥️ **VM Beast Mode**: Full VirtualBox support with kernel modules and guest additions.
+- 🎮 **Gaming-Ready**: GameMode, MangoHUD, Vulkan, drivers for Intel/AMD/NVIDIA, Steam — and tweaks for maximum FPS.
+- 💾 **SSD Friendly**: Enable periodic TRIM with `fstrim.timer`.
+- ⚙️ **CPU Performance Mode**: Enable "performance" governor for desktops.
+- 🎵 **Multimedia Support**: Install `ubuntu-restricted-extras` and codecs.
 - 🌐 **App Store Boost**: Enable Flatpak + Snap + GNOME Software.
 - 🦊 **Firefox Rebellion**: Replace Snap Firefox with LibreWolf from its official APT repo.
-- 🎮 **Gaming-Ready**: GameMode, MangoHUD, Vulkan, drivers for Intel/AMD/NVIDIA, Steam — and tweaks for maximum FPS.
-- 🎵 **Multimedia Support**: Install `ubuntu-restricted-extras` and codecs.
 - 📦 **Compression Support**: Install support for ZIP, RAR, 7z, tar.xz, bzip2, and more.
-
+- 🔁 **Preload & ZRAM**: Suggests `preload` or sets up ZRAM based on system RAM & hardware.
+- 🖥️ **SysAdmin Remote Access**: `--remmina` – Installs Remmina with full plugin support (remote desktop client).
+  
 ---
 
 ## 🧪 Usage
@@ -55,26 +54,27 @@ chmod +x sysboost.sh
 
 ## 📦 Modular Options
 ```bash
-  Option	       Description
+  Option           Description
 
---clean          Clean junk, fix broken deps, remove Snap leftovers
---harden         Disable telemetry, crash reports, and enable UFW with GUI
---store          Enable Flatpak, Snap, and GNOME Software
---librewolf      Replace Firefox Snap with LibreWolf via official APT repo
---vm             Install VirtualBox guest additions and DKMS modules
---gaming         Install GameMode, MangoHUD, and check if GameMode is active
---cpuperf        Set CPU governor to "performance" (recommended for desktops)
---trim           Enable SSD TRIM support with fstrim.timer
---media          Install ubuntu-restricted-extras, codecs, Microsoft fonts 
---compression    Install zip, unzip, rar, unrar, 7z, xz-utils, bzip2, and lzma
---tempclean      Clean /tmp, ~/.cache, and install BleachBit
---preload        Detect RAM and hardware to suggest preload or configure ZRAM
---update         Update package lists and upgrade system (safe apt update + upgrade)
---donate         Show donation options and author linktree
---dryrun         Preview what each option will do (no actual changes)
---all            Run all modules except --dryrun
--v,  --version	 Show current script version
--h,  --help	     Show help message
+  --clean          Clean junk, fix broken deps, remove Snap leftovers
+  --tempclean      Clean /tmp, ~/.cache, and install BleachBit
+  --update         Update package lists and upgrade system (safe apt update + upgrade)
+  --harden         Disable telemetry, crash reports, and enable UFW with GUI
+  --vm             Install VirtualBox guest additions and DKMS modules
+  --gaming         Install GameMode, MangoHUD, and check if GameMode is active
+  --trim           Enable SSD TRIM support with fstrim.timer
+  --cpuperf        Set CPU governor to "performance" (recommended for desktops)
+  --media          Install ubuntu-restricted-extras, codecs, Microsoft fonts
+  --store          Enable Flatpak, Snap, and GNOME Software
+  --librewolf      Replace Firefox Snap with LibreWolf via official APT repo
+  --compression    Install zip, unzip, rar, unrar, 7z, xz-utils, bzip2, and lzma
+  --preload        Detect RAM and hardware to suggest preload or configure ZRAM
+  --remmina        Install Remmina with full plugin support (remote desktop client)
+  --donate         Show donation options and author linktree
+  --dryrun         Preview what each option will do (no actual changes)
+  --all            Run all modules except --dryrun
+  -v,  --version   Show current script version
+  -h,  --help      Show help message
 ```
 
 ## 🛡️ License
