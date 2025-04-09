@@ -21,22 +21,21 @@ From disabling telemetry and deep cleaning your system, to enabling gaming optim
 ---
 
 ## 🔥 Features (Optional & Modular)
-
+- ✅ **Dry-Run Mode**: Preview actions before execution.
+- 🧠 **Smart Detection**: Detects desktop/laptop and adapts behavior.
 - 🧼 **Update & Deep Clean**: Update everything, remove junk, purge leftovers, and trim system fat.
+- 🧹 **Temp File Cleaner**: Wipe `/tmp`, `~/.cache`, and install BleachBit GUI.
 - 🔐 **Privacy First**: Disable telemetry, crash reports, and unnecessary background data.
+- 🔁 **Preload & ZRAM**: Suggests `preload` or sets up ZRAM based on system RAM & hardware.
 - 🛡️ **Firewall Setup**: Enable UFW with default allow-out/deny-in and a GUI for control.
+- 💾 **SSD Friendly**: Enable periodic TRIM with `fstrim.timer`
+- ⚙️ **CPU Performance Mode**: Enable "performance" governor for desktops
+- 🖥️ **VM Beast Mode**: Full VirtualBox support with kernel modules and guest additions.
 - 🌐 **App Store Boost**: Enable Flatpak + Snap + GNOME Software.
 - 🦊 **Firefox Rebellion**: Replace Snap Firefox with LibreWolf from its official APT repo.
 - 🎮 **Gaming-Ready**: Installs GameMode, MangoHUD, and tweaks for maximum FPS.
-- 💾 **SSD Friendly**: Enable periodic TRIM with `fstrim.timer`.
-- 🖥️ **VM Beast Mode**: Full VirtualBox support with kernel modules and guest additions.
-- ⚙️ **CPU Performance Mode**: Enable "performance" governor for desktops.
 - 🎵 **Multimedia Support**: Install `ubuntu-restricted-extras` and codecs.
 - 📦 **Compression Support**: Install support for ZIP, RAR, 7z, tar.xz, bzip2, and more.
-- 🧹 **Temp File Cleaner**: Wipe `/tmp`, `~/.cache`, and install BleachBit GUI.
-- 🧠 **Smart Detection**: Detects desktop/laptop and adapts behavior.
-- 🔁 **Preload & ZRAM**: Suggests `preload` or sets up ZRAM based on system RAM & hardware.
-- ✅ **Dry-Run Mode**: Preview actions before execution.
 
 ---
 
