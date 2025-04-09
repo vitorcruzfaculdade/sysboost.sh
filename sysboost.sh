@@ -225,23 +225,17 @@ install_gaming_tools() {
     dryrun sudo apt install vulkan-tools mesa-vulkan-drivers -y
     echo "✅ Vulkan support installed."
   fi
-
-  # 🔌 32-bit libs for Steam/Proton
-  if confirm "📦 Install 32-bit libraries required for Steam & gaming?"; then
-    dryrun sudo dpkg --add-architecture i386
-    dryrun sudo apt update
-    dryrun sudo apt install libc6:i386 libncurses6:i386 libstdc++6:i386 libxss1:i386 libasound2:i386 -y
-    echo "✅ 32-bit libraries installed for compatibility."
-  fi
-
-  # 🎮 Steam
+  
+  # 🎮 Steam + 32-bit lib support
   if confirm "🎮 Install Steam (official .deb release)?"; then
     tmp_deb="/tmp/steam_latest.deb"
+    dryrun sudo dpkg --add-architecture i386
     echo "🌐 Downloading Steam .deb from official servers..."
     dryrun wget -O "$tmp_deb" https://cdn.fastly.steamstatic.com/client/installer/steam.deb
     dryrun sudo apt install "$tmp_deb" -y
     dryrun sudo apt update
     dryrun sudo apt -f install -y
+    dryrun sudo apt upgrade -y
     dryrun rm -f "$tmp_deb"
     echo "✅ Steam installed from official .deb package (dependencies resolved)."
   fi
