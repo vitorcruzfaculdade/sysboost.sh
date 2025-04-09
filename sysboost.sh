@@ -93,6 +93,26 @@ disable_telemetry() {
   done
 }
 
+# Added code for checking and removing remote access servers
+remove_remote_access_servers() {
+  echo "🔐 Checking for remote access servers..."
+  # List of common remote access servers
+  remote_servers=("sshd" "xrdp" "vnc4server" "tightvncserver" "x11vnc")
+
+  for server in "${remote_servers[@]}"; do
+    if dpkg -l | grep -q "^ii\s*$server"; then
+      echo "⚠️ Found $server installed."
+      if confirm "Do you want to remove $server?"; then
+        dryrun sudo apt purge -y "$server"
+        dryrun sudo apt autoremove -y
+        echo "$server has been removed."
+      fi
+    else
+      echo "✔️ $server is not installed."
+    fi
+  done
+}
+
 setup_firewall() {
   echo "🛡️ Setting up UFW firewall rules..."
 
@@ -370,7 +390,7 @@ main() {
     case "$1" in
       --clean) full_cleanup ;;
       --update) system_update ;;
-      --harden) disable_telemetry; setup_firewall ;;
+      --harden) disable_telemetry; remove_remote_access_servers; setup_firewall ;;
       --vm) install_vm_tools ;;
       --gaming) install_gaming_tools ;;
       --trim) enable_trim ;;
@@ -387,6 +407,7 @@ main() {
         full_cleanup
         system_update
         disable_telemetry
+        remove_remote_access_servers
         setup_firewall
         install_flatpak_snap_store
         replace_firefox_with_librewolf
