@@ -172,7 +172,7 @@ install_gaming_tools() {
     if systemctl is-active --quiet gamemoded; then
       echo "✅ GameMode is active and running."
     else
-      echo "⚠️  GameMode is installed but not running. You may need to restart or check systemd services."
+      echo "⚠️ GameMode is installed but not running. You may need to restart or check systemd services."
     fi
   fi
 
@@ -185,7 +185,7 @@ install_gaming_tools() {
       echo "✅ NVIDIA drivers installation triggered."
     fi
   elif echo "$gpu_info" | grep -qi amd; then
-    echo "🟥 AMD GPU detected."
+    echo "🔴 AMD GPU detected."
     if confirm "Install AMD Mesa graphics drivers?"; then
       dryrun sudo apt install mesa-vulkan-drivers mesa-utils -y
       echo "✅ AMD Mesa drivers installed."
