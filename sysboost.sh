@@ -219,13 +219,14 @@ install_gaming_tools() {
   else
     echo "❓ GPU vendor not recognized: $gpu_info"
   fi
- 
+
+  # 🔌 Vulkan + Proton/DXVK
   if confirm "🧱 Install Vulkan packages for Proton/DXVK support?"; then
     dryrun sudo apt install vulkan-tools mesa-vulkan-drivers -y
     echo "✅ Vulkan support installed."
   fi
 
-  # 🔌 Vulkan + 32-bit libs for Steam/Proton
+  # 🔌 32-bit libs for Steam/Proton
   if confirm "📦 Install 32-bit libraries required for Steam & gaming?"; then
     dryrun sudo dpkg --add-architecture i386
     dryrun sudo apt update
