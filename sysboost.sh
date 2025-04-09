@@ -98,13 +98,15 @@ setup_firewall() {
 
   if sudo ufw status | grep -q "Status: active"; then
     echo "🔒 UFW is already active."
-    read -rp "Do you want to reconfigure the firewall? [y/N]: " confirm
-    confirm=${confirm,,} # to lowercase
-    [[ $confirm != "y" ]] && echo "❌ Skipping firewall configuration." && return
+    if ! confirm "🔁 Do you want to reconfigure the firewall?"; then
+      echo "❌ Skipping firewall configuration."
+      return
+    fi
   else
-    read -rp "Firewall is inactive. Do you want to enable and configure it now? [y/N]: " confirm
-    confirm=${confirm,,}
-    [[ $confirm != "y" ]] && echo "❌ Skipping firewall setup." && return
+    if ! confirm "🚫 Firewall is inactive. Do you want to enable and configure it now?"; then
+      echo "❌ Skipping firewall setup."
+      return
+    fi
   fi
 
   dryrun sudo apt update
@@ -116,7 +118,7 @@ setup_firewall() {
   dryrun sudo ufw default deny incoming
   dryrun sudo ufw logging off
   dryrun sudo ufw reload
-  echo "🛡️G/UFW firewall🔥🧱 configured and enabled✅ — logging disabled, incoming connections denied🚫."
+  echo "🧱 G/UFW firewall🔥 configured and enabled✅ — logging disabled, incoming connections denied🚫."
 }
 
 replace_firefox_with_librewolf() {
