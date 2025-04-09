@@ -116,9 +116,17 @@ setup_firewall() {
   dryrun sudo ufw --force reset
   dryrun sudo ufw default allow outgoing
   dryrun sudo ufw default deny incoming
-  dryrun sudo ufw logging off
+
+  if confirm "📝 Do you want to enable UFW logging?"; then
+    dryrun sudo ufw logging on
+    log_status="enabled"
+  else
+    dryrun sudo ufw logging off
+    log_status="disabled"
+  fi
+
   dryrun sudo ufw reload
-  echo "🧱 G/UFW firewall🔥 configured and enabled✅ — logging disabled, incoming connections denied🚫."
+  echo "🧱 G/UFW firewall🔥 configured and enabled✅ — logging $log_status, incoming connections denied🚫."
 }
 
 replace_firefox_with_librewolf() {
