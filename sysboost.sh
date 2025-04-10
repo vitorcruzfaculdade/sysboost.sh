@@ -137,7 +137,7 @@ setup_firewall() {
   dryrun sudo systemctl enable ufw
   dryrun sudo systemctl restart ufw
   dryrun sudo ufw --force reset
-  echo "🌐 Setting pretty sick block rule from outside - 🧱🔥 UFW/GUFW..."
+  echo "🌐 Setting pretty sick block rule from outside 🧱🔥 UFW/GUFW..."
   dryrun sudo ufw default deny incoming
   echo "🌐 Allowing conections started from this system to outside."
   dryrun sudo ufw default allow outgoing
