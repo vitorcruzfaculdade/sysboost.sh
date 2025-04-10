@@ -129,7 +129,7 @@ setup_firewall() {
     fi
   fi
 
-  echo "🌐 Updating instalation cache..."
+  echo "🌐 Updating installation cache..."
   dryrun sudo apt update
   echo "🌐 Installing 🧱🔥 UFW/GUFW..."
   dryrun sudo apt install ufw gufw -y
@@ -142,7 +142,7 @@ setup_firewall() {
   echo "🌐 Allowing conections started from this system to outside."
   dryrun sudo ufw default allow outgoing
   echo "🌐 Enabling and applying settings to 🧱🔥 UFW/GUFW..."
-  dryryn sudo ufw enable
+  dryrun sudo ufw enable
   dryrun sudo ufw reload
   
   if confirm "📝 Do you want to enable UFW logging?"; then
@@ -231,7 +231,7 @@ install_gaming_tools() {
       dryrun sudo apt install mesa-vulkan-drivers mesa-utils vulkan-tools -y
       echo "✅ Intel Mesa drivers installed."
     fi
-     if echo "$gpu_info" | grep -qi vmware; then
+  elif echo "$gpu_info" | grep -qi vmware; then
     echo "🟠 VMware or VirtualBox GPU detected."
     if confirm "Install Virtual Machine GPU drivers?"; then
       dryrun sudo apt update
