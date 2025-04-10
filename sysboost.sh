@@ -3,7 +3,7 @@
 # Vitor Cruz's General Purpose System Boost Script
 # License: GPL v3.0
 
-VERSION="1.6.3"
+VERSION="1.6.4"
 set -e
 
 ### Helper Functions ###
@@ -152,11 +152,13 @@ setup_firewall() {
 replace_firefox_with_librewolf() {
   if confirm "🌐 Replace Firefox Snap with LibreWolf its from official repo?"; then
     dryrun sudo snap remove firefox || true
-    echo "🌎 Adding LibreWolf repo and installing..."
+    echo "🌐 Adding LibreWolf repo..."
     dryrun sudo apt update
     dryrun sudo apt install extrepo -y
     dryrun sudo extrepo enable librewolf
+    echo "🌐 Updating instalation cache..."
     dryrun sudo apt update
+    echo "🌐 Installing LibreWolf..."
     dryrun sudo apt install librewolf -y
   fi
 }
