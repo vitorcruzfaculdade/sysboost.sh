@@ -146,9 +146,11 @@ setup_firewall() {
   if confirm "📝 Do you want to enable UFW logging?"; then
     dryrun sudo ufw logging on
     log_status="enabled"
+    echo "📝 UFW logging enabled."
   else
     dryrun sudo ufw logging off
     log_status="disabled"
+    echo "📝 UFW logging disabled."
   fi
 
   dryrun sudo ufw reload
