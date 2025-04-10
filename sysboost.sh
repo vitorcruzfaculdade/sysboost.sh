@@ -232,7 +232,7 @@ install_gaming_tools() {
     if confirm "Install Virtual Machine GPU drivers?"; then
       dryrun sudo apt update
       dryrun sudo apt upgrade -y
-      dryrun sudo apt install mesa-utils vulkan-tools mesa-vulkan-drivers open-vm-tools -y
+      dryrun sudo apt install mesa-vulkan-drivers mesa-utils vulkan-tools open-vm-tools -y
       dryrun sudo ubuntu-drivers autoinstall
       echo "✅ VM GPU drivers installed."
     fi
