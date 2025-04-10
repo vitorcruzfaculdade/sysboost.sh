@@ -174,6 +174,8 @@ install_flatpak_snap_store() {
     echo "🛍️ Installing Snap/Flatpak support with GNOME Software..."
     dryrun sudo apt install gnome-software gnome-software-plugin-flatpak gnome-software-plugin-snap flatpak -y
     dryrun sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+    dryrun sudo flatpak update
+    dryrun sudo snap refresh
   fi
 }
 
@@ -242,7 +244,7 @@ install_gaming_tools() {
 
   # 🔌 Vulkan + Proton/DXVK
   if confirm "🧱 Install Vulkan packages for Proton/DXVK support?"; then
-    dryrun sudo apt install vulkan-tools mesa-vulkan-drivers -y
+    dryrun sudo apt install mesa-vulkan-drivers vulkan-tools -y
     echo "✅ Vulkan support installed."
   fi
   
