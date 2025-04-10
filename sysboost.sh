@@ -3,7 +3,7 @@
 # Vitor Cruz's General Purpose System Boost Script
 # License: GPL v3.0
 
-VERSION="1.6.2"
+VERSION="1.6.3"
 set -e
 
 ### Helper Functions ###
@@ -146,11 +146,11 @@ setup_firewall() {
   fi
 
   dryrun sudo ufw reload
-  echo "🧱 G/UFW firewall🔥 configured and enabled✅ — logging $log_status, incoming connections denied🚫."
+  echo "🧱 G/UFW Firewall🔥 configured and enabled ✅ — logging $log_status, incoming connections denied 🚫."
 }
 
 replace_firefox_with_librewolf() {
-  if confirm "🌐 Replace Firefox Snap with LibreWolf from official repo?"; then
+  if confirm "🌐 Replace Firefox Snap with LibreWolf its from official repo?"; then
     dryrun sudo snap remove firefox || true
     echo "🌎 Adding LibreWolf repo and installing..."
     dryrun sudo apt update
@@ -201,6 +201,9 @@ install_gaming_tools() {
   if echo "$gpu_info" | grep -qi nvidia; then
     echo "🟢 NVIDIA GPU detected."
     if confirm "Install NVIDIA proprietary drivers?"; then
+      dryrun sudo apt update
+      dryrun sudo apt upgrade -y
+      dryrun sudo apt install mesa-utils vulkan-tools mesa-vulkan-drivers
       dryrun sudo ubuntu-drivers autoinstall
       echo "✅ NVIDIA drivers installation triggered."
     fi
@@ -215,6 +218,15 @@ install_gaming_tools() {
     if confirm "Install Intel Mesa graphics drivers?"; then
       dryrun sudo apt install mesa-vulkan-drivers mesa-utils vulkan-tools -y
       echo "✅ Intel Mesa drivers installed."
+    fi
+     if echo "$gpu_info" | grep -qi vmware; then
+    echo "🔵 VMware or VirtualBox GPU detected."
+    if confirm "Install Virtual Machine GPU drivers?"; then
+      dryrun sudo apt update
+      dryrun sudo apt upgrade -y
+      dryrun sudo apt install mesa-utils vulkan-tools mesa-vulkan-drivers open-vm-tools -y
+      dryrun sudo ubuntu-drivers autoinstall
+      echo "✅ VM GPU drivers installed."
     fi
   else
     echo "❓ GPU vendor not recognized: $gpu_info"
