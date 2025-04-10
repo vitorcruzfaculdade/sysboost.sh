@@ -174,6 +174,7 @@ install_flatpak_snap_store() {
     echo "🛍️ Installing Snap/Flatpak support with GNOME Software..."
     dryrun sudo apt install gnome-software gnome-software-plugin-flatpak gnome-software-plugin-snap flatpak -y
     dryrun sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+    echo "🛍️ Updating SNAP/Flatpak instalation cache and packages..."
     dryrun sudo flatpak update
     dryrun sudo snap refresh
   fi
