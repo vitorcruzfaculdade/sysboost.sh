@@ -139,10 +139,12 @@ setup_firewall() {
   dryrun sudo ufw --force reset
   echo "🌐 Setting pretty sick block rule from outside - 🧱🔥 UFW/GUFW..."
   dryrun sudo ufw default deny incoming
-  echo "🌐 Allowing conections started from this system to outside"
+  echo "🌐 Allowing conections started from this system to outside."
   dryrun sudo ufw default allow outgoing
+  echo "🌐 Enabling and applying settings to 🧱🔥 UFW/GUFW..."
+  dryryn sudo ufw enable
   dryrun sudo ufw reload
-
+  
   if confirm "📝 Do you want to enable UFW logging?"; then
     dryrun sudo ufw logging on
     log_status="enabled"
@@ -216,14 +218,14 @@ install_gaming_tools() {
     if confirm "Install NVIDIA proprietary drivers?"; then
       dryrun sudo apt update
       dryrun sudo apt upgrade -y
-      dryrun sudo apt install mesa-utils vulkan-tools mesa-vulkan-drivers
+      dryrun sudo apt install mesa-vulkan-drivers mesa-utils vulkan-tools -y
       dryrun sudo ubuntu-drivers autoinstall
       echo "✅ NVIDIA drivers installation triggered."
     fi
   elif echo "$gpu_info" | grep -qi amd; then
     echo "🔴 AMD GPU detected."
     if confirm "Install AMD Mesa graphics drivers?"; then
-      dryrun sudo apt install mesa-vulkan-drivers mesa-utils -y
+      dryrun sudo apt install mesa-vulkan-drivers mesa-utils vulkan-tools -y
       echo "✅ AMD Mesa drivers installed."
     fi
   elif echo "$gpu_info" | grep -qi intel; then
@@ -247,7 +249,7 @@ install_gaming_tools() {
 
   # 🔌 Vulkan + Proton/DXVK
   if confirm "🧱 Install Vulkan packages for Proton/DXVK support?"; then
-    dryrun sudo apt install mesa-vulkan-drivers vulkan-tools -y
+    dryrun sudo apt install mesa-vulkan-drivers mesa-utils vulkan-tools -y
     echo "✅ Vulkan support installed."
   fi
   
