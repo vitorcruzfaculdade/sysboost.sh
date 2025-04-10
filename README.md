@@ -10,7 +10,7 @@
 
 ## 🧰 What is sysboost?
 
-`sysboost.sh` is your open-source, all-in-one command-line ally to clean, speed up, secure, and enhance your Ubuntu GNOME system — **without breaking stuff**.
+`sysboost.sh` is your open-source, all-in-one command-line ally to clean, speed up, secure, and enhance your Ubuntu LTS (GNOME) system — **without breaking stuff**.
 
 It uses official Ubuntu repositories or trusted app sources — no sketchy downloads, no hidden behavior. You can inspect and verify every line of code.
 
