@@ -228,7 +228,7 @@ install_gaming_tools() {
       echo "✅ Intel Mesa drivers installed."
     fi
      if echo "$gpu_info" | grep -qi vmware; then
-    echo "🔵 VMware or VirtualBox GPU detected."
+    echo "🟠 VMware or VirtualBox GPU detected."
     if confirm "Install Virtual Machine GPU drivers?"; then
       dryrun sudo apt update
       dryrun sudo apt upgrade -y
@@ -273,7 +273,7 @@ install_vm_tools() {
 
 install_compression_tools() {
   if confirm "🗜️ Install support for compressed file formats (zip, rar, 7z, xz, bz2, etc)?"; then
-    dryrun sudo apt install -y zip unzip rar unrar p7zip-full xz-utils bzip2 lzma 7zip-rar
+    dryrun sudo apt install zip unzip rar unrar p7zip-full xz-utils bzip2 lzma 7zip-rar -y 
   fi
 }
 
