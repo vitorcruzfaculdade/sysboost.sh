@@ -129,13 +129,19 @@ setup_firewall() {
     fi
   fi
 
+  echo "🌐 Updating instalation cache..."
   dryrun sudo apt update
+  echo "🌐 Installing 🧱🔥 UFW/GUFW..."
   dryrun sudo apt install ufw gufw -y
+  echo "🌐 Enabling 🧱🔥 UFW/GUFW..."
   dryrun sudo systemctl enable ufw
   dryrun sudo systemctl restart ufw
   dryrun sudo ufw --force reset
-  dryrun sudo ufw default allow outgoing
+  echo "🌐 Setting pretty sick block rule from outside - 🧱🔥 UFW/GUFW..."
   dryrun sudo ufw default deny incoming
+  echo "🌐 Allowing conections started from this system to outside"
+  dryrun sudo ufw default allow outgoing
+  dryrun sudo ufw reload
 
   if confirm "📝 Do you want to enable UFW logging?"; then
     dryrun sudo ufw logging on
