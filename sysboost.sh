@@ -258,7 +258,6 @@ install_gaming_tools() {
     dryrun sudo apt install "$tmp_deb" -y
     dryrun sudo apt update
     dryrun sudo apt -f install -y
-    dryrun sudo apt upgrade -y
     dryrun rm -f "$tmp_deb"
     echo "✅ Steam installed from official .deb package (dependencies resolved)."
   fi
