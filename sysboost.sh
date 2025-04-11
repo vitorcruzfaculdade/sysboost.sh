@@ -186,12 +186,10 @@ setup_firewall() {
   
   if confirm "📝 Do you want to enable UFW logging?"; then
     dryrun sudo ufw logging on
-    log_status="enabled"
-    echo "📝 UFW logging enabled."
+    echo "📝 UFW logging " log_status="enabled"
   else
     dryrun sudo ufw logging off
-    log_status="disabled"
-    echo "📝 UFW logging disabled."
+    echo "📝 UFW logging" log_status="disabled"
   fi
 
   dryrun sudo ufw reload
@@ -216,7 +214,6 @@ replace_firefox_with_librewolf() {
 install_chrome() {
     echo "🧭 Google Chrome (from official repository)"
     local prompt_text="Do you want to install Google Chrome (Stable) using the official repository?"
-
     if prompt_user "$prompt_title" "$prompt_text"; then
         dryrun wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo gpg --dearmor -o /usr/share/keyrings/google-chrome.gpg
         dryrun sudo echo 'deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/google-chrome.gpg] https://dl.google.com/linux/chrome/deb/ stable main' | sudo tee /etc/apt/sources.list.d/google-chrome.list
@@ -414,7 +411,6 @@ setup_sysadmin_tools() {
     dryrun sudo apt install wireshark -y
     echo "⚠️ Note: You may need to add your user to the 'wireshark' group to capture packets without sudo."
   fi
-
   echo "✅ Sysadmin tool installation process completed."
 }
 
@@ -590,7 +586,6 @@ main() {
     esac
     shift
   done
-
   echo "✅ Done. Don't forget to reboot if major updates or kernel upgrades were installed."
 }
 
