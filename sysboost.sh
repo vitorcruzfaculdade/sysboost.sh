@@ -98,10 +98,8 @@ if prompt_confirm "🎧 Do you want to install Spotify (Snap version)? Spotify i
     echo "🎶 Installing Spotify (official Snap version)..."
     dryrun sudo snap install spotify
     echo "✅ Spotify (official Snap version) installed."
-fi
-    fi
-fi    
   fi
+fi    
 }
 
 disable_telemetry() {
