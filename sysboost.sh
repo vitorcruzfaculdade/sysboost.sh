@@ -3,7 +3,7 @@
 # Vitor Cruz's General Purpose System Boost Script
 # License: GPL v3.0
 
-VERSION="1.6.9"
+VERSION="1.6.10"
 set -e
 
 ### Helper Functions ###
@@ -446,7 +446,7 @@ show_version() {
 print_help() {
   echo "Usage: ./sysboost.sh [options]"
   echo ""
-  echo "Options:"
+  echo "  Options:"
   echo "  --clean           Full cleanup and temp file clearing"
   echo "  --update          Run update only (no cleanup)"
   echo "  --harden          Apply security tweaks, disable telemetry, enable firewall"
@@ -458,6 +458,7 @@ print_help() {
   echo "  --store           Add Flatpak, Snap, and GNOME Software support"
   echo "  --librewolf       Replace Snap Firefox with LibreWolf"
   echo "  --compression     Install archive format support (zip, rar, 7z, etc)"
+  echo "  --sysadmin       🛠️  Install Remmina and useful system/network tools for sysadmins"
   echo "  --remmina         Install Remmina client with full plugin support (RDP, VNC, etc)"
   echo "  --preload         Suggest and optionally install preload & ZRAM"
   echo "  --donate          Show donation info and open Linktree in browser"
@@ -490,6 +491,7 @@ main() {
       --store) install_flatpak_snap_store ;;
       --librewolf) replace_firefox_with_librewolf ;;
       --compression) install_compression_tools ;;
+      --sysadmin) setup_sysadmin_tools ;;
       --remmina) install_remmina ;;
       --preload) suggest_preload_and_zram ;;
       --donate) show_donation_info ;;
@@ -503,6 +505,7 @@ main() {
         install_flatpak_snap_store
         install_vm_tools
         install_gaming_tools
+        install_sysadmin_tools
         install_remmina
         enable_trim
         enable_cpu_performance_mode
