@@ -3,7 +3,7 @@
 # Vitor Cruz's General Purpose System Boost Script
 # License: GPL v3.0
 
-VERSION="1.6.10"
+VERSION="1.6.11"
 set -e
 
 ### Helper Functions ###
@@ -80,6 +80,15 @@ install_restricted_packages() {
         dryrun xdg-mime default org.gnome.Totem.desktop video/x-flv
       fi
     fi
+# Offer to install Spotify via Snap
+if prompt_confirm "🎧 Do you want to install Spotify (Snap version)? Do you want to install Spotify (Snap version)?" "Spotify is a popular music streaming service. This installs the official Snap version."; then
+    if $DRYRUN; then
+        echo "[DRYRUN] Would install Spotify via snap"
+    else
+        echo "Installing Spotify..."
+        sudo snap install spotify
+    fi
+fi    
   fi
 }
 
