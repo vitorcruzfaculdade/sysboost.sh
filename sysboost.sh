@@ -96,6 +96,7 @@ install_restricted_packages() {
 if prompt_confirm "🎧 Do you want to install Spotify (Snap version)? Spotify is a popular music streaming service. This installs the official Snap version."; then
     echo "🎶 Installing Spotify (official Snap version)..."
     dryrun sudo snap install spotify
+    echo "🎶 Spotify (official Snap version) installed ✅"
 fi
     fi
 fi    
@@ -123,6 +124,7 @@ disable_telemetry() {
       dryrun sudo apt-mark hold "$pkg"
     fi
   done
+  echo "🚫 Telemetry and background reporting fully disabled ✅"
 }
 
 # Added code for checking and removing remote access servers
@@ -167,15 +169,21 @@ setup_firewall() {
   dryrun sudo apt install ufw gufw -y
   echo "🌐 Enabling 🧱🔥 UFW/GUFW..."
   dryrun sudo systemctl enable ufw
+  echo "🌐 Restarting/Reseting 🧱🔥 UFW/GUFW..."
   dryrun sudo systemctl restart ufw
   dryrun sudo ufw --force reset
   echo "🌐 Setting pretty sick block rule from outside 🧱🔥 UFW/GUFW..."
   dryrun sudo ufw default deny incoming
-  echo "🌐 Allowing conections started from this system to outside."
+  echo "🌐 Denied incomming traffic (from outside) 🧱🔥 UFW/GUFW ✅"
+  echo "🌐 Allowing conections started from this system to outside..."
   dryrun sudo ufw default allow outgoing
+  echo "🌐 Allowed outgoing traffic 🧱🔥 UFW/GUFW ✅"
   echo "🌐 Enabling and applying settings to 🧱🔥 UFW/GUFW..."
   dryrun sudo ufw enable
+  echo "🌐 Enabled 🧱🔥 UFW/GUFW ✅"
+  echo "🌐 Reloading 🧱🔥 UFW/GUFW..."
   dryrun sudo ufw reload
+  echo "🌐 Reloaded 🧱🔥 UFW/GUFW ✅"
   
   if confirm "📝 Do you want to enable UFW logging?"; then
     dryrun sudo ufw logging on
