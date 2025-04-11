@@ -293,6 +293,66 @@ install_compression_tools() {
   fi
 }
 
+setup_sysadmin_tools() {
+  echo "🛠️ Preparing sysadmin tools setup..."
+
+  if confirm "📡 Install Remmina (GUI 🪟 - remote desktop client with full plugin support)?"; then
+    echo "📡 Installing Remmina..."
+    dryrun sudo apt install remmina remmina-plugin-* -y || echo "⚠️ Remmina installation failed."
+  fi
+
+  if confirm "📊 Install htop (CLI 🖥️ - interactive process viewer)?"; then
+    dryrun sudo apt install htop -y
+  fi
+
+  if confirm "📷 Install screenfetch (CLI 🖥️ - display system info with ASCII logo)?"; then
+    dryrun sudo apt install screenfetch -y
+  fi
+
+  if confirm "🖥️ Install guake (GUI 🪟 - dropdown terminal for GNOME)?"; then
+    dryrun sudo apt install guake -y
+  fi
+
+  if confirm "🔐 Install OpenSSH Client (CLI 🖥️ - secure remote terminal access)?"; then
+    dryrun sudo apt install openssh-client -y
+  fi
+
+  if confirm "🔁 Install lftp (CLI 🖥️ - advanced FTP/HTTP client with scripting support)?"; then
+    dryrun sudo apt install lftp -y
+  fi
+
+  if confirm "📡 Install telnet (CLI 🖥️ - basic network protocol testing tool)?"; then
+    dryrun sudo apt install telnet -y
+  fi
+
+  if confirm "🛰️ Install traceroute (CLI 🖥️ - trace path to a network host)?"; then
+    dryrun sudo apt install traceroute -y
+  fi
+
+  if confirm "📍 Install mtr (CLI 🖥️ - real-time network diagnostic tool)?"; then
+    dryrun sudo apt install mtr -y
+  fi
+
+  if confirm "🌐 Install whois (CLI 🖥️ - domain and IP ownership lookup)?"; then
+    dryrun sudo apt install whois -y
+  fi
+
+  if confirm "🧠 Install dnsutils (CLI 🖥️ - includes dig, nslookup, etc.)?"; then
+    dryrun sudo apt install dnsutils -y
+  fi
+
+  if confirm "🧪 Install nmap (CLI 🖥️ - network scanner and discovery tool)?"; then
+    dryrun sudo apt install nmap -y
+  fi
+
+  if confirm "🔬 Install Wireshark (GUI 🪟 - network packet analyzer)?"; then
+    dryrun sudo apt install wireshark -y
+    echo "⚠️ Note: You may need to add your user to the 'wireshark' group to capture packets without sudo."
+  fi
+
+  echo "✅ Sysadmin tool installation process completed."
+}
+
 install_remmina() {
   if confirm "🖥️ Install Remmina (remote desktop client with full plugin support)?"; then
     echo "📦 Installing Remmina and plugins..."
