@@ -3,7 +3,7 @@
 # Vitor Cruz's General Purpose System Boost Script
 # License: GPL v3.0
 
-VERSION="1.6.15"
+VERSION="1.6.17"
 set -e
 
 ### Helper Functions ###
@@ -55,7 +55,7 @@ full_cleanup() {
   echo "🗑️ Cleaning temporary files..."
   dryrun sudo rm -rf /tmp/*
   dryrun rm -rf ~/.cache/*
-  echo "🗑️ Package and temporary files clean! ✅"
+  echo "✅ Package and temporary files clean!🗑️"
 }
 
 system_update() {
@@ -73,7 +73,7 @@ system_update() {
   dryrun sudo snap refresh
   echo "🔄 Performing Flatpak update..."
   dryrun sudo flatpak update
-  echo "🌐 Everything updated!"
+  echo "✅ Everything updated!"
 }
 
 install_restricted_packages() {
@@ -97,7 +97,7 @@ install_restricted_packages() {
 if prompt_confirm "🎧 Do you want to install Spotify (Snap version)? Spotify is a popular music streaming service. This installs the official Snap version."; then
     echo "🎶 Installing Spotify (official Snap version)..."
     dryrun sudo snap install spotify
-    echo "🎶 Spotify (official Snap version) installed ✅"
+    echo "✅ Spotify (official Snap version) installed."
 fi
     fi
 fi    
@@ -168,23 +168,23 @@ setup_firewall() {
   dryrun sudo apt update
   echo "🌐 Installing 🧱🔥 UFW/GUFW..."
   dryrun sudo apt install ufw gufw -y
-  echo "🌐 Enabling 🧱🔥 UFW/GUFW..."
+  echo "🔧 Enabling 🧱🔥 UFW/GUFW..."
   dryrun sudo systemctl enable ufw
-  echo "🌐 Restarting/Reseting 🧱🔥 UFW/GUFW..."
+  echo "🔧 Restarting/Reseting 🧱🔥 UFW/GUFW..."
   dryrun sudo systemctl restart ufw
   dryrun sudo ufw --force reset
-  echo "🌐 Setting pretty sick block rule from outside 🧱🔥 UFW/GUFW..."
+  echo "🔧 Setting pretty sick block rule from outside 🧱🔥 UFW/GUFW..."
   dryrun sudo ufw default deny incoming
-  echo "🌐 Denied incomming traffic (from outside) 🧱🔥 UFW/GUFW ✅"
-  echo "🌐 Allowing conections started from this system to outside..."
+  echo "✅Denied incomming traffic (from outside) 🧱🔥 UFW/GUFW."
+  echo "🔧 Allowing conections started from this system to outside..."
   dryrun sudo ufw default allow outgoing
-  echo "🌐 Allowed outgoing traffic 🧱🔥 UFW/GUFW ✅"
-  echo "🌐 Enabling and applying settings to 🧱🔥 UFW/GUFW..."
+  echo "✅ Allowed outgoing traffic 🧱🔥 UFW/GUFW."
+  echo "🔧 Enabling and applying settings to 🧱🔥 UFW/GUFW..."
   dryrun sudo ufw enable
-  echo "🌐 Enabled 🧱🔥 UFW/GUFW ✅"
-  echo "🌐 Reloading 🧱🔥 UFW/GUFW..."
+  echo "✅ Enabled 🧱🔥 UFW/GUFW."
+  echo "⚙️ Reloading 🧱🔥 UFW/GUFW..."
   dryrun sudo ufw reload
-  echo "🌐 Reloaded 🧱🔥 UFW/GUFW ✅"
+  echo "✅ Reloaded 🧱🔥 UFW/GUFW."
   
   if confirm "📝 Do you want to enable UFW logging?"; then
     dryrun sudo ufw logging on
@@ -211,6 +211,7 @@ replace_firefox_with_librewolf() {
     dryrun sudo apt update
     echo "🌐 Installing LibreWolf..."
     dryrun sudo apt install librewolf -y
+    echo "✅ Librewolf installed."
   fi
 }
 
@@ -230,9 +231,9 @@ install_chrome() {
             dryrun xdg-settings set default-web-browser google-chrome.desktop
         fi
 
-        echo "✅ Google Chrome installed and configured.\n"
+        echo "✅ Google Chrome installed and configured."
     else
-        echo "❎ Skipped Google Chrome installation.\n"
+        echo "❎ Skipped Google Chrome installation."
     fi
 }
 
@@ -247,6 +248,7 @@ install_flatpak_snap_store() {
 enable_trim() {
   if confirm "✂️ Enable periodic TRIM for SSDs (recommended)?"; then
     dryrun sudo systemctl enable fstrim.timer
+    echo "✅ Timer service for TRIM enabled."
   fi
 }
 
@@ -349,6 +351,7 @@ install_vm_tools() {
     dryrun sudo apt update
     echo "🌐 Installing Virtualbox..."
     dryrun sudo apt install -y virtualbox-7.1
+    echo "✅ Virtualbox installed."
   fi
 }
 
@@ -512,26 +515,26 @@ print_help() {
   echo "Usage: ./sysboost.sh [options]"
   echo ""
   echo "  Options:"
-  echo "  --clean          🛠️ Full cleanup and temp file clearing"
-  echo "  --update         🛠️ Run update only (no cleanup)"
-  echo "  --harden         🛠️ Apply security tweaks, disable telemetry, enable firewall"
-  echo "  --vm             🛠️ Install VirtualBox tools"
-  echo "  --gaming         🛠️ Gaming tools, Vulkan, drivers, Steam & FPS tweaks"
-  echo "  --trim           🛠️ Enable SSD TRIM"
-  echo "  --performance    🛠️ Set CPU governor to 'performance'"
-  echo "  --media          🛠️ Install multimedia codecs (restricted-extras)"
-  echo "  --store          🛠️ Add Flatpak, Snap, and GNOME Software support"
-  echo "  --librewolf      🛠️ Replace Snap Firefox with LibreWolf"
-  echo "  --chrome         🛠️ Install Google Chrome from the official repository"
-  echo "  --compression    🛠️ Install archive format support (zip, rar, 7z, etc)"
-  echo "  --sysadmin       🛠️  Install Remmina and useful system/network tools for sysadmins"
-  echo "  --remmina        🛠️ Install Remmina client with full plugin support (RDP, VNC, etc)"
-  echo "  --preload        🛠️ Suggest and optionally install preload & ZRAM"
-  echo "  --donate         🛠️ Show donation info and open Linktree in browser"
-  echo "  --dryrun         🛠️ Show commands without executing"
-  echo "  --all            🛠️ Run all modules"
-  echo "  -v, --version    🛠️ Show script version"
-  echo "  -h, --help       🛠️ Show help"
+  echo "  --clean          🧹 Full cleanup and temp file clearing"
+  echo "  --update         🔄 Run update only (no cleanup)"
+  echo "  --harden         🔐 Apply security tweaks, disable telemetry, enable firewall"
+  echo "  --vm             🖥️  Install VirtualBox tools"
+  echo "  --gaming         🎮 Gaming tools, Vulkan, drivers, Steam & FPS tweaks"
+  echo "  --trim           ✂️  Enable SSD TRIM"
+  echo "  --performance    ⚡ Set CPU governor to 'performance'"
+  echo "  --media          🎵 Install multimedia codecs (restricted-extras)"
+  echo "  --store          🛍️  Add Flatpak, Snap, and GNOME Software support"
+  echo "  --librewolf      🦊 Replace Snap Firefox with LibreWolf"
+  echo "  --chrome         🌐 Install Google Chrome from the official repository"
+  echo "  --compression    📦 Install archive format support (zip, rar, 7z, etc)"
+  echo "  --sysadmin       🧰 Install Remmina and useful system/network tools for sysadmins"
+  echo "  --remmina        🖧 Install Remmina client with full plugin support (RDP, VNC, etc)"
+  echo "  --preload        🧠 Suggest and optionally install preload & ZRAM"
+  echo "  --donate         ❤️ Show donation info and open Linktree in browser"
+  echo "  --dryrun         🧪 Show commands without executing"
+  echo "  --all            🚀 Run all modules"
+  echo "  -v, --version    ℹ️  Show script version"
+  echo "  -h, --help       📖 Show help"
 }
 
 ### Main Entry Point ###
