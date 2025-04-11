@@ -3,7 +3,7 @@
 # Vitor Cruz's General Purpose System Boost Script
 # License: GPL v3.0
 
-VERSION="1.6.11"
+VERSION="1.6.12"
 set -e
 
 ### Helper Functions ###
@@ -191,6 +191,26 @@ replace_firefox_with_librewolf() {
     echo "🌐 Installing LibreWolf..."
     dryrun sudo apt install librewolf -y
   fi
+}
+
+install_chrome() {
+    local prompt_title="🧭 Google Chrome (from official repository)"
+    local prompt_text="Do you want to install Google Chrome (Stable) using the official repository?"
+
+    if prompt_user "$prompt_title" "$prompt_text"; then
+        run_cmd "wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | gpg --dearmor -o /usr/share/keyrings/google-chrome.gpg"
+        run_cmd "echo 'deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/google-chrome.gpg] https://dl.google.com/linux/chrome/deb/ stable main' | tee /etc/apt/sources.list.d/google-chrome.list"
+        run_cmd "apt update"
+        run_cmd "apt install -y google-chrome-stable"
+
+        if prompt_user "🌐 Set Chrome as default browser?" "Do you want to make Google Chrome your default browser?"; then
+            run_cmd "xdg-settings set default-web-browser google-chrome.desktop"
+        fi
+
+        echo -e "✅ Google Chrome installed and configured.\n"
+    else
+        echo -e "❎ Skipped Google Chrome installation.\n"
+    fi
 }
 
 install_flatpak_snap_store() {
@@ -497,6 +517,7 @@ main() {
       --media) install_restricted_packages ;;
       --store) install_flatpak_snap_store ;;
       --librewolf) replace_firefox_with_librewolf ;;
+      --chrome) install_chrome ;;
       --compression) install_compression_tools ;;
       --sysadmin) setup_sysadmin_tools ;;
       --remmina) install_remmina ;;
@@ -519,6 +540,7 @@ main() {
         install_restricted_packages
         install_compression_tools
         replace_firefox_with_librewolf
+        install_chrome
         suggest_preload_and_zram
         show_donation_info
         ;;
