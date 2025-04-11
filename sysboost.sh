@@ -225,7 +225,6 @@ install_chrome() {
         if prompt_user "🧭 Set Chrome as default browser?" "Do you want to make Google Chrome your default browser?"; then
             dryrun xdg-settings set default-web-browser google-chrome.desktop
         fi
-
         echo "✅ Google Chrome installed and configured."
     else
         echo "❎ Skipped Google Chrome installation."
