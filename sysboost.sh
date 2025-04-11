@@ -3,7 +3,7 @@
 # Vitor Cruz's General Purpose System Boost Script
 # License: GPL v3.0
 
-VERSION="1.6.13"
+VERSION="1.6.14"
 set -e
 
 ### Helper Functions ###
@@ -82,7 +82,7 @@ install_restricted_packages() {
 
     if confirm "📽️ Do you also want to install GNOME Videos (Totem)?"; then
       echo "🎞️ Installing GNOME Videos (Totem)..."
-      dryrun sudo apt install totem -y
+      dryrun sudo apt install totem totem-common totem-plugins -y
 
       if confirm "🎯 Set Totem as the default video player?"; then
         echo "🔧 Setting Totem as the default video player for common formats..."
