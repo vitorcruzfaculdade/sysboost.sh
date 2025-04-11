@@ -3,7 +3,7 @@
 # Vitor Cruz's General Purpose System Boost Script
 # License: GPL v3.0
 
-VERSION="1.6.14"
+VERSION="1.6.15"
 set -e
 
 ### Helper Functions ###
@@ -55,6 +55,7 @@ full_cleanup() {
   echo "🗑️ Cleaning temporary files..."
   dryrun sudo rm -rf /tmp/*
   dryrun rm -rf ~/.cache/*
+  echo "🗑️ Package and temporary files clean! ✅"
 }
 
 system_update() {
@@ -214,7 +215,7 @@ replace_firefox_with_librewolf() {
 }
 
 install_chrome() {
-    local prompt_title="🧭 Google Chrome (from official repository)"
+    echo "🧭 Google Chrome (from official repository)"
     local prompt_text="Do you want to install Google Chrome (Stable) using the official repository?"
 
     if prompt_user "$prompt_title" "$prompt_text"; then
@@ -244,7 +245,7 @@ install_flatpak_snap_store() {
 }
 
 enable_trim() {
-  if confirm "💾 Enable periodic TRIM for SSDs (recommended)?"; then
+  if confirm "✂️ Enable periodic TRIM for SSDs (recommended)?"; then
     dryrun sudo systemctl enable fstrim.timer
   fi
 }
@@ -275,9 +276,13 @@ install_gaming_tools() {
   if echo "$gpu_info" | grep -qi nvidia; then
     echo "🟢 NVIDIA GPU detected."
     if confirm "Install NVIDIA proprietary drivers?"; then
+      echo "🌐 Updating instalation cache..."
       dryrun sudo apt update
+      echo "🌐 Updating system..."
       dryrun sudo apt upgrade -y
+      echo "🌐 Adding some packages to improve GPU compatibility"
       dryrun sudo apt install mesa-vulkan-drivers mesa-utils vulkan-tools -y
+      echo "🌐 Installing NVIDIA drivers using Ubuntu-Drivers..."
       dryrun sudo ubuntu-drivers autoinstall
       echo "✅ NVIDIA drivers installation triggered."
     fi
@@ -296,9 +301,13 @@ install_gaming_tools() {
   elif echo "$gpu_info" | grep -qi vmware; then
     echo "🟠 VMware or VirtualBox GPU detected."
     if confirm "Install Virtual Machine GPU drivers?"; then
+      echo "🌐 Updating instalation cache..."    
       dryrun sudo apt update
+      echo "🌐 Updating system..."
       dryrun sudo apt upgrade -y
+      echo "🌐 Adding some packages to improve GPU compatibility and Open-VM-Tools..."
       dryrun sudo apt install mesa-vulkan-drivers mesa-utils vulkan-tools open-vm-tools -y
+      echo "🌐 Installing VM additional drivers using Ubuntu-Drivers (if any)..."
       dryrun sudo ubuntu-drivers autoinstall
       echo "✅ VM GPU drivers installed."
     fi
@@ -319,8 +328,11 @@ install_gaming_tools() {
     echo "🌐 Downloading Steam .deb from official servers..."
     dryrun wget -O "$tmp_deb" https://cdn.fastly.steamstatic.com/client/installer/steam.deb
     dryrun sudo apt install "$tmp_deb" -y
+    echo "🌐 Updating instalation cache..." 
     dryrun sudo apt update
+    echo "🛠️ Fixing dependencies (always happen with Steam deb)..." 
     dryrun sudo apt -f install -y
+    echo "🧹 Cleaning temp..." 
     dryrun rm -f "$tmp_deb"
     echo "✅ Steam installed from official .deb package (dependencies resolved)."
   fi
@@ -328,11 +340,14 @@ install_gaming_tools() {
 
 install_vm_tools() {
   if confirm "📦 Install latest VirtualBox from Oracle's official repo?"; then
+    echo "🌐 Obtaining key from Oracle..." 
     dryrun wget -q https://www.virtualbox.org/download/oracle_vbox_2016.asc -O- | sudo gpg --dearmor -o /usr/share/keyrings/oracle-virtualbox.gpg
     codename=$(lsb_release -cs)
+    echo "🌐 Adding key and repository information..." 
     echo "deb [arch=amd64 signed-by=/usr/share/keyrings/oracle-virtualbox.gpg] https://download.virtualbox.org/virtualbox/debian $codename contrib" | sudo tee /etc/apt/sources.list.d/virtualbox.list
-    
+    echo "🌐 Updating instalation cache..." 
     dryrun sudo apt update
+    echo "🌐 Installing Virtualbox..."
     dryrun sudo apt install -y virtualbox-7.1
   fi
 }
@@ -345,10 +360,9 @@ install_compression_tools() {
 
 setup_sysadmin_tools() {
   echo "🛠️ Preparing sysadmin tools setup..."
-
   if confirm "📡 Install Remmina (GUI 🪟 - remote desktop client with full plugin support)?"; then
     echo "📡 Installing Remmina..."
-    dryrun sudo apt install remmina remmina-plugin-* -y || echo "⚠️ Remmina installation failed."
+    dryrun apt install remmina remmina-plugin-rdp remmina-plugin-vnc remmina-plugin-secret remmina-plugin-spice remmina-plugin-exec -y || echo "⚠️ Remmina installation failed."
   fi
 
   if confirm "📊 Install htop (CLI 🖥️ - interactive process viewer)?"; then
@@ -405,8 +419,9 @@ setup_sysadmin_tools() {
 
 install_remmina() {
   if confirm "🖥️ Install Remmina (remote desktop client with full plugin support)?"; then
-    echo "📦 Installing Remmina and plugins..."
+    echo "🌐 Updating instalation cache..."
     dryrun sudo apt update
+    echo "📦 Installing Remmina and plugins..."
     dryrun sudo apt install remmina remmina-plugin-rdp remmina-plugin-vnc remmina-plugin-secret remmina-plugin-spice remmina-plugin-exec -y
     echo "✅ Remmina installed with full client support — no server components."
   fi
