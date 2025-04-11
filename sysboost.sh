@@ -226,7 +226,7 @@ install_chrome() {
         dryrun sudo apt install google-chrome-stable -y
 
         if prompt_user "🧭 Set Chrome as default browser?" "Do you want to make Google Chrome your default browser?"; then
-            run_cmd "xdg-settings set default-web-browser google-chrome.desktop"
+            dryrun xdg-settings set default-web-browser google-chrome.desktop
         fi
 
         echo "✅ Google Chrome installed and configured.\n"
