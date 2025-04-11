@@ -3,7 +3,7 @@
 # Vitor Cruz's General Purpose System Boost Script
 # License: GPL v3.0
 
-VERSION="1.6.20"
+VERSION="1.6.21"
 set -e
 
 ### Helper Functions ###
@@ -94,7 +94,7 @@ install_restricted_packages() {
       fi
     fi
 # Offer to install Spotify via Snap
-if prompt_confirm "🎧 Do you want to install Spotify (Snap version)? Spotify is a popular music streaming service. This installs the official Snap version."; then
+if confirm "🎧 Do you want to install Spotify (Snap version)? Spotify is a popular music streaming service. This installs the official Snap version."; then
     echo "🎶 Installing Spotify (official Snap version)..."
     dryrun sudo snap install spotify
     echo "✅ Spotify (official Snap version) installed."
@@ -510,26 +510,26 @@ print_help() {
   echo "Usage: ./sysboost.sh [options]"
   echo ""
   echo "  Options:"
-  echo "  --clean          🧹 Full cleanup and temp file clearing"
-  echo "  --update         🔄 Run update only (no cleanup)"
-  echo "  --harden         🔐 Apply security tweaks, disable telemetry, enable firewall"
+  echo "  --clean          🧹  Full cleanup and temp file clearing"
+  echo "  --update         🔄  Run update only (no cleanup)"
+  echo "  --harden         🔐  Apply security tweaks, disable telemetry, enable firewall"
   echo "  --vm             🖥️  Install VirtualBox tools"
-  echo "  --gaming         🎮 Gaming tools, Vulkan, drivers, Steam & FPS tweaks"
+  echo "  --gaming         🎮  Gaming tools, Vulkan, drivers, Steam & FPS tweaks"
   echo "  --trim           ✂️  Enable SSD TRIM"
-  echo "  --performance    ⚡ Set CPU governor to 'performance'"
-  echo "  --media          🎵 Install multimedia codecs (restricted-extras)"
+  echo "  --performance    ⚡   Set CPU governor to 'performance'"
+  echo "  --media          🎵  Install multimedia codecs (restricted-extras)"
   echo "  --store          🛍️  Add Flatpak, Snap, and GNOME Software support"
-  echo "  --librewolf      🦊 Replace Snap Firefox with LibreWolf"
-  echo "  --chrome         🌐 Install Google Chrome from the official repository"
-  echo "  --compression    📦 Install archive format support (zip, rar, 7z, etc)"
-  echo "  --sysadmin       🧰 Install Remmina and useful system/network tools for sysadmins"
-  echo "  --remmina        🖧 Install Remmina client with full plugin support (RDP, VNC, etc)"
-  echo "  --preload        🧠 Suggest and optionally install preload & ZRAM"
-  echo "  --donate         ❤️ Show donation info and open Linktree in browser"
-  echo "  --dryrun         🧪 Show commands without executing"
-  echo "  --all            🚀 Run all modules"
+  echo "  --librewolf      🦊  Replace Snap Firefox with LibreWolf"
+  echo "  --chrome         🧭  Install Google Chrome from the official repository"
+  echo "  --compression    📦  Install archive format support (zip, rar, 7z, etc)"
+  echo "  --sysadmin       🧰  Install Remmina and useful system/network tools for sysadmins"
+  echo "  --remmina        🖧  Install Remmina client with full plugin support (RDP, VNC, etc)"
+  echo "  --preload        🧠  Suggest and optionally install preload & ZRAM"
+  echo "  --donate         ❤️  Show donation info and open Linktree in browser"
+  echo "  --dryrun         🧪  Show commands without executing"
+  echo "  --all            🚀  Run all modules"
   echo "  -v, --version    ℹ️  Show script version"
-  echo "  -h, --help       📖 Show help"
+  echo "  -h, --help       📖  Show help"
 }
 
 ### Main Entry Point ###
