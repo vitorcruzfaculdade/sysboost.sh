@@ -3,7 +3,7 @@
 # Vitor Cruz's General Purpose System Boost Script
 # License: GPL v3.0
 
-VERSION="1.6.12"
+VERSION="1.6.13"
 set -e
 
 ### Helper Functions ###
@@ -39,28 +39,40 @@ confirm() {
 ### Core Functions ###
 full_cleanup() {
   echo "🗑️ Cleaning temp files..."
+  echo "🌐 Updating instalation cache..."
   dryrun sudo apt update
+  echo "🧽 Installing Bleachbit Cleaner..."
   dryrun sudo apt install bleachbit -y
+  echo "🌐 Checking for broken dependencies..."
   dryrun sudo apt-get check
+  echo "🛠️ Fixing broken dependencies (if any)..."
   dryrun sudo apt-get -f install -y
+  echo "🧹 Cleaning useless packages"
   dryrun sudo apt-get --purge autoremove -y
+  echo "🧹 Cleaning apt-get cache ..."
   dryrun sudo apt-get autoclean
   dryrun sudo apt-get clean
+  echo "🗑️ Cleaning temporary files..."
   dryrun sudo rm -rf /tmp/*
   dryrun rm -rf ~/.cache/*
 }
 
 system_update() {
-  echo "🔄 Performing full system update"
+  echo "🌐 Updating instalation cache..."
   dryrun sudo apt update
   dryrun sudo apt-get update
+  echo "🌐 Checking for broken dependencies..."
   dryrun sudo apt-get check
   dryrun sudo apt-get -f install
+  echo "🔄 Performing full system update..."
   dryrun sudo apt-get dist-upgrade -y
   dryrun sudo apt upgrade -y
   dryrun sudo apt full-upgrade -y
+  echo "🔄 Performing Snap packages update..."
   dryrun sudo snap refresh
+  echo "🔄 Performing Flatpak update..."
   dryrun sudo flatpak update
+  echo "🌐 Everything updated!"
 }
 
 install_restricted_packages() {
@@ -198,18 +210,20 @@ install_chrome() {
     local prompt_text="Do you want to install Google Chrome (Stable) using the official repository?"
 
     if prompt_user "$prompt_title" "$prompt_text"; then
-        run_cmd "wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | gpg --dearmor -o /usr/share/keyrings/google-chrome.gpg"
-        run_cmd "echo 'deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/google-chrome.gpg] https://dl.google.com/linux/chrome/deb/ stable main' | tee /etc/apt/sources.list.d/google-chrome.list"
-        run_cmd "apt update"
-        run_cmd "apt install -y google-chrome-stable"
+        dryrun wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo gpg --dearmor -o /usr/share/keyrings/google-chrome.gpg
+        dryrun sudo echo 'deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/google-chrome.gpg] https://dl.google.com/linux/chrome/deb/ stable main' | sudo tee /etc/apt/sources.list.d/google-chrome.list
+        echo "🌐 Updating instalation cache..."
+        dryryn sudo apt update
+        echo "🧭 Installing Google Chrome..."
+        dryrun sudo apt install google-chrome-stable -y
 
-        if prompt_user "🌐 Set Chrome as default browser?" "Do you want to make Google Chrome your default browser?"; then
+        if prompt_user "🧭 Set Chrome as default browser?" "Do you want to make Google Chrome your default browser?"; then
             run_cmd "xdg-settings set default-web-browser google-chrome.desktop"
         fi
 
-        echo -e "✅ Google Chrome installed and configured.\n"
+        echo "✅ Google Chrome installed and configured.\n"
     else
-        echo -e "❎ Skipped Google Chrome installation.\n"
+        echo "❎ Skipped Google Chrome installation.\n"
     fi
 }
 
@@ -309,6 +323,7 @@ install_vm_tools() {
     dryrun wget -q https://www.virtualbox.org/download/oracle_vbox_2016.asc -O- | sudo gpg --dearmor -o /usr/share/keyrings/oracle-virtualbox.gpg
     codename=$(lsb_release -cs)
     echo "deb [arch=amd64 signed-by=/usr/share/keyrings/oracle-virtualbox.gpg] https://download.virtualbox.org/virtualbox/debian $codename contrib" | sudo tee /etc/apt/sources.list.d/virtualbox.list
+    
     dryrun sudo apt update
     dryrun sudo apt install -y virtualbox-7.1
   fi
