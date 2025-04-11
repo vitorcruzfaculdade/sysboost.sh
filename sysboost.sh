@@ -3,7 +3,7 @@
 # Vitor Cruz's General Purpose System Boost Script
 # License: GPL v3.0
 
-VERSION="1.6.21"
+VERSION="1.6.22"
 set -e
 
 ### Helper Functions ###
@@ -214,9 +214,7 @@ replace_firefox_with_librewolf() {
 }
 
 install_chrome() {
-    echo "🧭 Google Chrome (from official repository)"
-    local prompt_text="Do you want to install Google Chrome (Stable) using the official repository?"
-    if prompt_user "$prompt_title" "$prompt_text"; then
+    if confirm "🧭 Do you want to install Google Chrome (Stable) using the official repository?"; then
         dryrun wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo gpg --dearmor -o /usr/share/keyrings/google-chrome.gpg
         dryrun sudo echo 'deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/google-chrome.gpg] https://dl.google.com/linux/chrome/deb/ stable main' | sudo tee /etc/apt/sources.list.d/google-chrome.list
         echo "🌐 Updating instalation cache..."
