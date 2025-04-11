@@ -81,12 +81,10 @@ install_restricted_packages() {
       fi
     fi
 # Offer to install Spotify via Snap
-if prompt_confirm "🎧 Do you want to install Spotify (Snap version)? Do you want to install Spotify (Snap version)?" "Spotify is a popular music streaming service. This installs the official Snap version."; then
-    if $DRYRUN; then
-        echo "[DRYRUN] Would install Spotify via snap"
-    else
-        echo "Installing Spotify..."
-        sudo snap install spotify
+if prompt_confirm "🎧 Do you want to install Spotify (Snap version)? Spotify is a popular music streaming service. This installs the official Snap version."; then
+    echo "🎶 Installing Spotify (official Snap version)..."
+    dryrun sudo snap install spotify
+fi
     fi
 fi    
   fi
