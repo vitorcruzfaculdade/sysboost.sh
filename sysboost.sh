@@ -3,7 +3,7 @@
 # Vitor Cruz's General Purpose System Boost Script
 # License: GPL v3.0
 
-VERSION="1.6.7"
+VERSION="1.6.8"
 set -e
 
 ### Helper Functions ###
@@ -65,8 +65,21 @@ system_update() {
 
 install_restricted_packages() {
   if confirm "🎵 Do you want to install multimedia support (ubuntu-restricted-extras & addons)?"; then
-    echo "🎶 Installing ubuntu-restricted-extras and ubuntu-restricted-addons..."
-    dryrun sudo apt install ubuntu-restricted-extras ubuntu-restricted-addons -y
+    echo "🎶 Installing ubuntu-restricted-extras, ubuntu-restricted-addons and extended GStreamer plugins..."
+    dryrun sudo apt install ubuntu-restricted-extras ubuntu-restricted-addons gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly gstreamer1.0-libav -y
+
+    if confirm "📽️ Do you also want to install GNOME Videos (Totem)?"; then
+      echo "🎞️ Installing GNOME Videos (Totem)..."
+      dryrun sudo apt install totem -y
+
+      if confirm "🎯 Set Totem as the default video player?"; then
+        echo "🔧 Setting Totem as the default video player for common formats..."
+        dryrun xdg-mime default org.gnome.Totem.desktop video/mp4
+        dryrun xdg-mime default org.gnome.Totem.desktop video/x-matroska
+        dryrun xdg-mime default org.gnome.Totem.desktop video/x-msvideo
+        dryrun xdg-mime default org.gnome.Totem.desktop video/x-flv
+      fi
+    fi
   fi
 }
 
