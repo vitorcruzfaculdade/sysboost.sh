@@ -3,7 +3,7 @@
 # Vitor Cruz's General Purpose System Boost Script
 # License: GPL v3.0
 
-VERSION="1.6.23"
+VERSION="1.6.24"
 set -e
 
 ### Helper Functions ###
@@ -215,14 +215,16 @@ replace_firefox_with_librewolf() {
 
 install_chrome() {
     if confirm "🧭 Do you want to install Google Chrome (Stable) using the official repository?"; then
+        echo "🌐 Downloading and saving Google Chrome repository key..."
         dryrun wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo gpg --dearmor -o /usr/share/keyrings/google-chrome.gpg
+        echo "🌐 Downloading and saving Google Chrome repository..."
         dryrun sudo echo 'deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/google-chrome.gpg] https://dl.google.com/linux/chrome/deb/ stable main' | sudo tee /etc/apt/sources.list.d/google-chrome.list
         echo "🌐 Updating instalation cache..."
         dryrun sudo apt update
         echo "🧭 Installing Google Chrome..."
         dryrun sudo apt install google-chrome-stable -y
 
-        if prompt_user "🧭 Set Chrome as default browser?" "Do you want to make Google Chrome your default browser?"; then
+        if confirm "🧭 Set Chrome as default browser?" "Do you want to make Google Chrome your default browser?"; then
             dryrun xdg-settings set default-web-browser google-chrome.desktop
         fi
         echo "✅ Google Chrome installed and configured."
