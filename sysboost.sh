@@ -3,7 +3,7 @@
 # Vitor Cruz's General Purpose System Boost Script
 # License: GPL v3.0
 
-VERSION="1.6.17"
+VERSION="1.6.20"
 set -e
 
 ### Helper Functions ###
@@ -87,10 +87,10 @@ install_restricted_packages() {
 
       if confirm "🎯 Set Totem as the default video player?"; then
         echo "🔧 Setting Totem as the default video player for common formats..."
-        dryrun xdg-mime default org.gnome.Totem.desktop video/mp4
-        dryrun xdg-mime default org.gnome.Totem.desktop video/x-matroska
-        dryrun xdg-mime default org.gnome.Totem.desktop video/x-msvideo
-        dryrun xdg-mime default org.gnome.Totem.desktop video/x-flv
+        formats=("video/mp4" "video/x-matroska" "video/x-msvideo" "video/x-flv" "video/webm" "video/ogg")
+          for format in "${formats[@]}"; do
+            dryrun xdg-mime default org.gnome.Totem.desktop "$format"
+          done
       fi
     fi
 # Offer to install Spotify via Snap
@@ -186,10 +186,12 @@ setup_firewall() {
   
   if confirm "📝 Do you want to enable UFW logging?"; then
     dryrun sudo ufw logging on
-    echo "📝 UFW logging " log_status="enabled"
+    log_status="enabled"
+    echo "✅ UFW logging on 📝"
   else
     dryrun sudo ufw logging off
-    echo "📝 UFW logging" log_status="disabled"
+    log_status="disabled"
+    echo "✅ UFW logging off 📝"
   fi
 
   dryrun sudo ufw reload
