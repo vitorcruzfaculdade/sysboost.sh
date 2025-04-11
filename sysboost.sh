@@ -3,7 +3,7 @@
 # Vitor Cruz's General Purpose System Boost Script
 # License: GPL v3.0
 
-VERSION="1.6.22"
+VERSION="1.6.23"
 set -e
 
 ### Helper Functions ###
@@ -218,7 +218,7 @@ install_chrome() {
         dryrun wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo gpg --dearmor -o /usr/share/keyrings/google-chrome.gpg
         dryrun sudo echo 'deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/google-chrome.gpg] https://dl.google.com/linux/chrome/deb/ stable main' | sudo tee /etc/apt/sources.list.d/google-chrome.list
         echo "🌐 Updating instalation cache..."
-        dryryn sudo apt update
+        dryrun sudo apt update
         echo "🧭 Installing Google Chrome..."
         dryrun sudo apt install google-chrome-stable -y
 
