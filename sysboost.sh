@@ -3,7 +3,7 @@
 # Vitor Cruz's General Purpose System Boost Script
 # License: GPL v3.0
 
-VERSION="1.7.4"
+VERSION="1.7.6"
 set -e
 
 ### Helper Functions ###
@@ -167,7 +167,7 @@ remove_remote_access_servers() {
   done
 }
 
-firewall_setup() {
+setup_firewall() {
   echo "🛡️ Setting up UFW firewall rules..."
 
   if sudo ufw status | grep -q "Status: active"; then
@@ -660,7 +660,7 @@ print_help() {
   echo "  --compression    📦  Install archive format support (zip, rar, 7z, etc)"
   echo "  --sysadmin       🧰  Install Remmina and useful system/network tools for sysadmins"
   echo "  --remmina        🖧  Install Remmina client with full plugin support (RDP, VNC, etc)"
-  echo "   --office          📝 Install LibreOffice or OnlyOffice with language & default options"
+  echo "  --office         📝  Install LibreOffice or OnlyOffice with language & default options"
   echo "  --preload        🧠  Suggest and optionally install preload & ZRAM"
   echo "  --donate         ❤️  Show donation info and open Linktree in browser"
   echo "  --dryrun         🧪  Show commands without executing"
@@ -683,7 +683,7 @@ main() {
     case "$1" in
       --clean) full_cleanup ;;
       --update) update_system ;;
-      --harden) disable_telemetry; remove_remote_access_servers; firewall_setup ;;
+      --harden) disable_telemetry; remove_remote_access_servers; setup_firewall ;;
       --vm) install_vm_tools ;;
       --gaming) install_gaming_tools ;;
       --trim) enable_trim ;;
