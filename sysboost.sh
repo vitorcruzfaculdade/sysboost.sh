@@ -3,7 +3,7 @@
 # Vitor Cruz's General Purpose System Boost Script
 # License: GPL v3.0
 
-VERSION="1.7.22"
+VERSION="1.7.25"
 set -e
 
 ### Helper Functions ###
@@ -79,7 +79,7 @@ update_system() {
   if ! command -v flatpak &> /dev/null; then
     echo "📦 Flatpak is not installed. Needed for updating Flatpak apps."
 
-    if confirm_prompt "🛍️ Store (Flatpak, Snap, GNOME Software) is not installed. Would you like to install it now?" "y"; then
+    if confirm "🛍️ Store (Flatpak, Snap, GNOME Software) is not installed. Would you like to install it now?" "y"; then
       echo "🛍️ Installing Store module..."
       install_store
     else
@@ -325,7 +325,7 @@ install_gaming_tools() {
       echo "🌐 Updating system..."
       dryrun sudo apt upgrade -y
       echo "🌐 Adding some packages to improve GPU compatibility and Open-VM-Tools..."
-      dryrun sudo apt install mesa-vulkan-drivers mesa-utils vulkan-tools open-vm-tools -y
+      dryrun sudo apt install mesa-vulkan-drivers mesa-utils vulkan-tools open-vm-tools open-vm-tools-desktop -y
       echo "🌐 Installing VM additional drivers using Ubuntu-Drivers (if any)..."
       dryrun sudo ubuntu-drivers autoinstall
       echo "✅ VM GPU drivers installed."
