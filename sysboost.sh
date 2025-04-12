@@ -361,7 +361,7 @@ install_sysadmin_tools() {
   echo "🛠️ Preparing sysadmin tools setup..."
   if confirm "📡 Install Remmina (GUI 🪟 - remote desktop client with full plugin support)?"; then
     echo "📡 Installing Remmina..."
-    dryrun apt install remmina remmina-plugin-rdp remmina-plugin-vnc remmina-plugin-secret remmina-plugin-spice remmina-plugin-exec -y || echo "⚠️ Remmina installation failed."
+    dryrun sudo apt install remmina remmina-plugin-rdp remmina-plugin-vnc remmina-plugin-secret remmina-plugin-spice remmina-plugin-exec -y || echo "⚠️ Remmina installation failed."
   fi
 
   if confirm "📊 Install htop (CLI 🖥️ - interactive process viewer)?"; then
