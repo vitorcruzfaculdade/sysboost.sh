@@ -3,7 +3,7 @@
 # Vitor Cruz's General Purpose System Boost Script
 # License: GPL v3.0
 
-VERSION="1.7.12"
+VERSION="1.7.14"
 set -e
 
 ### Helper Functions ###
@@ -450,6 +450,7 @@ install_office() {
     echo "📝 Office suite setup selected."
 
     # Detect existing installs
+    echo "📝 Detecting installed Office."
     local libre_installed only_installed
     libre_installed=$(dpkg -l | grep -i libreoffice)
     only_installed=$(dpkg -l | grep -i onlyoffice)
@@ -459,8 +460,8 @@ install_office() {
         [ -n "$libre_installed" ] && echo "   - 📝 LibreOffice"
         [ -n "$only_installed" ] && echo "   - 📝 OnlyOffice"
 
-        confirm "↪️ Do you want to skip this step?" && {
-            echo "⏭️ Skipped office installation."
+        confirm "↪️ Do you want to skip Office installation?" && {
+            echo "⏭️ Skipped Office installation."
             return
         }
     fi
