@@ -3,7 +3,7 @@
 # Vitor Cruz's General Purpose System Boost Script
 # License: GPL v3.0
 
-VERSION="1.7.6"
+VERSION="1.7.8"
 set -e
 
 ### Helper Functions ###
@@ -445,6 +445,7 @@ install_remmina() {
     echo "✅ Remmina installed with full client support — no server components."
   fi
 }
+
 install_office() {
     echo "📝 Office suite setup selected."
 
@@ -458,11 +459,10 @@ install_office() {
         [ -n "$libre_installed" ] && echo "   - 📝 LibreOffice"
         [ -n "$only_installed" ] && echo "   - 📝 OnlyOffice"
 
-        read -p "↪️  Do you want to skip this step? (y/N): " skip_office
-        if [[ "$skip_office" =~ ^[Yy]$ ]]; then
+        confirm "↪️  Do you want to skip this step?" && {
             echo "⏭️  Skipped office installation."
             return
-        fi
+        }
     fi
 
     echo "❓ Which office suite do you want to install?"
@@ -470,8 +470,7 @@ install_office() {
     echo "   2) 📝 OnlyOffice"
     echo "   3) ⏭️ Skip"
 
-    read -p "➡️  Enter your choice [1-3]: " office_choice
-    office_choice=${office_choice:-1}
+    confirm "➡️  Enter your choice [1-3]:" && office_choice=${office_choice:-1}
 
     case $office_choice in
         1)
@@ -504,19 +503,17 @@ install_office() {
             esac
 
             if [ -n "$PACK" ]; then
-                read -p "🌍 Do you want to install language support for LibreOffice ($LOCALE_LANG)? (Y/n): " lang_answer
-                if [[ ! "$lang_answer" =~ ^[Nn]$ ]]; then
+                confirm "🌍 Do you want to install language support for LibreOffice ($LOCALE_LANG)?" && {
                     if $dryrun; then
                         echo "DRYRUN: sudo apt install $PACK -y"
                     else
                         sudo apt install $PACK -y
                         echo "🌐 Language pack for $LOCALE_LANG installed."
                     fi
-                fi
+                }
             fi
 
-            read -p "📝 Do you want to set LibreOffice as default for office files? (Y/n): " def_lo
-            if [[ ! "$def_lo" =~ ^[Nn]$ ]]; then
+            confirm "📝 Do you want to set LibreOffice as default for office files?" && {
                 if $dryrun; then
                     echo "DRYRUN: xdg-mime default libreoffice-writer.desktop application/vnd.openxmlformats-officedocument.wordprocessingml.document"
                     echo "DRYRUN: xdg-mime default libreoffice-calc.desktop application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
@@ -525,7 +522,7 @@ install_office() {
                     xdg-mime default libreoffice-calc.desktop application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
                     echo "🗂️  LibreOffice set as default office app."
                 fi
-            fi
+            }
             ;;
         2)
             echo "📦 Installing OnlyOffice Desktop Editors..."
@@ -540,8 +537,7 @@ install_office() {
                 echo "✅ OnlyOffice installed from DEB."
             fi
 
-            read -p "📝 Do you want to set OnlyOffice as default for office files? (Y/n): " def_oo
-            if [[ ! "$def_oo" =~ ^[Nn]$ ]]; then
+            confirm "📝 Do you want to set OnlyOffice as default for office files?" && {
                 if $dryrun; then
                     echo "DRYRUN: xdg-mime default onlyoffice-desktopeditors.desktop application/vnd.openxmlformats-officedocument.wordprocessingml.document"
                     echo "DRYRUN: xdg-mime default onlyoffice-desktopeditors.desktop application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
@@ -550,7 +546,7 @@ install_office() {
                     xdg-mime default onlyoffice-desktopeditors.desktop application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
                     echo "🗂️  OnlyOffice set as default office app."
                 fi
-            fi
+            }
             ;;
         3)
             echo "⏭️  Skipped office installation."
