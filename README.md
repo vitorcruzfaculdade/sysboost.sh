@@ -3,7 +3,7 @@
 **Version:** 1.6.2  
 **Author:** Vitor Cruz  
 **License:** GPL v3.0  
-**Scope:** Ubuntu 24.04+ (GNOME) — Laptops & Desktops  
+**Scope:** Ubuntu 24.04+ (GNOME) — Laptops & Desktops & VM's  
 *(Not recommended for servers due to reliance on GUI apps)*
 
 ---
