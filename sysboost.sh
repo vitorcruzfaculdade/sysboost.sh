@@ -194,7 +194,7 @@ setup_firewall() {
   dryrun sudo ufw --force reset
   echo "🔧 Setting pretty sick block rule from outside 🧱🔥 UFW/GUFW..."
   dryrun sudo ufw default deny incoming
-  echo "✅Denied incomming traffic (from outside) 🧱🔥 UFW/GUFW."
+  echo "✅ Denied incomming traffic (from outside) 🧱🔥 UFW/GUFW."
   echo "🔧 Allowing conections started from this system to outside..."
   dryrun sudo ufw default allow outgoing
   echo "✅ Allowed outgoing traffic 🧱🔥 UFW/GUFW."
@@ -506,7 +506,7 @@ install_office() {
             confirm "📝 Do you want to set LibreOffice as default for office files?" && {
                 dryrun "xdg-mime default libreoffice-writer.desktop application/vnd.openxmlformats-officedocument.wordprocessingml.document"
                 dryrun "xdg-mime default libreoffice-calc.desktop application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-                echo "🗂️  LibreOffice set as default office app."
+                echo "🗂️ LibreOffice set as default office app."
             }
             ;;
         2)
