@@ -470,10 +470,10 @@ install_office() {
 
     # Always fall through to the menu
     echo "❓ Which office suite do you want to install?"
-    echo "   1) 📝 LibreOffice (default)"
-    echo "   2) 📝 OnlyOffice"
-    echo "   3) ⏭️ Skip"
-    read -rp "➡️ Enter your choice [1-3]: " office_choice
+    echo "   1) 📝  LibreOffice (default)"
+    echo "   2) 📝  OnlyOffice"
+    echo "   3) ⏭️  Skip"
+    read -rp "➡️  Enter your choice [1-3]: " office_choice
     office_choice=${office_choice:-1}
 
     case $office_choice in
