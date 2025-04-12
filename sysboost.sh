@@ -3,7 +3,7 @@
 # Vitor Cruz's General Purpose System Boost Script
 # License: GPL v3.0
 
-VERSION="1.7.8"
+VERSION="1.7.10"
 set -e
 
 ### Helper Functions ###
@@ -459,8 +459,8 @@ install_office() {
         [ -n "$libre_installed" ] && echo "   - 📝 LibreOffice"
         [ -n "$only_installed" ] && echo "   - 📝 OnlyOffice"
 
-        confirm "↪️  Do you want to skip this step?" && {
-            echo "⏭️  Skipped office installation."
+        confirm "↪️ Do you want to skip this step?" && {
+            echo "⏭️ Skipped office installation."
             return
         }
     fi
@@ -475,13 +475,9 @@ install_office() {
     case $office_choice in
         1)
             echo "📦 Installing LibreOffice..."
-            if $dryrun; then
-                echo "DRYRUN: sudo apt install libreoffice -y"
-            else
-                sudo apt install libreoffice -y
-                echo "✅ LibreOffice installed. 📝"
-            fi
-
+            # Use the existing dryrun function to handle installation
+            dryrun "sudo apt install libreoffice -y"
+            
             # Language pack suggestion based on locale
             LOCALE_LANG=$(echo $LANG | cut -d_ -f1)
             case $LOCALE_LANG in
@@ -504,55 +500,34 @@ install_office() {
 
             if [ -n "$PACK" ]; then
                 confirm "🌍 Do you want to install language support for LibreOffice ($LOCALE_LANG)?" && {
-                    if $dryrun; then
-                        echo "DRYRUN: sudo apt install $PACK -y"
-                    else
-                        sudo apt install $PACK -y
-                        echo "🌐 Language pack for $LOCALE_LANG installed."
-                    fi
+                    dryrun "sudo apt install $PACK -y"
                 }
             fi
 
             confirm "📝 Do you want to set LibreOffice as default for office files?" && {
-                if $dryrun; then
-                    echo "DRYRUN: xdg-mime default libreoffice-writer.desktop application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-                    echo "DRYRUN: xdg-mime default libreoffice-calc.desktop application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-                else
-                    xdg-mime default libreoffice-writer.desktop application/vnd.openxmlformats-officedocument.wordprocessingml.document
-                    xdg-mime default libreoffice-calc.desktop application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
-                    echo "🗂️  LibreOffice set as default office app."
-                fi
+                dryrun "xdg-mime default libreoffice-writer.desktop application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                dryrun "xdg-mime default libreoffice-calc.desktop application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                echo "🗂️  LibreOffice set as default office app."
             }
             ;;
         2)
             echo "📦 Installing OnlyOffice Desktop Editors..."
-            if $dryrun; then
-                echo "DRYRUN: wget -qO onlyoffice.deb https://github.com/ONLYOFFICE/DesktopEditors/releases/download/v8.0.1/onlyoffice-desktopeditors_amd64.deb"
-                echo "DRYRUN: sudo apt install ./onlyoffice.deb -y"
-                echo "DRYRUN: rm onlyoffice.deb"
-            else
-                wget -qO onlyoffice.deb https://github.com/ONLYOFFICE/DesktopEditors/releases/download/v8.0.1/onlyoffice-desktopeditors_amd64.deb
-                sudo apt install ./onlyoffice.deb -y
-                rm onlyoffice.deb
-                echo "✅ OnlyOffice installed from DEB."
-            fi
+            dryrun "wget -qO onlyoffice.deb https://github.com/ONLYOFFICE/DesktopEditors/releases/download/v8.0.1/onlyoffice-desktopeditors_amd64.deb"
+            dryrun "sudo apt install ./onlyoffice.deb -y"
+            dryrun "rm onlyoffice.deb"
+            echo "✅ OnlyOffice installed from DEB."
 
             confirm "📝 Do you want to set OnlyOffice as default for office files?" && {
-                if $dryrun; then
-                    echo "DRYRUN: xdg-mime default onlyoffice-desktopeditors.desktop application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-                    echo "DRYRUN: xdg-mime default onlyoffice-desktopeditors.desktop application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-                else
-                    xdg-mime default onlyoffice-desktopeditors.desktop application/vnd.openxmlformats-officedocument.wordprocessingml.document
-                    xdg-mime default onlyoffice-desktopeditors.desktop application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
-                    echo "🗂️  OnlyOffice set as default office app."
-                fi
+                dryrun "xdg-mime default onlyoffice-desktopeditors.desktop application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                dryrun "xdg-mime default onlyoffice-desktopeditors.desktop application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                echo "🗂️ OnlyOffice set as default office app."
             }
             ;;
         3)
-            echo "⏭️  Skipped office installation."
+            echo "⏭️ Skipped office installation."
             ;;
         *)
-            echo "❌ Invalid option. Skipping office installation."
+            echo "❌ Invalid option. ⏭️ Skipping office installation."
             ;;
     esac
 }
