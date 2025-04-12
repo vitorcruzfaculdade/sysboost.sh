@@ -84,7 +84,7 @@ See the LICENSE file or visit:
 
 ## 👤 Credits
 Crafted with 💻 + ☕ by Vitor Cruz
-- Pull requests, forks, and stars are always welcome 🌟
+- Pull requests, forks, and stars and/or donations are always welcome 🌟
 
 ## 👋 Follow & Support
 Want to support my work, check more tools, or donate?
