@@ -3,7 +3,7 @@
 # Vitor Cruz's General Purpose System Boost Script
 # License: GPL v3.0
 
-VERSION="1.7.2"
+VERSION="1.7.4"
 set -e
 
 ### Helper Functions ###
@@ -58,22 +58,43 @@ full_cleanup() {
   echo "✅ Package and temporary files clean!🗑️"
 }
 
-system_update() {
-  echo "🌐 Updating instalation cache..."
-  dryrun sudo apt update
-  dryrun sudo apt-get update
-  echo "🌐 Checking for broken dependencies..."
-  dryrun sudo apt-get check
-  dryrun sudo apt-get -f install
-  echo "🔄 Performing full system update..."
-  dryrun sudo apt-get dist-upgrade -y
-  dryrun sudo apt upgrade -y
-  dryrun sudo apt full-upgrade -y
-  echo "🔄 Performing Snap packages update..."
-  dryrun sudo snap refresh
-  echo "🔄 Performing Flatpak update..."
-  dryrun sudo flatpak update
-  echo "✅ Everything updated!"
+update_system() {
+  echo "🔄 Updating APT packages..."
+  if [[ "$dryrun" == true ]]; then
+    echo "[dryrun] sudo apt update && sudo apt full-upgrade -y"
+  else
+    sudo apt update && sudo apt full-upgrade -y
+    echo "✅ APT packages updated."
+  fi
+
+  echo "📦 Cleaning up unused packages..."
+  if [[ "$dryrun" == true ]]; then
+    echo "[dryrun] sudo apt autoremove --purge -y && sudo apt autoclean -y"
+  else
+    sudo apt autoremove --purge -y && sudo apt autoclean -y
+    echo "🧹 Package cleanup complete."
+  fi
+
+  # Check for Flatpak support
+  if ! command -v flatpak &> /dev/null; then
+    echo "📦 Flatpak is not installed. Needed for updating Flatpak apps."
+
+    if confirm_prompt "🛍️ Store (Flatpak, Snap, GNOME Software) is not installed. Would you like to install it now?" "y"; then
+      echo "🛍️ Installing Store module..."
+      install_store
+    else
+      echo "⚠️ Skipping Flatpak updates. You can install the store later with '--store'."
+      return
+    fi
+  fi
+
+  echo "📦 Updating Flatpak apps..."
+  if [[ "$dryrun" == true ]]; then
+    echo "[dryrun] flatpak update -y"
+  else
+    flatpak update -y
+    echo "✅ Flatpak apps updated."
+  fi
 }
 
 install_restricted_packages() {
@@ -146,7 +167,7 @@ remove_remote_access_servers() {
   done
 }
 
-setup_firewall() {
+firewall_setup() {
   echo "🛡️ Setting up UFW firewall rules..."
 
   if sudo ufw status | grep -q "Status: active"; then
@@ -661,8 +682,8 @@ main() {
     while [[ $# -gt 0 ]]; do
     case "$1" in
       --clean) full_cleanup ;;
-      --update) system_update ;;
-      --harden) disable_telemetry; remove_remote_access_servers; setup_firewall ;;
+      --update) update_system ;;
+      --harden) disable_telemetry; remove_remote_access_servers; firewall_setup ;;
       --vm) install_vm_tools ;;
       --gaming) install_gaming_tools ;;
       --trim) enable_trim ;;
@@ -680,7 +701,7 @@ main() {
       --dryrun) is_dryrun=true ;;
       --all)
         full_cleanup
-        system_update
+        update_system
         disable_telemetry
         remove_remote_access_servers
         setup_firewall
