@@ -449,16 +449,18 @@ install_remmina() {
 install_office() {
     echo "📝 Office suite setup selected."
 
-    # Detect existing installs
+    # Detect existing installs using booleans
     echo "📝 Detecting installed Office..."
-    local libre_installed only_installed
-    libre_installed=$(dpkg -l | grep -i libreoffice)
-    only_installed=$(dpkg -l | grep -i onlyoffice)
+    local libre_installed=0
+    local only_installed=0
 
-    if [ -n "$libre_installed" ] || [ -n "$only_installed" ]; then
+    dpkg -l | grep -iq libreoffice && libre_installed=1
+    dpkg -l | grep -iq onlyoffice && only_installed=1
+
+    if [ "$libre_installed" -eq 1 ] || [ "$only_installed" -eq 1 ]; then
         echo "📦 Existing installation detected:"
-        [ -n "$libre_installed" ] && echo "   - 📝 LibreOffice"
-        [ -n "$only_installed" ] && echo "   - 📝 OnlyOffice"
+        [ "$libre_installed" -eq 1 ] && echo "   - 📝 LibreOffice"
+        [ "$only_installed" -eq 1 ] && echo "   - 📝 OnlyOffice"
 
         if confirm "↪️ Do you want to skip Office installation?"; then
             echo "⏭️ Skipped Office installation."
@@ -466,7 +468,7 @@ install_office() {
         fi
     fi
 
-    # Show menu and ask user
+    # Always fall through to the menu
     echo "❓ Which office suite do you want to install?"
     echo "   1) 📝 LibreOffice (default)"
     echo "   2) 📝 OnlyOffice"
@@ -478,8 +480,8 @@ install_office() {
         1)
             echo "📦 Installing LibreOffice..."
             dryrun "sudo apt install libreoffice -y"
-
             # Language pack suggestion based on locale
+            echo "📦 Installing LibreOffice Language Pack..."
             LOCALE_LANG=$(echo $LANG | cut -d_ -f1)
             case $LOCALE_LANG in
                 pt) PACK="libreoffice-l10n-pt libreoffice-help-pt" ;;
