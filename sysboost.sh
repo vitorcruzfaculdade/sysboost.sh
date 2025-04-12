@@ -357,7 +357,7 @@ install_compression_tools() {
   fi
 }
 
-setup_sysadmin_tools() {
+install_sysadmin_tools() {
   echo "🛠️ Preparing sysadmin tools setup..."
   if confirm "📡 Install Remmina (GUI 🪟 - remote desktop client with full plugin support)?"; then
     echo "📡 Installing Remmina..."
