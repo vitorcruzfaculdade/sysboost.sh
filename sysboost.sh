@@ -3,7 +3,7 @@
 # Vitor Cruz's General Purpose System Boost Script
 # License: GPL v3.0
 
-VERSION="1.7.14"
+VERSION="1.7.19"
 set -e
 
 ### Helper Functions ###
@@ -450,7 +450,7 @@ install_office() {
     echo "📝 Office suite setup selected."
 
     # Detect existing installs
-    echo "📝 Detecting installed Office."
+    echo "📝 Detecting installed Office..."
     local libre_installed only_installed
     libre_installed=$(dpkg -l | grep -i libreoffice)
     only_installed=$(dpkg -l | grep -i onlyoffice)
@@ -460,42 +460,33 @@ install_office() {
         [ -n "$libre_installed" ] && echo "   - 📝 LibreOffice"
         [ -n "$only_installed" ] && echo "   - 📝 OnlyOffice"
 
-        confirm "↪️ Do you want to skip Office installation?" && {
+        if confirm "↪️ Do you want to skip Office installation?"; then
             echo "⏭️ Skipped Office installation."
             return
-        }
+        fi
     fi
 
+    # Show menu and ask user
     echo "❓ Which office suite do you want to install?"
     echo "   1) 📝 LibreOffice (default)"
     echo "   2) 📝 OnlyOffice"
     echo "   3) ⏭️ Skip"
-    confirm "➡️ Enter your choice [1-3]:" && { office_choice=${office_choice:-1}; }
+    read -rp "➡️ Enter your choice [1-3]: " office_choice
+    office_choice=${office_choice:-1}
 
     case $office_choice in
         1)
             echo "📦 Installing LibreOffice..."
-            # Use the existing dryrun function to handle installation
             dryrun "sudo apt install libreoffice -y"
-            
+
             # Language pack suggestion based on locale
             LOCALE_LANG=$(echo $LANG | cut -d_ -f1)
             case $LOCALE_LANG in
-                pt)
-                    PACK="libreoffice-l10n-pt libreoffice-help-pt"
-                    ;;
-                es)
-                    PACK="libreoffice-l10n-es libreoffice-help-es"
-                    ;;
-                fr)
-                    PACK="libreoffice-l10n-fr libreoffice-help-fr"
-                    ;;
-                de)
-                    PACK="libreoffice-l10n-de libreoffice-help-de"
-                    ;;
-                *)
-                    PACK=""
-                    ;;
+                pt) PACK="libreoffice-l10n-pt libreoffice-help-pt" ;;
+                es) PACK="libreoffice-l10n-es libreoffice-help-es" ;;
+                fr) PACK="libreoffice-l10n-fr libreoffice-help-fr" ;;
+                de) PACK="libreoffice-l10n-de libreoffice-help-de" ;;
+                *) PACK="" ;;
             esac
 
             if [ -n "$PACK" ]; then
