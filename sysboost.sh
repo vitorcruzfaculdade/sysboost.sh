@@ -3,7 +3,7 @@
 # Vitor Cruz's General Purpose System Boost Script
 # License: GPL v3.0
 
-VERSION="1.7.10"
+VERSION="1.7.11"
 set -e
 
 ### Helper Functions ###
@@ -469,8 +469,7 @@ install_office() {
     echo "   1) 📝 LibreOffice (default)"
     echo "   2) 📝 OnlyOffice"
     echo "   3) ⏭️ Skip"
-
-    confirm "➡️  Enter your choice [1-3]:" && office_choice=${office_choice:-1}
+    confirm "➡️ Enter your choice [1-3]:" && { office_choice=${office_choice:-1}; }
 
     case $office_choice in
         1)
