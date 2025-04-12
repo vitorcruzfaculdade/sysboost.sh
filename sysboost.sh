@@ -3,7 +3,7 @@
 # Vitor Cruz's General Purpose System Boost Script
 # License: GPL v3.0
 
-VERSION="1.6.27"
+VERSION="1.7.2"
 set -e
 
 ### Helper Functions ###
@@ -424,6 +424,121 @@ install_remmina() {
     echo "✅ Remmina installed with full client support — no server components."
   fi
 }
+install_office() {
+    echo "📝 Office suite setup selected."
+
+    # Detect existing installs
+    local libre_installed only_installed
+    libre_installed=$(dpkg -l | grep -i libreoffice)
+    only_installed=$(dpkg -l | grep -i onlyoffice)
+
+    if [ -n "$libre_installed" ] || [ -n "$only_installed" ]; then
+        echo "📦 Existing installation detected:"
+        [ -n "$libre_installed" ] && echo "   - 📝 LibreOffice"
+        [ -n "$only_installed" ] && echo "   - 📝 OnlyOffice"
+
+        read -p "↪️  Do you want to skip this step? (y/N): " skip_office
+        if [[ "$skip_office" =~ ^[Yy]$ ]]; then
+            echo "⏭️  Skipped office installation."
+            return
+        fi
+    fi
+
+    echo "❓ Which office suite do you want to install?"
+    echo "   1) 📝 LibreOffice (default)"
+    echo "   2) 📝 OnlyOffice"
+    echo "   3) ⏭️ Skip"
+
+    read -p "➡️  Enter your choice [1-3]: " office_choice
+    office_choice=${office_choice:-1}
+
+    case $office_choice in
+        1)
+            echo "📦 Installing LibreOffice..."
+            if $dryrun; then
+                echo "DRYRUN: sudo apt install libreoffice -y"
+            else
+                sudo apt install libreoffice -y
+                echo "✅ LibreOffice installed. 📝"
+            fi
+
+            # Language pack suggestion based on locale
+            LOCALE_LANG=$(echo $LANG | cut -d_ -f1)
+            case $LOCALE_LANG in
+                pt)
+                    PACK="libreoffice-l10n-pt libreoffice-help-pt"
+                    ;;
+                es)
+                    PACK="libreoffice-l10n-es libreoffice-help-es"
+                    ;;
+                fr)
+                    PACK="libreoffice-l10n-fr libreoffice-help-fr"
+                    ;;
+                de)
+                    PACK="libreoffice-l10n-de libreoffice-help-de"
+                    ;;
+                *)
+                    PACK=""
+                    ;;
+            esac
+
+            if [ -n "$PACK" ]; then
+                read -p "🌍 Do you want to install language support for LibreOffice ($LOCALE_LANG)? (Y/n): " lang_answer
+                if [[ ! "$lang_answer" =~ ^[Nn]$ ]]; then
+                    if $dryrun; then
+                        echo "DRYRUN: sudo apt install $PACK -y"
+                    else
+                        sudo apt install $PACK -y
+                        echo "🌐 Language pack for $LOCALE_LANG installed."
+                    fi
+                fi
+            fi
+
+            read -p "📝 Do you want to set LibreOffice as default for office files? (Y/n): " def_lo
+            if [[ ! "$def_lo" =~ ^[Nn]$ ]]; then
+                if $dryrun; then
+                    echo "DRYRUN: xdg-mime default libreoffice-writer.desktop application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                    echo "DRYRUN: xdg-mime default libreoffice-calc.desktop application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                else
+                    xdg-mime default libreoffice-writer.desktop application/vnd.openxmlformats-officedocument.wordprocessingml.document
+                    xdg-mime default libreoffice-calc.desktop application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+                    echo "🗂️  LibreOffice set as default office app."
+                fi
+            fi
+            ;;
+        2)
+            echo "📦 Installing OnlyOffice Desktop Editors..."
+            if $dryrun; then
+                echo "DRYRUN: wget -qO onlyoffice.deb https://github.com/ONLYOFFICE/DesktopEditors/releases/download/v8.0.1/onlyoffice-desktopeditors_amd64.deb"
+                echo "DRYRUN: sudo apt install ./onlyoffice.deb -y"
+                echo "DRYRUN: rm onlyoffice.deb"
+            else
+                wget -qO onlyoffice.deb https://github.com/ONLYOFFICE/DesktopEditors/releases/download/v8.0.1/onlyoffice-desktopeditors_amd64.deb
+                sudo apt install ./onlyoffice.deb -y
+                rm onlyoffice.deb
+                echo "✅ OnlyOffice installed from DEB."
+            fi
+
+            read -p "📝 Do you want to set OnlyOffice as default for office files? (Y/n): " def_oo
+            if [[ ! "$def_oo" =~ ^[Nn]$ ]]; then
+                if $dryrun; then
+                    echo "DRYRUN: xdg-mime default onlyoffice-desktopeditors.desktop application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                    echo "DRYRUN: xdg-mime default onlyoffice-desktopeditors.desktop application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                else
+                    xdg-mime default onlyoffice-desktopeditors.desktop application/vnd.openxmlformats-officedocument.wordprocessingml.document
+                    xdg-mime default onlyoffice-desktopeditors.desktop application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+                    echo "🗂️  OnlyOffice set as default office app."
+                fi
+            fi
+            ;;
+        3)
+            echo "⏭️  Skipped office installation."
+            ;;
+        *)
+            echo "❌ Invalid option. Skipping office installation."
+            ;;
+    esac
+}
 
 suggest_preload_and_zram() {
   total_ram_gb=$(free -g | awk '/^Mem:/{print $2}')
@@ -524,6 +639,7 @@ print_help() {
   echo "  --compression    📦  Install archive format support (zip, rar, 7z, etc)"
   echo "  --sysadmin       🧰  Install Remmina and useful system/network tools for sysadmins"
   echo "  --remmina        🖧  Install Remmina client with full plugin support (RDP, VNC, etc)"
+  echo "   --office          📝 Install LibreOffice or OnlyOffice with language & default options"
   echo "  --preload        🧠  Suggest and optionally install preload & ZRAM"
   echo "  --donate         ❤️  Show donation info and open Linktree in browser"
   echo "  --dryrun         🧪  Show commands without executing"
@@ -558,6 +674,7 @@ main() {
       --compression) install_compression_tools ;;
       --sysadmin) setup_sysadmin_tools ;;
       --remmina) install_remmina ;;
+      --office) install_office;;
       --preload) suggest_preload_and_zram ;;
       --donate) show_donation_info ;;
       --dryrun) is_dryrun=true ;;
@@ -571,7 +688,7 @@ main() {
         install_vm_tools
         install_gaming_tools
         install_sysadmin_tools
-        install_remmina
+        install_office
         enable_trim
         enable_cpu_performance_mode
         install_restricted_packages
