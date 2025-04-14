@@ -3,7 +3,7 @@
 # Vitor Cruz's General Purpose System Boost Script
 # License: GPL v3.0
 
-VERSION="1.7.27"
+VERSION="1.7.30"
 set -e
 
 ### Helper Functions ###
@@ -39,74 +39,95 @@ confirm() {
 ### Core Functions ###
 full_cleanup() {
   echo "🗑️ Cleaning temp files..."
+  echo ""
   echo "🌐 Updating instalation cache..."
   dryrun sudo apt update
+  echo ""
   echo "🧽 Installing Bleachbit Cleaner..."
   dryrun sudo apt install bleachbit -y
+  echo ""
   echo "🌐 Checking for broken dependencies..."
   dryrun sudo apt-get check
+  echo ""
   echo "🛠️ Fixing broken dependencies (if any)..."
   dryrun sudo apt-get -f install -y
+  echo ""
   echo "🧹 Cleaning useless packages"
   dryrun sudo apt-get --purge autoremove -y
+  echo ""
   echo "🧹 Cleaning apt-get cache ..."
   dryrun sudo apt-get autoclean
   dryrun sudo apt-get clean
+  echo ""
   echo "🗑️ Cleaning temporary files..."
   dryrun sudo rm -rf /tmp/*
   dryrun rm -rf ~/.cache/*
+  echo ""
   echo "✅ Package and temporary files clean!🗑️"
 }
 
 update_system() {
+  echo ""
   echo "🔄 Updating APT packages..."
   if [[ "$dryrun" == true ]]; then
     echo "[dryrun] sudo apt update && sudo apt full-upgrade -y"
   else
     sudo apt update && sudo apt full-upgrade -y
+    echo ""
     echo "✅ APT packages updated."
   fi
 
+  echo ""
   echo "📦 Cleaning up unused packages..."
   if [[ "$dryrun" == true ]]; then
     echo "[dryrun] sudo apt autoremove --purge -y && sudo apt autoclean -y"
   else
     sudo apt autoremove --purge -y && sudo apt autoclean -y
+    echo ""
     echo "🧹 Package cleanup complete."
   fi
 
   # Check for Flatpak support
   if ! command -v flatpak &> /dev/null; then
+    echo ""
     echo "📦 Flatpak is not installed. Needed for updating Flatpak apps."
 
+    echo ""
     if confirm "🛍️ Store (Flatpak, Snap, GNOME Software) is not installed. Would you like to install it now?" "y"; then
+      echo ""
       echo "🛍️ Installing Store module..."
       install_flatpak_snap_store
     else
+      echo ""
       echo "⚠️ Skipping Flatpak updates. You can install the store later with '--store'."
       return
     fi
   fi
 
+  echo ""
   echo "📦 Updating Flatpak apps..."
   if [[ "$dryrun" == true ]]; then
     echo "[dryrun] flatpak update -y"
   else
     flatpak update -y
+    echo ""
     echo "✅ Flatpak apps updated."
   fi
 }
 
 install_restricted_packages() {
   if confirm "🎵 Do you want to install multimedia support (ubuntu-restricted-extras & addons)?"; then
+    echo ""
     echo "🎶 Installing ubuntu-restricted-extras, ubuntu-restricted-addons and extended GStreamer plugins..."
     dryrun sudo apt install ubuntu-restricted-extras ubuntu-restricted-addons gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly gstreamer1.0-libav -y
 
     if confirm "📽️ Do you also want to install GNOME Videos (Totem)?"; then
+      echo ""
       echo "🎞️ Installing GNOME Videos (Totem)..."
       dryrun sudo apt install totem totem-common totem-plugins -y
 
       if confirm "🎯 Set Totem as the default video player?"; then
+        echo ""
         echo "🔧 Setting Totem as the default video player for common formats..."
         formats=("video/mp4" "video/x-matroska" "video/x-msvideo" "video/x-flv" "video/webm" "video/ogg")
           for format in "${formats[@]}"; do
@@ -116,6 +137,7 @@ install_restricted_packages() {
     fi
 # Offer to install Spotify via Snap
 if confirm "🎧 Do you want to install Spotify (Snap version)? Spotify is a popular music streaming service. This installs the official Snap version."; then
+    echo ""
     echo "🎶 Installing Spotify (official Snap version)..."
     dryrun sudo snap install spotify
     echo "✅ Spotify (official Snap version) installed."
@@ -124,6 +146,7 @@ fi
 }
 
 disable_telemetry() {
+  echo ""
   echo "🚫 Disabling telemetry and background reporting..."
   for service in apport whoopsie motd-news.timer; do
     if systemctl list-unit-files | grep -q "${service}"; then
@@ -144,118 +167,154 @@ disable_telemetry() {
       dryrun sudo apt-mark hold "$pkg"
     fi
   done
+  echo ""
   echo "🚫 Telemetry and background reporting fully disabled ✅"
 }
 
 # Added code for checking and removing remote access servers
 remove_remote_access_servers() {
+  echo ""
   echo "🔐 Checking for remote access servers..."
   # List of common remote access servers
   remote_servers=("sshd" "xrdp" "vnc4server" "tightvncserver" "x11vnc")
 
   for server in "${remote_servers[@]}"; do
     if dpkg -l | grep -q "^ii\s*$server"; then
+      echo ""
       echo "⚠️ Found $server installed."
       if confirm "Do you want to remove $server?"; then
         dryrun sudo apt purge -y "$server"
         dryrun sudo apt autoremove -y
+        echo ""
         echo "$server has been removed."
       fi
     else
+      echo ""
       echo "✔️ $server is not installed."
     fi
   done
 }
 
 setup_firewall() {
+  echo ""
   echo "🛡️ Setting up UFW firewall rules..."
 
   if sudo ufw status | grep -q "Status: active"; then
+    echo ""
     echo "🔒 UFW is already active."
     if ! confirm "🔁 Do you want to reconfigure the firewall?"; then
+      echo ""
       echo "❌ Skipping firewall configuration."
       return
     fi
   else
     if ! confirm "🚫 Firewall is inactive. Do you want to enable and configure it now?"; then
+      echo ""
       echo "❌ Skipping firewall setup."
       return
     fi
   fi
 
+  echo ""
   echo "🌐 Updating installation cache..."
   dryrun sudo apt update
+  echo ""
   echo "🌐 Installing 🧱🔥 UFW/GUFW..."
   dryrun sudo apt install ufw gufw -y
+  echo ""
   echo "🔧 Enabling 🧱🔥 UFW/GUFW..."
   dryrun sudo systemctl enable ufw
+  echo ""
   echo "🔧 Restarting/Reseting 🧱🔥 UFW/GUFW..."
   dryrun sudo systemctl restart ufw
+  echo ""
   dryrun sudo ufw --force reset
+  echo ""
   echo "🔧 Setting pretty sick block rule from outside 🧱🔥 UFW/GUFW..."
   dryrun sudo ufw default deny incoming
+  echo ""
   echo "✅ Denied incomming traffic (from outside) 🧱🔥 UFW/GUFW."
+  echo ""
   echo "🔧 Allowing conections started from this system to outside..."
   dryrun sudo ufw default allow outgoing
+  echo ""
   echo "✅ Allowed outgoing traffic 🧱🔥 UFW/GUFW."
+  echo ""
   echo "🔧 Enabling and applying settings to 🧱🔥 UFW/GUFW..."
   dryrun sudo ufw enable
+  echo ""
   echo "✅ Enabled 🧱🔥 UFW/GUFW."
+  echo ""
   echo "⚙️ Reloading 🧱🔥 UFW/GUFW..."
   dryrun sudo ufw reload
+  echo ""
   echo "✅ Reloaded 🧱🔥 UFW/GUFW."
   
   if confirm "📝 Do you want to enable UFW logging?"; then
     dryrun sudo ufw logging on
     log_status="enabled"
+    echo ""
     echo "✅ UFW logging on 📝"
   else
     dryrun sudo ufw logging off
     log_status="disabled"
+    echo ""
     echo "✅ UFW logging off 📝"
   fi
 
   dryrun sudo ufw reload
+  echo ""
   echo "🧱 G/UFW Firewall🔥 configured and enabled ✅ — logging $log_status, incoming connections denied 🚫."
 }
 
 replace_firefox_with_librewolf() {
   if confirm "🌐 Replace Firefox Snap with LibreWolf its from official repo?"; then
     dryrun sudo snap remove firefox || true
+    echo ""
     echo "🌐 Adding LibreWolf repo..."
     dryrun sudo apt update
     dryrun sudo apt install extrepo -y
     dryrun sudo extrepo enable librewolf
+    echo ""
     echo "🌐 Updating instalation cache..."
     dryrun sudo apt update
+    echo ""
     echo "🌐 Installing LibreWolf..."
     dryrun sudo apt install librewolf -y
+    echo ""
     echo "✅ Librewolf installed."
   fi
 }
 
 install_chrome() {
     if confirm "🧭 Do you want to install Google Chrome (Stable) using the official repository?"; then
+        echo ""
         echo "🌐 Downloading and saving Google Chrome repository key..."
         dryrun wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo gpg --dearmor -o /usr/share/keyrings/google-chrome.gpg
+        echo ""
         echo "🌐 Downloading and saving Google Chrome repository..."
         dryrun sudo echo 'deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/google-chrome.gpg] https://dl.google.com/linux/chrome/deb/ stable main' | sudo tee /etc/apt/sources.list.d/google-chrome.list
+        echo ""
         echo "🌐 Updating instalation cache..."
         dryrun sudo apt update
+        echo ""
         echo "🧭 Installing Google Chrome..."
         dryrun sudo apt install google-chrome-stable -y
 
         if confirm "🧭 Set Chrome as default browser?" "Do you want to make Google Chrome your default browser?"; then
             dryrun xdg-settings set default-web-browser google-chrome.desktop
         fi
+        echo ""
         echo "✅ Google Chrome installed and configured."
     else
+        echo ""
         echo "❎ Skipped Google Chrome installation."
     fi
 }
 
 install_flatpak_snap_store() {
   if confirm "📦 Do you want full Flatpak, Snap and GNOME Software support?"; then
+    echo ""
     echo "🛍️ Installing Snap/Flatpak support with GNOME Software..."
     dryrun sudo apt install gnome-software gnome-software-plugin-flatpak gnome-software-plugin-snap flatpak -y
     dryrun sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
@@ -265,6 +324,7 @@ install_flatpak_snap_store() {
 enable_trim() {
   if confirm "✂️ Enable periodic TRIM for SSDs (recommended)?"; then
     dryrun sudo systemctl enable fstrim.timer
+    echo ""
     echo "✅ Timer service for TRIM enabled."
   fi
 }
@@ -282,10 +342,13 @@ install_gaming_tools() {
   # 🎮 Gaming Utilities
   if confirm "🎮 Enable gaming mode (GameMode, MangoHUD)?"; then
     dryrun sudo apt install gamemode mangohud -y
+    echo ""
     echo "🧪 Checking if gamemoded is running..."
     if systemctl is-active --quiet gamemoded; then
+      echo ""
       echo "✅ GameMode is active and running."
     else
+      echo ""
       echo "⚠️ GameMode is installed but not running. You may need to restart or check systemd services."
     fi
   fi
@@ -293,50 +356,68 @@ install_gaming_tools() {
   # 🧠 GPU Detection
   gpu_info=$(lspci | grep -E "VGA|3D")
   if echo "$gpu_info" | grep -qi nvidia; then
+    echo ""
     echo "🟢 NVIDIA GPU detected."
     if confirm "Install NVIDIA proprietary drivers?"; then
+      echo ""
       echo "🌐 Updating instalation cache..."
       dryrun sudo apt update
+      echo ""
       echo "🌐 Updating system..."
       dryrun sudo apt upgrade -y
+      echo ""
       echo "🌐 Adding some packages to improve GPU compatibility"
       dryrun sudo apt install mesa-vulkan-drivers mesa-utils vulkan-tools -y
+      echo ""
       echo "🌐 Installing NVIDIA drivers using Ubuntu-Drivers..."
       dryrun sudo ubuntu-drivers autoinstall
+      echo ""
       echo "✅ NVIDIA drivers installation triggered."
     fi
   elif echo "$gpu_info" | grep -qi amd; then
+    echo ""
     echo "🔴 AMD GPU detected."
     if confirm "Install AMD Mesa graphics drivers?"; then
       dryrun sudo apt install mesa-vulkan-drivers mesa-utils vulkan-tools -y
+      echo ""
       echo "✅ AMD Mesa drivers installed."
     fi
   elif echo "$gpu_info" | grep -qi intel; then
+    echo ""
     echo "🔵 Intel GPU detected."
     if confirm "Install Intel Mesa graphics drivers?"; then
       dryrun sudo apt install mesa-vulkan-drivers mesa-utils vulkan-tools -y
+      echo ""
       echo "✅ Intel Mesa drivers installed."
     fi
   elif echo "$gpu_info" | grep -qi vmware; then
+    echo ""
     echo "🟠 VMware or VirtualBox GPU detected."
     if confirm "Install Virtual Machine GPU drivers?"; then
+      echo ""
       echo "🌐 Updating instalation cache..."    
       dryrun sudo apt update
+      echo ""
       echo "🌐 Updating system..."
       dryrun sudo apt upgrade -y
+      echo ""
       echo "🌐 Adding some packages to improve GPU compatibility and Open-VM-Tools..."
       dryrun sudo apt install mesa-vulkan-drivers mesa-utils vulkan-tools open-vm-tools open-vm-tools-desktop -y
+      echo ""
       echo "🌐 Installing VM additional drivers using Ubuntu-Drivers (if any)..."
       dryrun sudo ubuntu-drivers autoinstall
+      echo ""
       echo "✅ VM GPU drivers installed."
     fi
   else
+    echo ""
     echo "❓ GPU vendor not recognized: $gpu_info"
   fi
 
   # 🔌 Vulkan + Proton/DXVK
   if confirm "🧱 Install Vulkan packages for Proton/DXVK support?"; then
     dryrun sudo apt install mesa-vulkan-drivers mesa-utils vulkan-tools -y
+    echo ""
     echo "✅ Vulkan support installed."
   fi
   
@@ -344,30 +425,40 @@ install_gaming_tools() {
   if confirm "🎮 Install Steam (official .deb release)?"; then
     tmp_deb="/tmp/steam_latest.deb"
     dryrun sudo dpkg --add-architecture i386
+    echo ""
     echo "🌐 Downloading Steam .deb from official servers..."
     dryrun wget -O "$tmp_deb" https://cdn.fastly.steamstatic.com/client/installer/steam.deb
     dryrun sudo apt install "$tmp_deb" -y
+    echo ""
     echo "🌐 Updating instalation cache..." 
     dryrun sudo apt update
+    echo ""
     echo "🛠️ Fixing dependencies (always happen with Steam deb)..." 
     dryrun sudo apt -f install -y
+    echo ""
     echo "🧹 Cleaning temp..." 
     dryrun rm -f "$tmp_deb"
+    echo ""
     echo "✅ Steam installed from official .deb package (dependencies resolved)."
   fi
 }
 
 install_vm_tools() {
   if confirm "📦 Install latest VirtualBox from Oracle's official repo?"; then
+    echo ""
     echo "🌐 Obtaining key from Oracle..." 
     dryrun wget -q https://www.virtualbox.org/download/oracle_vbox_2016.asc -O- | sudo gpg --dearmor -o /usr/share/keyrings/oracle-virtualbox.gpg
     codename=$(lsb_release -cs)
+    echo ""
     echo "🌐 Adding key and repository information..." 
     echo "deb [arch=amd64 signed-by=/usr/share/keyrings/oracle-virtualbox.gpg] https://download.virtualbox.org/virtualbox/debian $codename contrib" | sudo tee /etc/apt/sources.list.d/virtualbox.list
+    echo ""
     echo "🌐 Updating instalation cache..." 
     dryrun sudo apt update
+    echo ""
     echo "🌐 Installing Virtualbox..."
     dryrun sudo apt install -y virtualbox-7.1
+    echo ""
     echo "✅ Virtualbox installed."
   fi
 }
@@ -379,8 +470,10 @@ install_compression_tools() {
 }
 
 install_sysadmin_tools() {
+  echo ""
   echo "🛠️ Preparing sysadmin tools setup..."
   if confirm "📡 Install Remmina (GUI 🪟 - remote desktop client with full plugin support)?"; then
+    echo ""
     echo "📡 Installing Remmina..."
     dryrun sudo apt install remmina remmina-plugin-rdp remmina-plugin-vnc remmina-plugin-secret remmina-plugin-spice remmina-plugin-exec -y || echo "⚠️ Remmina installation failed."
   fi
@@ -431,22 +524,28 @@ install_sysadmin_tools() {
 
   if confirm "🔬 Install Wireshark (GUI 🪟 - network packet analyzer)?"; then
     dryrun sudo apt install wireshark -y
+    echo ""
     echo "⚠️ Note: You may need to add your user to the 'wireshark' group to capture packets without sudo."
   fi
+  echo ""
   echo "✅ Sysadmin tool installation process completed."
 }
 
 install_remmina() {
   if confirm "🖥️ Install Remmina (remote desktop client with full plugin support)?"; then
+    echo ""
     echo "🌐 Updating instalation cache..."
     dryrun sudo apt update
+    echo ""
     echo "📦 Installing Remmina and plugins..."
     dryrun sudo apt install remmina remmina-plugin-rdp remmina-plugin-vnc remmina-plugin-secret remmina-plugin-spice remmina-plugin-exec -y
+    echo ""
     echo "✅ Remmina installed with full client support — no server components."
   fi
 }
 
 install_office() {
+    echo ""
     echo "📝 Office suite setup selected."
 
     # Detect existing installs using booleans
@@ -458,33 +557,40 @@ install_office() {
     dpkg -l | grep -iq onlyoffice && only_installed=1
 
     if [ "$libre_installed" -eq 1 ] || [ "$only_installed" -eq 1 ]; then
+        echo ""
         echo "📦 Existing installation detected:"
         [ "$libre_installed" -eq 1 ] && echo "   - 📝 LibreOffice"
         [ "$only_installed" -eq 1 ] && echo "   - 📝 OnlyOffice"
 
         if confirm "↪️ Do you want to skip Office installation?"; then
+            echo ""
             echo "⏭️ Skipped Office installation."
             return
         fi
     fi
 
     # Always fall through to the menu
+    echo ""
     echo "❓ Which office suite do you want to install?"
     echo "   1) 📝  LibreOffice (default)"
     echo "   2) 📝  OnlyOffice"
+    echo ""
     echo "   3) ⏭️  Skip"
+    echo ""
     read -rp "➡️  Enter your choice [1-3]: " office_choice
     office_choice=${office_choice:-1}
 
     case $office_choice in
         1)
+            echo ""
             echo "📦 Installing LibreOffice..."
             dryrun "sudo apt install libreoffice -y"
             # Language pack suggestion based on locale
+            echo ""
             echo "📦 Installing LibreOffice Language Pack..."
             LOCALE_LANG=$(echo $LANG | cut -d_ -f1)
             case $LOCALE_LANG in
-                pt) PACK="libreoffice-l10n-pt libreoffice-help-pt" ;;
+                pt) PACK="libreoffice-l10n-pt-br libreoffice-help-pt-br" ;;
                 es) PACK="libreoffice-l10n-es libreoffice-help-es" ;;
                 fr) PACK="libreoffice-l10n-fr libreoffice-help-fr" ;;
                 de) PACK="libreoffice-l10n-de libreoffice-help-de" ;;
@@ -500,26 +606,32 @@ install_office() {
             confirm "📝 Do you want to set LibreOffice as default for office files?" && {
                 dryrun "xdg-mime default libreoffice-writer.desktop application/vnd.openxmlformats-officedocument.wordprocessingml.document"
                 dryrun "xdg-mime default libreoffice-calc.desktop application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                echo ""
                 echo "🗂️ LibreOffice set as default office app."
             }
             ;;
         2)
+            echo ""
             echo "📦 Installing OnlyOffice Desktop Editors..."
             dryrun "wget -qO onlyoffice.deb https://github.com/ONLYOFFICE/DesktopEditors/releases/download/v8.0.1/onlyoffice-desktopeditors_amd64.deb"
             dryrun "sudo apt install ./onlyoffice.deb -y"
             dryrun "rm onlyoffice.deb"
+            echo ""
             echo "✅ OnlyOffice installed from DEB."
 
             confirm "📝 Do you want to set OnlyOffice as default for office files?" && {
                 dryrun "xdg-mime default onlyoffice-desktopeditors.desktop application/vnd.openxmlformats-officedocument.wordprocessingml.document"
                 dryrun "xdg-mime default onlyoffice-desktopeditors.desktop application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                echo ""
                 echo "🗂️ OnlyOffice set as default office app."
             }
             ;;
         3)
+            echo ""
             echo "⏭️ Skipped office installation."
             ;;
         *)
+            echo ""
             echo "❌ Invalid option. ⏭️ Skipping office installation."
             ;;
     esac
@@ -533,22 +645,27 @@ suggest_preload_and_zram() {
 
   case $total_ram_gb in
     [0-2])
+      echo ""
       echo "🟥 Low RAM detected (≤2GB): ZRAM is recommended. Preload is not advised."
       if confirm "💾 Enable ZRAM (compressed RAM swap)?"; then
         dryrun sudo apt install zram-tools -y
         echo "ALGO=zstd" | sudo tee /etc/default/zramswap
+        echo ""
         echo "✅ ZRAM enabled. Reboot to apply."
       fi
       ;;
     [3-4])
+      echo ""
       echo "🟧 Low RAM (3–4GB): ZRAM strongly recommended. Preload not advised."
       if confirm "💾 Enable ZRAM (compressed RAM swap)?"; then
         dryrun sudo apt install zram-tools -y
         echo "ALGO=zstd" | sudo tee /etc/default/zramswap
+        echo ""
         echo "✅ ZRAM enabled. Reboot to apply."
       fi
       ;;
     [5-8])
+      echo ""
       echo "🟨 Moderate RAM (5–8GB): Preload and ZRAM can both improve performance."
       if confirm "📦 Install preload to speed up app launches?"; then
         dryrun sudo apt install preload -y
@@ -556,10 +673,12 @@ suggest_preload_and_zram() {
       if confirm "💾 Enable ZRAM (compressed RAM swap)?"; then
         dryrun sudo apt install zram-tools -y
         echo "ALGO=zstd" | sudo tee /etc/default/zramswap
+        echo ""
         echo "✅ ZRAM enabled. Reboot to apply."
       fi
       ;;
     [9-9]|1[0-6])
+      echo ""
       echo "🟩 High RAM (9–16GB): Preload may help, ZRAM is optional."
       if confirm "📦 Install preload to speed up app launches?"; then
         dryrun sudo apt install preload -y
@@ -567,10 +686,12 @@ suggest_preload_and_zram() {
       if confirm "💾 Enable ZRAM (optional)?"; then
         dryrun sudo apt install zram-tools -y
         echo "ALGO=zstd" | sudo tee /etc/default/zramswap
+        echo ""
         echo "✅ ZRAM enabled. Reboot to apply."
       fi
       ;;
     *)
+      echo ""
       echo "🟦 Plenty of RAM (>16GB): Preload and ZRAM likely unnecessary, but optional."
       if confirm "📦 Install preload anyway?"; then
         dryrun sudo apt install preload -y
@@ -578,6 +699,7 @@ suggest_preload_and_zram() {
       if confirm "💾 Enable ZRAM anyway?"; then
         dryrun sudo apt install zram-tools -y
         echo "ALGO=zstd" | sudo tee /etc/default/zramswap
+        echo ""
         echo "✅ ZRAM enabled. Reboot to apply."
       fi
       ;;
@@ -598,6 +720,7 @@ show_donation_info() {
   if ! $is_dryrun; then
     xdg-open "https://linktr.ee/vitorcruzcode" >/dev/null 2>&1 &
   else
+    echo ""
     echo "[dryrun] xdg-open https://linktr.ee/vitorcruzcode"
   fi
 }
@@ -689,6 +812,7 @@ main() {
     esac
     shift
   done
+  echo ""
   echo "✅ Done. Don't forget to reboot if major updates or kernel upgrades were installed."
 }
 
