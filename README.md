@@ -1,4 +1,5 @@
-⚡ sysboost.sh - Optimize. Harden. Upgrade.
+# ⚡ sysboost.sh - Optimize. Harden. Upgrade.
+
 **Version:** 1.7.25  
 **Author:** Vitor Cruz  
 **License:** GPL v3.0  
