@@ -20,15 +20,24 @@ From disabling telemetry and junk cleanup to boosting gaming performance, suppor
 
 ## 🔥 Features (Modular & Optional):
 
-- 🎮 **Gaming-Ready**: GameMode, MangoHUD, Vulkan, drivers for Intel/AMD/NVIDIA, Steam — and tweaks for maximum FPS.
-- 💾 **SSD Friendly**: Enable periodic TRIM with `fstrim.timer`.
-- ⚙️ **CPU Performance Mode**: Enable "performance" governor for desktops.
-- 🎵 **Multimedia Support**: Install `ubuntu-restricted-extras` and codecs.
-- 🌐 **App Store Boost**: Enable Flatpak + Snap + GNOME Software.
-- 🦊 **Firefox Rebellion**: Replace Snap Firefox with LibreWolf from its official APT repo.
-- 📦 **Compression Support**: Install support for ZIP, RAR, 7z, tar.xz, bzip2, and more.
-- 🔁 **Preload & ZRAM**: Suggests `preload` or sets up ZRAM based on system RAM & hardware.
-- 🖥️ **SysAdmin Remote Access**: `--remmina` – Installs Remmina with full plugin support (remote desktop client).  
+✅ **Dry-Run Mode** — Preview all actions before execution  
+🧼 **Update & Deep Clean** — Update all packages, fix broken deps, remove leftovers  
+🧹 **Temp File Wipe** — Clean `/tmp`, `~/.cache`, and install **BleachBit** GUI  
+🔐 **Privacy First** — Disable telemetry, crash reports, background reporting  
+🛡️ **Firewall Setup** — Enable UFW with deny-in/allow-out and **GUFW**  
+🖥️ **Virtualization Mode** — Full **VirtualBox** support w/ kernel modules  
+🎮 **Gaming Tools** — GameMode, MangoHUD, Vulkan, drivers, **Steam**, DXVK  
+💾 **SSD Friendly** — Enable **TRIM** support with `fstrim.timer`  
+⚙️ **Performance Mode** — Set CPU governor to **performance**  
+🎵 **Multimedia Support** — `ubuntu-restricted-extras`, codecs, MS fonts  
+🌐 **App Store Setup** — Enable **Flatpak**, **Snap**, and **GNOME Software**  
+🦊 **Firefox Rebellion** — Replace Snap Firefox with **LibreWolf (APT)**  
+📦 **Compression Support** — zip, rar, 7z, xz, bzip2, lzma, and more  
+🔁 **ZRAM & Preload Detection** — Suggest based on your RAM size  
+🖧 **SysAdmin Tools** — Install **Remmina**, **Wireshark**, CLI diagnostics  
+📝 **Office Suite Installer** — Choose between **LibreOffice** and **OnlyOffice**, with default MIME config and locale detection 🌍  
+🧠 **Smart Update Logic** — Detect missing Flatpak/Snap before trying to update them  
+❤️ **Donation Info** — Friendly Linktree page for support 
 
 ---
 
