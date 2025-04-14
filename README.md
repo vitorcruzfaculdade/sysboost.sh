@@ -82,7 +82,7 @@ chmod +x sysboost.sh
 ## 🛡️ License
 This project is licensed under the GNU GPL v3.0.
 See the LICENSE file or visit:
-👉 https://www.gnu.org/licenses/gpl-3.0.html
+- 👉 https://www.gnu.org/licenses/gpl-3.0.html
 
 ## 👤 Credits
 Crafted with 💻 + ☕ by Vitor Cruz
