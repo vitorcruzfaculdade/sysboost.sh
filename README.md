@@ -11,9 +11,15 @@
 ## 🧰 What is sysboost?
 
 `sysboost.sh` is your open-source, all-in-one command-line ally to clean, speed up, secure, and enhance your Ubuntu LTS (GNOME) system — without breaking things. It uses **only official Ubuntu repositories** or trusted sources — no sketchy downloads, no surprises. Every line is human-readable and auditable.
+
+From disabling telemetry and junk cleanup to boosting gaming performance, supporting virtualization, compression formats, language packs, and now even **Office suite setup** — `sysboost.sh` adapts to your needs.
+
 > ⚠️ Based on personal preferences. Review & back up your system before use.
 
-From disabling telemetry and junk cleanup to boosting gaming performance, supporting virtualization, compression formats, l
+---
+
+## 🔥 Features (Modular & Optional):
+
 - 🎮 **Gaming-Ready**: GameMode, MangoHUD, Vulkan, drivers for Intel/AMD/NVIDIA, Steam — and tweaks for maximum FPS.
 - 💾 **SSD Friendly**: Enable periodic TRIM with `fstrim.timer`.
 - ⚙️ **CPU Performance Mode**: Enable "performance" governor for desktops.
@@ -41,7 +47,7 @@ chmod +x sysboost.sh
 
 ## 📦 Modular Options
 ```bash
-  Option           Description
+    Option         Description
 
   --clean          Clean junk, fix broken deps, remove Snap leftovers
   --tempclean      Clean /tmp, ~/.cache, and install BleachBit
@@ -77,7 +83,11 @@ Crafted with 💻 + ☕ by Vitor Cruz
 Want to support my work, check more tools, or donate?
 ## 👉 https://linktr.ee/vitorcruzcode
 
+---
+
 ## ⚠️ Disclaimer
 This script modifies system-level settings and installs packages.
 Use at your own risk. Always make a backup or snapshot beforehand.
 No guarantees — just results.
+
+---
