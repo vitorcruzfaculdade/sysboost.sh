@@ -3,7 +3,7 @@
 # Vitor Cruz's General Purpose System Boost Script
 # License: GPL v3.0
 
-VERSION="1.7.26"
+VERSION="1.7.27"
 set -e
 
 ### Helper Functions ###
@@ -81,7 +81,7 @@ update_system() {
 
     if confirm "🛍️ Store (Flatpak, Snap, GNOME Software) is not installed. Would you like to install it now?" "y"; then
       echo "🛍️ Installing Store module..."
-      install_flatpak_snap_store()
+      install_flatpak_snap_store
     else
       echo "⚠️ Skipping Flatpak updates. You can install the store later with '--store'."
       return
