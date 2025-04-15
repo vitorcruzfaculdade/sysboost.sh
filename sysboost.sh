@@ -616,7 +616,7 @@ install_office() {
         2)
             echo ""
             echo "📦 Installing OnlyOffice Desktop Editors..."
-            dryrun "wget -O onlyoffice.deb https://github.com/ONLYOFFICE/DesktopEditors/releases/download/v8.0.1/onlyoffice-desktopeditors_amd64.deb"
+            dryrun "wget -O onlyoffice.deb https://download.onlyoffice.com/install/desktop/editors/linux/onlyoffice-desktopeditors_amd64.deb"
             dryrun "sudo apt install ./onlyoffice.deb -y"
             dryrun "rm onlyoffice.deb"
             echo ""
