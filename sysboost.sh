@@ -3,7 +3,7 @@
 # Vitor Cruz's General Purpose System Boost Script
 # License: GPL v3.0
 
-VERSION="1.7.31"
+VERSION="1.7.32"
 set -e
 
 ### Helper Functions ###
