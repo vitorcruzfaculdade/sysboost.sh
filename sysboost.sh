@@ -428,7 +428,7 @@ install_gaming_tools() {
     dryrun sudo dpkg --add-architecture i386
     echo ""
     echo "🌐 Downloading Steam .deb from official servers..."
-    dryrun wget -O "$tmp_deb" https://cdn.fastly.steamstatic.com/client/installer/steam.deb
+    dryrun wget --show-progress --progress=bar:force:noscroll -O "$tmp_deb" https://cdn.fastly.steamstatic.com/client/installer/steam.deb
     dryrun sudo apt install "$tmp_deb" -y
     echo ""
     echo "🌐 Updating instalation cache..." 
@@ -616,7 +616,7 @@ install_office() {
         2)
             echo ""
             echo "📦 Installing OnlyOffice Desktop Editors..."
-            dryrun "wget -O onlyoffice.deb https://download.onlyoffice.com/install/desktop/editors/linux/onlyoffice-desktopeditors_amd64.deb"
+            dryrun "wget --show-progress --progress=bar:force:noscroll -O onlyoffice.deb https://download.onlyoffice.com/install/desktop/editors/linux/onlyoffice-desktopeditors_amd64.deb"
             dryrun "sudo apt install ./onlyoffice.deb -y"
             dryrun "rm onlyoffice.deb"
             echo ""
