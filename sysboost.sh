@@ -38,6 +38,7 @@ confirm() {
 
 ### Core Functions ###
 full_cleanup() {
+  echo ""
   echo "🗑️ Cleaning temp files..."
   echo ""
   echo "🌐 Updating instalation cache..."
@@ -290,7 +291,7 @@ install_chrome() {
     if confirm "🧭 Do you want to install Google Chrome (Stable) using the official repository?"; then
         echo ""
         echo "🌐 Downloading and saving Google Chrome repository key..."
-        dryrun wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo gpg --dearmor -o /usr/share/keyrings/google-chrome.gpg
+        dryrun wget -O - https://dl.google.com/linux/linux_signing_key.pub | sudo gpg --dearmor -o /usr/share/keyrings/google-chrome.gpg
         echo ""
         echo "🌐 Downloading and saving Google Chrome repository..."
         dryrun sudo echo 'deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/google-chrome.gpg] https://dl.google.com/linux/chrome/deb/ stable main' | sudo tee /etc/apt/sources.list.d/google-chrome.list
@@ -590,7 +591,8 @@ install_office() {
             echo "📦 Installing LibreOffice Language Pack..."
             LOCALE_LANG=$(echo $LANG | cut -d_ -f1)
             case $LOCALE_LANG in
-                pt) PACK="libreoffice-l10n-pt-br libreoffice-help-pt-br" ;;
+                pt-br) PACK="libreoffice-l10n-pt-br libreoffice-help-pt-br" ;;
+                pt) PACK="libreoffice-l10n-br libreoffice-help-pt" ;;
                 es) PACK="libreoffice-l10n-es libreoffice-help-es" ;;
                 fr) PACK="libreoffice-l10n-fr libreoffice-help-fr" ;;
                 de) PACK="libreoffice-l10n-de libreoffice-help-de" ;;
@@ -599,6 +601,7 @@ install_office() {
 
             if [ -n "$PACK" ]; then
                 confirm "🌍 Do you want to install language support for LibreOffice ($LOCALE_LANG)?" && {
+                    echo ""
                     dryrun "sudo apt install $PACK -y"
                 }
             fi
@@ -613,7 +616,7 @@ install_office() {
         2)
             echo ""
             echo "📦 Installing OnlyOffice Desktop Editors..."
-            dryrun "wget -qO onlyoffice.deb https://github.com/ONLYOFFICE/DesktopEditors/releases/download/v8.0.1/onlyoffice-desktopeditors_amd64.deb"
+            dryrun "wget -O onlyoffice.deb https://github.com/ONLYOFFICE/DesktopEditors/releases/download/v8.0.1/onlyoffice-desktopeditors_amd64.deb"
             dryrun "sudo apt install ./onlyoffice.deb -y"
             dryrun "rm onlyoffice.deb"
             echo ""
