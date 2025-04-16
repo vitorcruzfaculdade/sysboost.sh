@@ -41,7 +41,7 @@ full_cleanup() {
   echo ""
   echo "🗑️ Cleaning temp files..."
   echo ""
-  echo "🌐 Updating instalation cache..."
+  echo "🌐 Updating installation cache..."
   dryrun sudo apt update
   echo ""
   echo "🧽 Installing Bleachbit Cleaner..."
@@ -290,7 +290,7 @@ replace_firefox_with_librewolf() {
     dryrun sudo apt install extrepo -y
     dryrun sudo extrepo enable librewolf
     echo ""
-    echo "🌐 Updating instalation cache..."
+    echo "🌐 Updating installation cache..."
     dryrun sudo apt update
     echo ""
     echo "🌐 Installing LibreWolf..."
@@ -309,7 +309,7 @@ install_chrome() {
         echo "🌐 Downloading and saving Google Chrome repository..."
         dryrun sudo echo 'deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/google-chrome.gpg] https://dl.google.com/linux/chrome/deb/ stable main' | sudo tee /etc/apt/sources.list.d/google-chrome.list
         echo ""
-        echo "🌐 Updating instalation cache..."
+        echo "🌐 Updating installation cache..."
         dryrun sudo apt update
         echo ""
         echo "🧭 Installing Google Chrome..."
@@ -374,7 +374,7 @@ install_gaming_tools() {
     echo "🟢 NVIDIA GPU detected."
     if confirm "Install NVIDIA proprietary drivers?"; then
       echo ""
-      echo "🌐 Updating instalation cache..."
+      echo "🌐 Updating installation cache..."
       dryrun sudo apt update
       echo ""
       echo "🌐 Updating system..."
@@ -409,7 +409,7 @@ install_gaming_tools() {
     echo "🟠 VMware or VirtualBox GPU detected."
     if confirm "Install Virtual Machine GPU drivers?"; then
       echo ""
-      echo "🌐 Updating instalation cache..."    
+      echo "🌐 Updating installation cache..."    
       dryrun sudo apt update
       echo ""
       echo "🌐 Updating system..."
@@ -444,7 +444,7 @@ install_gaming_tools() {
     dryrun wget --show-progress --progress=bar:force:noscroll -O "$tmp_deb" https://cdn.fastly.steamstatic.com/client/installer/steam.deb
     dryrun sudo apt install "$tmp_deb" -y
     echo ""
-    echo "🌐 Updating instalation cache..." 
+    echo "🌐 Updating installation cache..." 
     dryrun sudo apt update
     echo ""
     echo "🛠️ Fixing dependencies (always happen with Steam deb)..." 
@@ -467,7 +467,7 @@ install_vm_tools() {
     echo "🌐 Adding key and repository information..." 
     echo "deb [arch=amd64 signed-by=/usr/share/keyrings/oracle-virtualbox.gpg] https://download.virtualbox.org/virtualbox/debian $codename contrib" | sudo tee /etc/apt/sources.list.d/virtualbox.list
     echo ""
-    echo "🌐 Updating instalation cache..." 
+    echo "🌐 Updating installation cache..." 
     dryrun sudo apt update
     echo ""
     echo "🌐 Installing Virtualbox..."
@@ -548,7 +548,7 @@ install_sysadmin_tools() {
 install_remmina() {
   if confirm "🖥️ Install Remmina (remote desktop client with full plugin support)?"; then
     echo ""
-    echo "🌐 Updating instalation cache..."
+    echo "🌐 Updating installation cache..."
     dryrun sudo apt update
     echo ""
     echo "📦 Installing Remmina and plugins..."
