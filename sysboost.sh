@@ -3,7 +3,7 @@
 # Vitor Cruz's General Purpose System Boost Script
 # License: GPL v3.0
 
-VERSION="1.7.34"
+VERSION="1.7.35"
 set -e
 
 ### Helper Functions ###
@@ -88,12 +88,11 @@ update_system() {
     echo "🧹 Package cleanup complete."
   fi
 
-  # Check for Flatpak support
+  # Flatpak update
   if ! command -v flatpak &> /dev/null; then
     echo ""
     echo "📦 Flatpak is not installed. Needed for updating Flatpak apps."
 
-    echo ""
     if confirm "🛍️ Store (Flatpak, Snap, GNOME Software) is not installed. Would you like to install it now?" "y"; then
       echo ""
       echo "🛍️ Installing Store module..."
@@ -101,22 +100,22 @@ update_system() {
     else
       echo ""
       echo "⚠️ Skipping Flatpak updates. You can install the store later with '--store'."
-      return
     fi
   fi
 
-  echo ""
-  echo "📦 Updating Flatpak apps..."
-  if [[ "$dryrun" == true ]]; then
-    echo "[dryrun] flatpak update -y"
-  else
-    flatpak update -y
+  if command -v flatpak &> /dev/null; then
     echo ""
-    echo "✅ Flatpak apps updated."
+    echo "📦 Updating Flatpak apps..."
+    if [[ "$dryrun" == true ]]; then
+      echo "[dryrun] flatpak update -y"
+    else
+      flatpak update -y
+      echo ""
+      echo "✅ Flatpak apps updated."
+    fi
   fi
-}
 
-# Snap support
+  # Snap update
   if command -v snap &> /dev/null; then
     echo ""
     echo "📦 Updating Snap packages..."
