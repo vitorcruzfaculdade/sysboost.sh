@@ -3,7 +3,7 @@
 # Vitor Cruz's General Purpose System Boost Script
 # License: GPL v3.0
 
-VERSION="1.7.37"
+VERSION="1.7.40"
 set -e
 
 ### Helper Functions ###
@@ -659,8 +659,22 @@ install_office() {
 }
 
 suggest_preload_and_zram() {
-  total_ram_gb=$(free -g | awk '/^Mem:/{print $2}')
+  # Get system locale
+  locale_lang=$(locale | grep LANG | cut -d= -f2)
+
+  # Check for the system's RAM based on locale
+  if [[ "$locale_lang" =~ "pt_BR" ]]; then
+    # Adjust for pt-br (Mem.)
+    total_ram_gb=$(free -g | awk '/^Mem\./{print $2}')
+  else
+    # Default for other languages (Mem)
+    total_ram_gb=$(free -g | awk '/^Mem:/{print $2}')
+  fi
+
+  # Detect machine type:
   machine_type=$(detect_machine_type)
+  
+  # Output information
   echo ""
   echo "🧠 Detected RAM: ${total_ram_gb} GB"
   echo ""
