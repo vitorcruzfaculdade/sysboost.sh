@@ -3,7 +3,7 @@
 # Vitor Cruz's General Purpose System Boost Script
 # License: GPL v3.0
 
-VERSION="1.7.33"
+VERSION="1.7.34"
 set -e
 
 ### Helper Functions ###
@@ -113,6 +113,20 @@ update_system() {
     flatpak update -y
     echo ""
     echo "✅ Flatpak apps updated."
+  fi
+}
+
+# Snap support
+  if command -v snap &> /dev/null; then
+    echo ""
+    echo "📦 Updating Snap packages..."
+    if [[ "$dryrun" == true ]]; then
+      echo "[dryrun] sudo snap refresh"
+    else
+      sudo snap refresh
+      echo ""
+      echo "✅ Snap packages updated."
+    fi
   fi
 }
 
