@@ -656,7 +656,9 @@ install_office() {
 suggest_preload_and_zram() {
   total_ram_gb=$(free -g | awk '/^Mem:/{print $2}')
   machine_type=$(detect_machine_type)
+  echo ""
   echo "🧠 Detected RAM: ${total_ram_gb} GB"
+  echo ""
   echo "💻 Machine type: $machine_type"
 
   case $total_ram_gb in
@@ -723,11 +725,23 @@ suggest_preload_and_zram() {
 }
 
 show_donation_info() {
-  echo ""
+  pulse_heart() {
+    echo ""
+    for i in {1..3}; do
+      echo -ne "   💖  Thanks for using sysboost.sh!  \r"
+      sleep 0.3
+      echo -ne "   ❤️  Thanks for using sysboost.sh!  \r"
+      sleep 0.3
+    done
+    echo -ne "   💖  Thanks for using sysboost.sh!  \n"
+  }
+
+  pulse_heart
+
   echo "     .-. .-.   "
-  echo "    (   |   )  💖 Thanks for using sysboost.sh!"
-  echo "     \\     /   If you'd like to support this project,"
-  echo "      \\   /    visit my Linktree below:"
+  echo "    (   |   )   If you'd like to support this project,"
+  echo "     \\     /   visit my Linktree below:"
+  echo "      \\   /"
   echo "       \`-’     "
   echo ""
   echo "🔗 https://linktr.ee/vitorcruzcode"
@@ -736,7 +750,6 @@ show_donation_info() {
   if ! $is_dryrun; then
     xdg-open "https://linktr.ee/vitorcruzcode" >/dev/null 2>&1 &
   else
-    echo ""
     echo "[dryrun] xdg-open https://linktr.ee/vitorcruzcode"
   fi
 }
