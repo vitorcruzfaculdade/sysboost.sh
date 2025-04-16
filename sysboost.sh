@@ -3,7 +3,7 @@
 # Vitor Cruz's General Purpose System Boost Script
 # License: GPL v3.0
 
-VERSION="1.7.36"
+VERSION="1.7.37"
 set -e
 
 ### Helper Functions ###
@@ -602,19 +602,24 @@ install_office() {
             # Language pack suggestion based on locale
             echo ""
             echo "📦 Installing LibreOffice Language Pack..."
-            LOCALE_LANG=$(echo $LANG | cut -d_ -f1)
-            case $LOCALE_LANG in
-                pt-br) PACK="libreoffice-l10n-pt-br libreoffice-help-pt-br" ;;
-                pt) PACK="libreoffice-l10n-br libreoffice-help-pt" ;;
+            LOCALE_LANG=$(echo "$LANG" | cut -d_ -f1)
+            LOCALE_REGION=$(echo "$LANG" | cut -d_ -f2 | cut -d. -f1 | tr '[:upper:]' '[:lower:]')
+            if [[ "$LOCALE_LANG" == "pt" && "$LOCALE_REGION" == "br" ]]; then
+              PACK="libreoffice-l10n-pt-br libreoffice-help-pt-br"
+            else
+              case $LOCALE_LANG in
+                pt) PACK="libreoffice-l10n-pt libreoffice-help-pt" ;;
                 es) PACK="libreoffice-l10n-es libreoffice-help-es" ;;
                 fr) PACK="libreoffice-l10n-fr libreoffice-help-fr" ;;
                 de) PACK="libreoffice-l10n-de libreoffice-help-de" ;;
                 *) PACK="" ;;
-            esac
+              esac
+            fi
 
             if [ -n "$PACK" ]; then
                 confirm "🌍 Do you want to install language support for LibreOffice ($LOCALE_LANG)?" && {
                     echo ""
+                    echo "🌍 Installing language pack for LibreOffice: $PACK"
                     dryrun "sudo apt install $PACK -y"
                 }
             fi
