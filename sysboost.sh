@@ -3,7 +3,7 @@
 # Vitor Cruz's General Purpose System Boost Script
 # License: GPL v3.0
 
-VERSION="1.7.47"
+VERSION="1.7.49"
 set -e
 
 ### Helper Functions ###
@@ -202,7 +202,7 @@ disable_telemetry() {
   echo ""
   if confirm "🔒 Do you want to disable core dumps (security and privacy improvement)?"; then
     dryrun sudo sysctl -w fs.suid_dumpable=0
-    dryrun sudo bash -c 'echo "fs.suid_dumpable=0" > /etc/sysctl.d/99-disable-coredump.conf'
+    dryrun 'echo "fs.suid_dumpable=0" | sudo tee /etc/sysctl.d/99-disable-coredump.conf > /dev/null'
     echo ""
     echo "🧠 Core dumps disabled."
   fi
