@@ -3,7 +3,7 @@
 # Vitor Cruz's General Purpose System Boost Script
 # License: GPL v3.0
 
-VERSION="1.7.40"
+VERSION="1.7.45"
 set -e
 
 ### Helper Functions ###
@@ -175,7 +175,7 @@ disable_telemetry() {
     grep -q "popcon.ubuntu.com" /etc/hosts || echo "127.0.0.1 popcon.ubuntu.com" | sudo tee -a /etc/hosts
   } || true
 
-  for pkg in ubuntu-report popularity-contest apport whoopsie apport-symptoms; do
+  for pkg in ubuntu-report popularity-contest apport whoopsie apport-symptoms kerneloops ubuntu-advantage-tools; do
     if dpkg -l | grep -q "^ii\s*$pkg"; then
       dryrun sudo apt purge -y "$pkg"
       dryrun sudo apt-mark hold "$pkg"
@@ -183,6 +183,35 @@ disable_telemetry() {
   done
   echo ""
   echo "🚫 Telemetry and background reporting fully disabled ✅"
+  
+  # Optional extra hardening
+  echo ""
+  if confirm "🔒 Do you want to disable Avahi (zeroconf/Bonjour/SSDP broadcasting)?"; then
+    dryrun sudo systemctl disable avahi-daemon.socket avahi-daemon.service --now
+    echo "📡 Avahi broadcasting disabled."
+  fi
+
+  echo ""
+  if confirm "🔒 Do you want to disable guest login in GDM (login screen)?"; then
+    dryrun sudo bash -c 'echo "[Seat:*]" > /etc/gdm3/custom.conf'
+    dryrun sudo bash -c 'echo "AllowGuest=false" >> /etc/gdm3/custom.conf'
+    echo "🚷 Guest login disabled in GDM."
+  fi
+
+  echo ""
+  if confirm "🔒 Do you want to disable core dumps (security and privacy improvement)?"; then
+    dryrun sudo sysctl -w fs.suid_dumpable=0
+    dryrun sudo bash -c 'echo "fs.suid_dumpable=0" > /etc/sysctl.d/99-disable-coredump.conf'
+    echo "🧠 Core dumps disabled."
+  fi
+
+  echo ""
+  if confirm "🛡️ Do you want to check AppArmor status?"; then
+    dryrun sudo aa-status
+  fi
+
+  echo ""
+  echo "✅ Additional optional hardening steps completed."
 }
 
 # Added code for checking and removing remote access servers
@@ -301,6 +330,7 @@ replace_firefox_with_librewolf() {
 }
 
 install_chrome() {
+        echo ""
     if confirm "🧭 Do you want to install Google Chrome (Stable) using the official repository?"; then
         echo ""
         echo "🌐 Downloading and saving Google Chrome repository key..."
@@ -315,6 +345,7 @@ install_chrome() {
         echo "🧭 Installing Google Chrome..."
         dryrun sudo apt install google-chrome-stable -y
 
+        echo ""
         if confirm "🧭 Set Chrome as default browser?" "Do you want to make Google Chrome your default browser?"; then
             dryrun xdg-settings set default-web-browser google-chrome.desktop
         fi
@@ -327,6 +358,7 @@ install_chrome() {
 }
 
 install_flatpak_snap_store() {
+    echo ""
   if confirm "📦 Do you want full Flatpak, Snap and GNOME Software support?"; then
     echo ""
     echo "🛍️ Installing Snap/Flatpak support with GNOME Software..."
@@ -336,6 +368,7 @@ install_flatpak_snap_store() {
 }
 
 enable_trim() {
+    echo ""
   if confirm "✂️ Enable periodic TRIM for SSDs (recommended)?"; then
     dryrun sudo systemctl enable fstrim.timer
     echo ""
@@ -344,6 +377,7 @@ enable_trim() {
 }
 
 enable_cpu_performance_mode() {
+    echo ""
   if confirm "⚙️ Set CPU governor to 'performance'?"; then
     dryrun sudo apt install cpufrequtils -y
     echo 'GOVERNOR="performance"' | sudo tee /etc/default/cpufrequtils
@@ -354,6 +388,7 @@ enable_cpu_performance_mode() {
 
 install_gaming_tools() {
   # 🎮 Gaming Utilities
+    echo ""
   if confirm "🎮 Enable gaming mode (GameMode, MangoHUD)?"; then
     dryrun sudo apt install gamemode mangohud -y
     echo ""
@@ -369,6 +404,7 @@ install_gaming_tools() {
 
   # 🧠 GPU Detection
   gpu_info=$(lspci | grep -E "VGA|3D")
+    echo ""
   if echo "$gpu_info" | grep -qi nvidia; then
     echo ""
     echo "🟢 NVIDIA GPU detected."
@@ -429,6 +465,7 @@ install_gaming_tools() {
   fi
 
   # 🔌 Vulkan + Proton/DXVK
+  echo ""
   if confirm "🧱 Install Vulkan packages for Proton/DXVK support?"; then
     dryrun sudo apt install mesa-vulkan-drivers mesa-utils vulkan-tools -y
     echo ""
@@ -436,6 +473,7 @@ install_gaming_tools() {
   fi
   
   # 🎮 Steam + 32-bit lib support
+  echo ""
   if confirm "🎮 Install Steam (official .deb release)?"; then
     tmp_deb="/tmp/steam_latest.deb"
     dryrun sudo dpkg --add-architecture i386
@@ -458,6 +496,7 @@ install_gaming_tools() {
 }
 
 install_vm_tools() {
+  echo ""
   if confirm "📦 Install latest VirtualBox from Oracle's official repo?"; then
     echo ""
     echo "🌐 Obtaining key from Oracle..." 
@@ -478,6 +517,7 @@ install_vm_tools() {
 }
 
 install_compression_tools() {
+  echo ""
   if confirm "🗜️ Install support for compressed file formats (zip, rar, 7z, xz, bz2, etc)?"; then
     dryrun sudo apt install zip unzip rar unrar p7zip-full xz-utils bzip2 lzma 7zip-rar -y 
   fi
@@ -492,50 +532,62 @@ install_sysadmin_tools() {
     dryrun sudo apt install remmina remmina-plugin-rdp remmina-plugin-vnc remmina-plugin-secret remmina-plugin-spice remmina-plugin-exec -y || echo "⚠️ Remmina installation failed."
   fi
 
+  echo ""
   if confirm "📊 Install htop (CLI 🖥️ - interactive process viewer)?"; then
     dryrun sudo apt install htop -y
   fi
 
+  echo ""
   if confirm "📷 Install screenfetch (CLI 🖥️ - display system info with ASCII logo)?"; then
     dryrun sudo apt install screenfetch -y
   fi
 
+  echo ""
   if confirm "🖥️ Install guake (GUI 🪟 - dropdown terminal for GNOME)?"; then
     dryrun sudo apt install guake -y
   fi
 
+  echo ""
   if confirm "🔐 Install OpenSSH Client (CLI 🖥️ - secure remote terminal access)?"; then
     dryrun sudo apt install openssh-client -y
   fi
-
+  
+  echo ""
   if confirm "🔁 Install lftp (CLI 🖥️ - advanced FTP/HTTP client with scripting support)?"; then
     dryrun sudo apt install lftp -y
   fi
 
+  echo ""
   if confirm "📡 Install telnet (CLI 🖥️ - basic network protocol testing tool)?"; then
     dryrun sudo apt install telnet -y
   fi
 
+  echo ""
   if confirm "🛰️ Install traceroute (CLI 🖥️ - trace path to a network host)?"; then
     dryrun sudo apt install traceroute -y
   fi
 
+  echo ""
   if confirm "📍 Install mtr (CLI 🖥️ - real-time network diagnostic tool)?"; then
     dryrun sudo apt install mtr -y
   fi
 
+  echo ""
   if confirm "🌐 Install whois (CLI 🖥️ - domain and IP ownership lookup)?"; then
     dryrun sudo apt install whois -y
   fi
 
+  echo ""
   if confirm "🧠 Install dnsutils (CLI 🖥️ - includes dig, nslookup, etc.)?"; then
     dryrun sudo apt install dnsutils -y
   fi
 
+  echo ""
   if confirm "🧪 Install nmap (CLI 🖥️ - network scanner and discovery tool)?"; then
     dryrun sudo apt install nmap -y
   fi
 
+  echo ""
   if confirm "🔬 Install Wireshark (GUI 🪟 - network packet analyzer)?"; then
     dryrun sudo apt install wireshark -y
     echo ""
@@ -546,6 +598,7 @@ install_sysadmin_tools() {
 }
 
 install_remmina() {
+  echo ""
   if confirm "🖥️ Install Remmina (remote desktop client with full plugin support)?"; then
     echo ""
     echo "🌐 Updating installation cache..."
@@ -783,7 +836,7 @@ print_help() {
   echo "  Options:"
   echo "  --clean          🧹  Full cleanup and temp file clearing"
   echo "  --update         🔄  Run update only (no cleanup)"
-  echo "  --harden         🔐  Apply security tweaks, disable telemetry, enable firewall"
+  echo "  --harden         🔐  Apply security tweaks, disable telemetry, enable firewall, disable some services"
   echo "  --vm             🖥️  Install VirtualBox tools"
   echo "  --gaming         🎮  Gaming tools, Vulkan, drivers, Steam & FPS tweaks"
   echo "  --trim           ✂️  Enable SSD TRIM"
