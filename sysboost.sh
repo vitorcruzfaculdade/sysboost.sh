@@ -3,7 +3,7 @@
 # Vitor Cruz's General Purpose System Boost Script
 # License: GPL v3.0
 
-VERSION="1.7.45"
+VERSION="1.7.47"
 set -e
 
 ### Helper Functions ###
@@ -193,8 +193,9 @@ disable_telemetry() {
 
   echo ""
   if confirm "🔒 Do you want to disable guest login in GDM (login screen)?"; then
-    dryrun sudo bash -c 'echo "[Seat:*]" > /etc/gdm3/custom.conf'
-    dryrun sudo bash -c 'echo "AllowGuest=false" >> /etc/gdm3/custom.conf'
+    dryrun 'echo "[Seat:*]" | sudo tee /etc/gdm3/custom.conf > /dev/null'
+    dryrun 'echo "AllowGuest=false" | sudo tee -a /etc/gdm3/custom.conf > /dev/null'
+    echo ""
     echo "🚷 Guest login disabled in GDM."
   fi
 
@@ -202,11 +203,13 @@ disable_telemetry() {
   if confirm "🔒 Do you want to disable core dumps (security and privacy improvement)?"; then
     dryrun sudo sysctl -w fs.suid_dumpable=0
     dryrun sudo bash -c 'echo "fs.suid_dumpable=0" > /etc/sysctl.d/99-disable-coredump.conf'
+    echo ""
     echo "🧠 Core dumps disabled."
   fi
 
   echo ""
   if confirm "🛡️ Do you want to check AppArmor status?"; then
+    echo ""
     dryrun sudo aa-status
   fi
 
