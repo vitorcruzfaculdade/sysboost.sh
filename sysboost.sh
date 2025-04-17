@@ -3,7 +3,7 @@
 # Vitor Cruz's General Purpose System Boost Script
 # License: GPL v3.0
 
-VERSION="1.7.49"
+VERSION="1.7.51"
 set -e
 
 ### Helper Functions ###
@@ -186,18 +186,31 @@ disable_telemetry() {
   
   # Optional extra hardening
   echo ""
-  if confirm "🔒 Do you want to disable Avahi (zeroconf/Bonjour/SSDP broadcasting)?"; then
+  if confirm "🔐 Do you want to disable Avahi (zeroconf/Bonjour/SSDP broadcasting)?"; then
     dryrun sudo systemctl disable avahi-daemon.socket avahi-daemon.service --now
     echo "📡 Avahi broadcasting disabled."
   fi
 
+  # 1. GDM3 block
   echo ""
-  if confirm "🔒 Do you want to disable guest login in GDM (login screen)?"; then
+  if confirm "🔐 Do you want to disable guest login in GDM (login screen)?"; then
     dryrun 'echo "[Seat:*]" | sudo tee /etc/gdm3/custom.conf > /dev/null'
     dryrun 'echo "AllowGuest=false" | sudo tee -a /etc/gdm3/custom.conf > /dev/null'
     echo ""
     echo "🚷 Guest login disabled in GDM."
   fi
+
+  # 2. LightDM block (only if installed)
+  if [ -d /etc/lightdm ] || [ -f /etc/lightdm/lightdm.conf ]; then
+    echo ""
+    confirm "🔐 LightDM detected. Disable guest login for LightDM?" && {
+    dryrun 'sudo mkdir -p /etc/lightdm/lightdm.conf.d'
+    dryrun 'echo "[SeatDefaults]" | sudo tee /etc/lightdm/lightdm.conf.d/50-no-guest.conf > /dev/null'
+    dryrun 'echo "allow-guest=false" | sudo tee -a /etc/lightdm/lightdm.conf.d/50-no-guest.conf > /dev/null'
+    echo ""
+    echo "🚷 Guest login disabled for LightDM."
+  }
+fi
 
   echo ""
   if confirm "🔒 Do you want to disable core dumps (security and privacy improvement)?"; then
