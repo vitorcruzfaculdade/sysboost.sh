@@ -1,6 +1,6 @@
 # ⚡ sysboost.sh - Optimize. Harden. Upgrade.
 
-**Version:** 1.7.33  
+**Version:** 1.7.51  
 **Author:** Vitor Cruz  
 **License:** GPL v3.0  
 **Scope:** Ubuntu 24.04+ (GNOME) — Laptops, Desktops & VMs  
@@ -23,7 +23,10 @@ From disabling telemetry and junk cleanup to boosting gaming performance, suppor
 ✅ **Dry-Run Mode** — Preview all actions before execution  
 🧼 **Update & Deep Clean** — Update all packages, fix broken deps, remove leftovers  
 🧹 **Temp File Wipe** — Clean `/tmp`, `~/.cache`, and install **BleachBit** GUI  
-🔐 **Privacy First** — Disable telemetry, crash reports, background reporting  
+🔐 **Privacy First** — Disable telemetry, crash reports, background reporting
+🚷 **Guest Login Hardening** — Disable guest login for GDM and LightDM (optional)
+🧱 **Extra Hardening** — Disable core dumps, Avahi broadcasting, and guest sessions
+🌍 **Locale-aware** — LibreOffice language packs suggested based on system language
 🛡️ **Firewall Setup** — Enable UFW with deny-in/allow-out and **GUFW**  
 🖥️ **Virtualization Mode** — Full **VirtualBox** support w/ kernel modules  
 🎮 **Gaming Tools** — GameMode, MangoHUD, Vulkan, drivers, **Steam**, DXVK  
