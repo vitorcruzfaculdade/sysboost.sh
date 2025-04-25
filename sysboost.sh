@@ -3,7 +3,7 @@
 # Vitor Cruz's General Purpose System Boost Script
 # License: GPL v3.0
 
-VERSION="1.7.51"
+VERSION="1.7.52"
 set -e
 
 ### Helper Functions ###
@@ -703,11 +703,13 @@ install_office() {
         2)
             echo ""
             echo "📦 Installing OnlyOffice Desktop Editors..."
-            dryrun "wget --show-progress --progress=bar:force:noscroll -O onlyoffice.deb https://download.onlyoffice.com/install/desktop/editors/linux/onlyoffice-desktopeditors_amd64.deb"
-            dryrun "sudo apt install ./onlyoffice.deb -y"
-            dryrun "rm onlyoffice.deb"
+            dryrun ""
+            echo "🌐 Updating installation cache and Snap Packages..."
+            dryrun "sudo snap refresh"
+            dryrun ""
+            dryrun "sudo snap install onlyoffice-desktopeditors"
             echo ""
-            echo "✅ OnlyOffice installed from DEB."
+            echo "✅ OnlyOffice installed from 🛍️ SnapStore."
 
             confirm "📝 Do you want to set OnlyOffice as default for office files?" && {
                 dryrun "xdg-mime default onlyoffice-desktopeditors.desktop application/vnd.openxmlformats-officedocument.wordprocessingml.document"
