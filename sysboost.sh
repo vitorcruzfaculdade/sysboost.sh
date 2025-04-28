@@ -1,5 +1,6 @@
 #!/bin/bash
-
+#
+# sysboosth.sh
 # Vitor Cruz's General Purpose System Boost Script
 # License: GPL v3.0
 
