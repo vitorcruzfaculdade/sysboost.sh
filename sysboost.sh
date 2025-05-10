@@ -1,10 +1,10 @@
 #!/bin/bash
 #
 # sysboosth.sh
-# Vitor Cruz's General Purpose System Boost Script
+# Vitor Cruz's Ultimate Ubuntu Booster for Ubuntu 24.04 LTS + Script
 # License: GPL v3.0
 
-VERSION="1.7.52"
+VERSION="1.7.54"
 set -e
 
 ### Helper Functions ###
@@ -17,9 +17,9 @@ dryrun() {
 print_banner() {
   echo ""
   echo "┌─────────────────────────────────────────────────────────────┐"
-  echo "│ 🛠️  sysboost.sh v$VERSION                                    "
-  echo "│ 🚀 The Ultimate Ubuntu Booster for 24.04+                     "
-  echo "│ 🔧 By Vitor Cruz · License: GPL v3.0                          "
+  echo "│ 🛠️  sysboost.sh v$VERSION                                   |"
+  echo "│ 🚀 The Ultimate Ubuntu Booster for Ubuntu 24.04+ LTS        |"
+  echo "│ 🔧 By Vitor Cruz · License: GPL v3.0                        |"
   echo "└─────────────────────────────────────────────────────────────┘"
   echo ""
 }
@@ -536,7 +536,7 @@ install_vm_tools() {
 install_compression_tools() {
   echo ""
   if confirm "🗜️ Install support for compressed file formats (zip, rar, 7z, xz, bz2, etc)?"; then
-    dryrun sudo apt install zip unzip rar unrar p7zip-full xz-utils bzip2 lzma 7zip-rar -y 
+    dryrun sudo apt install gzip bzip2 zx-utils tar arc lzop cpio lzma p7zip-full 7zip-rar zip unzip rar unrar  -y 
   fi
 }
 
