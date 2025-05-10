@@ -4,7 +4,7 @@
 # Vitor Cruz's Ultimate Ubuntu Booster for Ubuntu 24.04 LTS + Script
 # License: GPL v3.0
 
-VERSION="1.7.55"
+VERSION="1.7.56"
 set -e
 
 ### Helper Functions ###
