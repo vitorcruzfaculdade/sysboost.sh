@@ -4,7 +4,7 @@
 # Vitor Cruz's Ultimate Ubuntu Booster for Ubuntu 24.04 LTS + Script
 # License: GPL v3.0
 
-VERSION="1.7.54"
+VERSION="1.7.55"
 set -e
 
 ### Helper Functions ###
@@ -437,7 +437,7 @@ install_gaming_tools() {
       dryrun sudo apt install mesa-vulkan-drivers mesa-utils vulkan-tools -y
       echo ""
       echo "🌐 Installing NVIDIA drivers using Ubuntu-Drivers..."
-      dryrun sudo ubuntu-drivers autoinstall
+      dryrun sudo ubuntu-drivers install
       echo ""
       echo "✅ NVIDIA drivers installation triggered."
     fi
@@ -448,6 +448,9 @@ install_gaming_tools() {
       dryrun sudo apt install mesa-vulkan-drivers mesa-utils vulkan-tools -y
       echo ""
       echo "✅ AMD Mesa drivers installed."
+      echo ""
+      echo "🌐 Installing AMD (or other) additional drivers using Ubuntu-Drivers (if any)..."
+      dryrun sudo ubuntu-drivers install
     fi
   elif echo "$gpu_info" | grep -qi intel; then
     echo ""
@@ -456,6 +459,9 @@ install_gaming_tools() {
       dryrun sudo apt install mesa-vulkan-drivers mesa-utils vulkan-tools -y
       echo ""
       echo "✅ Intel Mesa drivers installed."
+      echo ""
+      echo "🌐 Installing Intel (or other) additional drivers using Ubuntu-Drivers (if any)..."
+      dryrun sudo ubuntu-drivers install
     fi
   elif echo "$gpu_info" | grep -qi vmware; then
     echo ""
@@ -472,7 +478,7 @@ install_gaming_tools() {
       dryrun sudo apt install mesa-vulkan-drivers mesa-utils vulkan-tools open-vm-tools open-vm-tools-desktop -y
       echo ""
       echo "🌐 Installing VM additional drivers using Ubuntu-Drivers (if any)..."
-      dryrun sudo ubuntu-drivers autoinstall
+      dryrun sudo ubuntu-drivers install
       echo ""
       echo "✅ VM GPU drivers installed."
     fi
@@ -487,6 +493,9 @@ install_gaming_tools() {
     dryrun sudo apt install mesa-vulkan-drivers mesa-utils vulkan-tools -y
     echo ""
     echo "✅ Vulkan support installed."
+    echo ""
+    echo "🌐 Installing other additional drivers using Ubuntu-Drivers (if any)..."
+    dryrun sudo ubuntu-drivers install
   fi
   
   # 🎮 Steam + 32-bit lib support
@@ -535,7 +544,7 @@ install_vm_tools() {
 
 install_compression_tools() {
   echo ""
-  if confirm "🗜️ Install support for compressed file formats (zip, rar, 7z, xz, bz2, etc)?"; then
+  if confirm "🗜️ Install support for compressed file formats (gzip, bzip2, tar, arc, lzma, zip, rar, 7z, xz, bz2, etc)?"; then
     dryrun sudo apt install gzip bzip2 zx-utils tar arc lzop cpio lzma p7zip-full 7zip-rar zip unzip rar unrar  -y 
   fi
 }
@@ -637,8 +646,13 @@ install_office() {
     local libre_installed=0
     local only_installed=0
 
+    # Detecting Office installs
+    # Detectiong LibreOffice install
     dpkg -l | grep -iq libreoffice && libre_installed=1
+    # Detecting OnlyOffice install from a .deb source
     dpkg -l | grep -iq onlyoffice && only_installed=1
+    # Detecting OnlyOffice install from a snap source
+    snap list | grep -i onlyoffice && only_installed=1
 
     if [ "$libre_installed" -eq 1 ] || [ "$only_installed" -eq 1 ]; then
         echo ""
@@ -704,13 +718,14 @@ install_office() {
         2)
             echo ""
             echo "📦 Installing OnlyOffice Desktop Editors..."
-            dryrun ""
+            echo ""
             echo "🌐 Updating installation cache and Snap Packages..."
             dryrun "sudo snap refresh"
-            dryrun ""
+            echo ""
+            echo "🌐 Installing OnlyOffice from Snap Package..." 
             dryrun "sudo snap install onlyoffice-desktopeditors"
             echo ""
-            echo "✅ OnlyOffice installed from 🛍️ SnapStore."
+            echo "✅ OnlyOffice installed from 🛍️ Snap Store."
 
             confirm "📝 Do you want to set OnlyOffice as default for office files?" && {
                 dryrun "xdg-mime default onlyoffice-desktopeditors.desktop application/vnd.openxmlformats-officedocument.wordprocessingml.document"
@@ -938,3 +953,5 @@ main() {
 
 # Run main function
 main "$@"
+
+#EOF
