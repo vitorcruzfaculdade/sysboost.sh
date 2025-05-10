@@ -328,6 +328,7 @@ setup_firewall() {
 }
 
 replace_firefox_with_librewolf() {
+    echo ""
   if confirm "🌐 Replace Firefox Snap with LibreWolf its from official repo?"; then
     dryrun sudo snap remove firefox || true
     echo ""
