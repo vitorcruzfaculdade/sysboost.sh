@@ -544,8 +544,8 @@ install_vm_tools() {
 
 install_compression_tools() {
   echo ""
-  if confirm "🗜️ Install support for compressed file formats (gzip, bzip2, tar, arc, lzma, zip, rar, 7z, xz, bz2, etc)?"; then
-    dryrun sudo apt install gzip bzip2 zx-utils tar arc lzop cpio lzma p7zip-full 7zip-rar zip unzip rar unrar  -y 
+  if confirm "🗜️ Install support for compressed file formats (gzip, bzip2, xz, tar, arc, lzma, zip, rar, 7z, bz2, etc) ?"; then
+    dryrun sudo apt install gzip bzip2 xz-utils tar arc lzop cpio lzma p7zip-full 7zip-rar zip unzip rar unrar  -y 
   fi
 }
 
