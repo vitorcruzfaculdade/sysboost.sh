@@ -1,4 +1,4 @@
-# ⚡ sysboost.sh - Optimize. Harden. Upgrade.
+# ⚡ sysboost.sh - Optimize. Harden. Upgrade. 🇺🇸
 
 **Version:** 1.7.56  
 **Author:** Vitor Cruz  
