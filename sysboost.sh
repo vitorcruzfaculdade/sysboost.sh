@@ -4,7 +4,7 @@
 # Vitor Cruz's Ultimate Ubuntu Booster for Ubuntu 24.04 LTS + Script
 # License: GPL v3.0
 
-VERSION="1.7.56"
+VERSION="1.7.57"
 set -e
 
 ### Helper Functions ###
@@ -176,7 +176,7 @@ disable_telemetry() {
     grep -q "popcon.ubuntu.com" /etc/hosts || echo "127.0.0.1 popcon.ubuntu.com" | sudo tee -a /etc/hosts
   } || true
 
-  for pkg in ubuntu-report popularity-contest apport whoopsie apport-symptoms kerneloops ubuntu-advantage-tools; do
+  for pkg in ubuntu-report popularity-contest apport whoopsie apport-symptoms kerneloops ubuntu-advantage-tools kerneloops-applet; do
     if dpkg -l | grep -q "^ii\s*$pkg"; then
       dryrun sudo apt purge -y "$pkg"
       dryrun sudo apt-mark hold "$pkg"
