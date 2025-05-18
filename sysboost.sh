@@ -4,7 +4,7 @@
 # Vitor Cruz's Ultimate Ubuntu Booster for Ubuntu 24.04 LTS + Script
 # License: GPL v3.0
 
-VERSION="1.7.57"
+VERSION="1.7.58"
 set -e
 
 ### Helper Functions ###
@@ -351,20 +351,19 @@ install_chrome() {
         echo ""
     if confirm "🧭 Do you want to install Google Chrome (Stable) using the official repository?"; then
         echo ""
-        echo "🌐 Downloading and saving Google Chrome repository key..."
-        dryrun wget -O - https://dl.google.com/linux/linux_signing_key.pub | sudo gpg --dearmor -o /usr/share/keyrings/google-chrome.gpg
+        echo "🌐 Downloading 🧭 Google Chrome official Package..."
+        dryrun wget -O /tmp/google-chrome.deb https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
         echo ""
-        echo "🌐 Downloading and saving Google Chrome repository..."
-        dryrun sudo echo 'deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/google-chrome.gpg] https://dl.google.com/linux/chrome/deb/ stable main' | sudo tee /etc/apt/sources.list.d/google-chrome.list
+        echo "🧭 Installing Google Chrome..."
+        dryrun sudo dpkg -i /tmp/google-chrome.deb
         echo ""
         echo "🌐 Updating installation cache..."
         dryrun sudo apt update
         echo ""
-        echo "🧭 Installing Google Chrome..."
-        dryrun sudo apt install google-chrome-stable -y
-
+        echo "🌐 Adjusting 🧭 Google Chrome dependencies (if needed)..."
+        dryrun sudo apt-get -f install
         echo ""
-        if confirm "🧭 Set Chrome as default browser?" "Do you want to make Google Chrome your default browser?"; then
+        if confirm "Do you want to make 🧭 Google Chrome your default browser?"; then
             dryrun xdg-settings set default-web-browser google-chrome.desktop
         fi
         echo ""
