@@ -17,11 +17,12 @@ dryrun() {
 
 print_banner() {
   echo ""
-  echo "┌─────────────────────────────────────────────────────────────┐"
-  echo "│ 🛠️  sysboost.sh v$VERSION                                   |"
-  echo "│ 🚀 The Ultimate Ubuntu Booster for Ubuntu 24.04+ LTS        |"
-  echo "│ 🔧 By Vitor Cruz · License: GPL v3.0                        |"
-  echo "└─────────────────────────────────────────────────────────────┘"
+  echo "┌──────────────────────────────────────────────────────────────────────┐"
+  echo "│ 🛠️ sysboost.sh v$VERSION                                             |"
+  echo "│ 🚀 The Ultimate Ubuntu Booster for Ubuntu 24.04+ LTS                 |"
+  echo "│ 🔧 By Vitor Cruz · License: GPL v3.0                                 |"
+  echo "| 🌐 Downloaded from https://github.com/vitorcruzfaculdade/sysboost.sh |"
+  echo "└──────────────────────────────────────────────────────────────────────┘"
   echo ""
 }
 
