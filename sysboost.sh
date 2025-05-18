@@ -187,13 +187,6 @@ disable_telemetry() {
   echo ""
   echo "🚫 Telemetry and background reporting fully disabled ✅"
   
-  # Optional extra hardening
-  echo ""
-  if confirm "🔐 Do you want to disable Avahi (zeroconf/Bonjour/SSDP broadcasting)?"; then
-    dryrun sudo systemctl disable avahi-daemon.socket avahi-daemon.service --now
-    echo "📡 Avahi broadcasting disabled."
-  fi
-
   # 1. GDM3 block
   echo ""
   if confirm "🔐 Do you want to disable guest login in GDM (login screen)?"; then
@@ -229,6 +222,13 @@ fi
     dryrun 'echo "fs.suid_dumpable=0" | sudo tee /etc/sysctl.d/99-disable-coredump.conf > /dev/null'
     echo ""
     echo "🧠 Core dumps disabled."
+  fi
+
+  # Optional extra hardening
+  echo ""
+  if confirm "🔐 Do you want to disable Avahi (zeroconf/Bonjour/SSDP broadcasting)?"; then
+    dryrun sudo systemctl disable avahi-daemon.socket avahi-daemon.service --now
+    echo "📡 Avahi broadcasting disabled."
   fi
 
   echo ""
@@ -851,14 +851,18 @@ show_donation_info() {
     done
     echo -ne "   💖  Thanks for using sysboost.sh!  \n"
   }
-
   pulse_heart
 
-  echo "     .-. .-.   "
-  echo "    (   |   )   If you'd like to support this project,"
-  echo "     \\     /   visit my Linktree below:"
-  echo "      \\   /"
-  echo "       \`-’     "
+  echo ""
+  echo "   ***     ***   "
+  echo "  *****   *****  If you'd like to support this project,"
+  echo "  *************  visit my Linktree below:"
+  echo "   ***********"
+  echo "    *********"
+  echo "     *******"
+  echo "      *****"
+  echo "       ***"
+  echo "        *"
   echo ""
   echo "🔗 https://linktr.ee/vitorcruzcode"
   echo ""
