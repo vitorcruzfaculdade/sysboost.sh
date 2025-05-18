@@ -5,7 +5,7 @@
 # License: GPL v3.0
 # Downloaded from https://github.com/vitorcruzfaculdade/sysboost.sh
 
-VERSION="1.7.60"
+VERSION="1.7.61"
 set -e
 
 ### Helper Functions ###
@@ -41,16 +41,22 @@ confirm() {
 
 ### Core Functions ###
 full_cleanup() {
+    # Ask user if they want to install BleachBit
+    echo ""
+  if confirm "Would you like to install BleachBit Cleaner?"; then
+    echo "🌐 Updating installation cache..."
+    dryrun sudo apt update
+    echo ""
+    echo "🧽 Installing BleachBit Cleaner..."
+    dryrun sudo apt install bleachbit -y
+  else
+    echo ""
+    echo "🧼 Skipping BleachBit installation."
+  fi
   echo ""
   echo "🗑️ Cleaning temp files..."
-  echo ""
-  echo "🌐 Updating installation cache..."
-  dryrun sudo apt update
-  echo ""
-  echo "🧽 Installing Bleachbit Cleaner..."
-  dryrun sudo apt install bleachbit -y
-  echo ""
-  echo "🌐 Checking for broken dependencies..."
+  echo ""  
+  echo "📦 Checking for broken dependencies..."
   dryrun sudo apt-get check
   echo ""
   echo "🛠️ Fixing broken dependencies (if any)..."
