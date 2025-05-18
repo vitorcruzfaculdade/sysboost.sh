@@ -353,7 +353,7 @@ install_chrome() {
     if confirm "🧭 Do you want to install Google Chrome (Stable) using the official repository?"; then
         echo ""
         echo "🌐 Downloading 🧭 Google Chrome official Package..."
-        dryrun wget -O /tmp/google-chrome.deb https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+        dryrun wget --show-progress --progress=bar:force:noscroll -O /tmp/google-chrome.deb https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
         echo ""
         echo "🧭 Installing Google Chrome..."
         dryrun sudo dpkg -i /tmp/google-chrome.deb
@@ -436,7 +436,7 @@ install_gaming_tools() {
       dryrun sudo apt upgrade -y
       echo ""
       echo "🌐 Adding some packages to improve GPU compatibility"
-      dryrun sudo apt install mesa-vulkan-drivers mesa-utils vulkan-tools -y
+      dryrun sudo apt install mesa-vulkan-drivers mesa-utils vulkan-tools linux-firmware -y
       echo ""
       echo "🌐 Installing NVIDIA drivers using Ubuntu-Drivers..."
       dryrun sudo ubuntu-drivers install
@@ -447,7 +447,7 @@ install_gaming_tools() {
     echo ""
     echo "🔴 AMD GPU detected."
     if confirm "Install AMD Mesa graphics drivers?"; then
-      dryrun sudo apt install mesa-vulkan-drivers mesa-utils vulkan-tools -y
+      dryrun sudo apt install mesa-vulkan-drivers mesa-utils vulkan-tools linux-firmware -y
       echo ""
       echo "✅ AMD Mesa drivers installed."
       echo ""
@@ -458,7 +458,7 @@ install_gaming_tools() {
     echo ""
     echo "🔵 Intel GPU detected."
     if confirm "Install Intel Mesa graphics drivers?"; then
-      dryrun sudo apt install mesa-vulkan-drivers mesa-utils vulkan-tools -y
+      dryrun sudo apt install mesa-vulkan-drivers mesa-utils vulkan-tools linux-firmware -y
       echo ""
       echo "✅ Intel Mesa drivers installed."
       echo ""
@@ -477,7 +477,7 @@ install_gaming_tools() {
       dryrun sudo apt upgrade -y
       echo ""
       echo "🌐 Adding some packages to improve GPU compatibility and Open-VM-Tools..."
-      dryrun sudo apt install mesa-vulkan-drivers mesa-utils vulkan-tools open-vm-tools open-vm-tools-desktop -y
+      dryrun sudo apt install mesa-vulkan-drivers mesa-utils vulkan-tools open-vm-tools open-vm-tools-desktop linux-firmware -y
       echo ""
       echo "🌐 Installing VM additional drivers using Ubuntu-Drivers (if any)..."
       dryrun sudo ubuntu-drivers install
@@ -492,7 +492,7 @@ install_gaming_tools() {
   # 🔌 Vulkan + Proton/DXVK
   echo ""
   if confirm "🧱 Install Vulkan packages for Proton/DXVK support?"; then
-    dryrun sudo apt install mesa-vulkan-drivers mesa-utils vulkan-tools -y
+    dryrun sudo apt install mesa-vulkan-drivers mesa-utils vulkan-tools linux-firmware -y
     echo ""
     echo "✅ Vulkan support installed."
     echo ""
@@ -528,7 +528,7 @@ install_vm_tools() {
   if confirm "📦 Install latest VirtualBox from Oracle's official repo?"; then
     echo ""
     echo "🌐 Obtaining key from Oracle..." 
-    dryrun wget -q https://www.virtualbox.org/download/oracle_vbox_2016.asc -O- | sudo gpg --dearmor -o /usr/share/keyrings/oracle-virtualbox.gpg
+    dryrun wget --show-progress --progress=bar:force:noscroll https://www.virtualbox.org/download/oracle_vbox_2016.asc -O- | sudo gpg --dearmor -o /usr/share/keyrings/oracle-virtualbox.gpg
     codename=$(lsb_release -cs)
     echo ""
     echo "🌐 Adding key and repository information..." 
