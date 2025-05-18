@@ -3,8 +3,9 @@
 # sysboosth.sh
 # Vitor Cruz's Ultimate Ubuntu Booster for Ubuntu 24.04 LTS + Script
 # License: GPL v3.0
+# Downloaded from https://github.com/vitorcruzfaculdade/sysboost.sh
 
-VERSION="1.7.58"
+VERSION="1.7.59"
 set -e
 
 ### Helper Functions ###
