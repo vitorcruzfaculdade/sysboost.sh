@@ -362,6 +362,7 @@ install_chrome() {
         dryrun sudo apt update
         echo ""
         echo "🌐 Adjusting 🧭 Google Chrome dependencies (if needed)..."
+        dryrun sudo apt-get check
         dryrun sudo apt-get -f install
         echo ""
         if confirm "Do you want to make 🧭 Google Chrome your default browser?"; then
