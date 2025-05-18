@@ -5,7 +5,7 @@
 # License: GPL v3.0
 # Downloaded from https://github.com/vitorcruzfaculdade/sysboost.sh
 
-VERSION="1.7.59"
+VERSION="1.7.60"
 set -e
 
 ### Helper Functions ###
@@ -178,7 +178,7 @@ disable_telemetry() {
     grep -q "popcon.ubuntu.com" /etc/hosts || echo "127.0.0.1 popcon.ubuntu.com" | sudo tee -a /etc/hosts
   } || true
 
-  for pkg in ubuntu-report popularity-contest apport whoopsie apport-symptoms kerneloops ubuntu-advantage-tools kerneloops-applet; do
+  for pkg in ubuntu-report ubuntu-advantage-tools popularity-contest apport apport-symptoms whoopsie kerneloops kerneloops-applet; do
     if dpkg -l | grep -q "^ii\s*$pkg"; then
       dryrun sudo apt purge -y "$pkg"
       dryrun sudo apt-mark hold "$pkg"
@@ -216,7 +216,15 @@ disable_telemetry() {
 fi
 
   echo ""
-  if confirm "🔒 Do you want to disable core dumps (security and privacy improvement)?"; then
+  if confirm "🔒 Enable ASLR (Address Space Layout Randomization) by setting kernel.randomize_va_space=2 for increased memory security?"; then
+    dryrun 'echo "kernel.randomize_va_space = 2" | sudo tee -a /etc/sysctl.conf > /dev/null'
+    dryrun sudo sysctl -p
+    echo ""
+    echo "🧠 ASLR (Address Space Layout Randomization) enabled."
+  fi
+
+  echo ""
+  if confirm "🔒 Do you want to disable core dumps to improve security and privacy?"; then
     dryrun sudo sysctl -w fs.suid_dumpable=0
     dryrun 'echo "fs.suid_dumpable=0" | sudo tee /etc/sysctl.d/99-disable-coredump.conf > /dev/null'
     echo ""
@@ -437,7 +445,7 @@ install_gaming_tools() {
       dryrun sudo apt upgrade -y
       echo ""
       echo "🌐 Adding some packages to improve GPU compatibility"
-      dryrun sudo apt install mesa-vulkan-drivers mesa-utils vulkan-tools linux-firmware -y
+      dryrun sudo apt install mesa-utils mesa-vulkan-drivers vulkan-tools linux-firmware -y
       echo ""
       echo "🌐 Installing NVIDIA drivers using Ubuntu-Drivers..."
       dryrun sudo ubuntu-drivers install
@@ -448,7 +456,7 @@ install_gaming_tools() {
     echo ""
     echo "🔴 AMD GPU detected."
     if confirm "Install AMD Mesa graphics drivers?"; then
-      dryrun sudo apt install mesa-vulkan-drivers mesa-utils vulkan-tools linux-firmware -y
+      dryrun sudo apt install mesa-utils mesa-vulkan-drivers vulkan-tools linux-firmware -y
       echo ""
       echo "✅ AMD Mesa drivers installed."
       echo ""
@@ -459,7 +467,7 @@ install_gaming_tools() {
     echo ""
     echo "🔵 Intel GPU detected."
     if confirm "Install Intel Mesa graphics drivers?"; then
-      dryrun sudo apt install mesa-vulkan-drivers mesa-utils vulkan-tools linux-firmware -y
+      dryrun sudo apt install mesa-utils mesa-vulkan-drivers vulkan-tools linux-firmware -y
       echo ""
       echo "✅ Intel Mesa drivers installed."
       echo ""
@@ -478,7 +486,7 @@ install_gaming_tools() {
       dryrun sudo apt upgrade -y
       echo ""
       echo "🌐 Adding some packages to improve GPU compatibility and Open-VM-Tools..."
-      dryrun sudo apt install mesa-vulkan-drivers mesa-utils vulkan-tools open-vm-tools open-vm-tools-desktop linux-firmware -y
+      dryrun sudo apt install mesa-utils mesa-vulkan-drivers vulkan-tools open-vm-tools open-vm-tools-desktop linux-firmware -y
       echo ""
       echo "🌐 Installing VM additional drivers using Ubuntu-Drivers (if any)..."
       dryrun sudo ubuntu-drivers install
@@ -493,7 +501,7 @@ install_gaming_tools() {
   # 🔌 Vulkan + Proton/DXVK
   echo ""
   if confirm "🧱 Install Vulkan packages for Proton/DXVK support?"; then
-    dryrun sudo apt install mesa-vulkan-drivers mesa-utils vulkan-tools linux-firmware -y
+    dryrun sudo apt install mesa-utils mesa-vulkan-drivers vulkan-tools linux-firmware -y
     echo ""
     echo "✅ Vulkan support installed."
     echo ""
