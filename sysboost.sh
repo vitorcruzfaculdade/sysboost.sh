@@ -135,7 +135,7 @@ install_restricted_packages() {
   if confirm "🎵 Do you want to install multimedia support (ubuntu-restricted-extras & addons)?"; then
     echo ""
     echo "🎶 Installing ubuntu-restricted-extras, ubuntu-restricted-addons and extended GStreamer plugins..."
-    dryrun sudo apt install ubuntu-restricted-extras ubuntu-restricted-addons gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly gstreamer1.0-libav -y
+    dryrun sudo apt install ubuntu-restricted-extras ubuntu-restricted-addons gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly gstreamer1.0-libav libavcodec-extra -y
 
     if confirm "📽️ Do you also want to install GNOME Videos (Totem)?"; then
       echo ""
