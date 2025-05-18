@@ -361,7 +361,7 @@ install_chrome() {
         echo "🌐 Updating installation cache..."
         dryrun sudo apt update
         echo ""
-        echo "🌐 Adjusting 🧭 Google Chrome dependencies (if needed)..."
+        echo "📦 Adjusting 🧭 Google Chrome dependencies (if needed)..."
         dryrun sudo apt-get check
         dryrun sudo apt-get -f install
         echo ""
@@ -648,8 +648,7 @@ install_office() {
     local libre_installed=0
     local only_installed=0
 
-    # Detecting Office installs
-    # Detectiong LibreOffice install
+    # Detectiong LibreOffice / OnlyOffice install
     dpkg -l | grep -iq libreoffice && libre_installed=1
     # Detecting OnlyOffice install from a .deb source
     dpkg -l | grep -iq onlyoffice && only_installed=1
