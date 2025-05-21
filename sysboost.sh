@@ -5,7 +5,7 @@
 # License: GPL v3.0
 # Downloaded from https://github.com/vitorcruzfaculdade/sysboost.sh
 
-VERSION="1.7.63"
+VERSION="1.7.64"
 set -e
 
 ### Helper Functions ###
@@ -236,8 +236,62 @@ fi
     dryrun sudo sysctl -p /etc/sysctl.d/60-aslr.conf
     echo "🧠 ASLR enabled (runtime memory randomization)."
   fi
+  
+  # 6. Optional sysctl-based network hardening
+  echo ""
+  if confirm "🌐 Do you want to apply additional network hardening sysctl settings?"; then
 
-  # 6. Veryfing AppArmor Status
+    echo ""
+    if confirm "🛡️ Enable SYN cookies (protection against SYN flood attacks)?"; then
+      dryrun 'echo "net.ipv4.tcp_syncookies=1" | sudo tee -a /etc/sysctl.d/99-sysboost-network.conf > /dev/null'
+      echo "✅ SYN cookies enabled."
+    fi
+
+    echo ""
+    if confirm "🚫 Ignore all ICMP ping requests (echo)?"; then
+      dryrun 'echo "net.ipv4.icmp_echo_ignore_all=1" | sudo tee -a /etc/sysctl.d/99-sysboost-network.conf > /dev/null'
+      echo "✅ ICMP ping requests ignored."
+    fi
+
+    echo ""
+    if confirm "🚫 Disable source routing (prevent IP spoofing)?"; then
+      dryrun 'echo "net.ipv4.conf.all.accept_source_route=0" | sudo tee -a /etc/sysctl.d/99-sysboost-network.conf > /dev/null'
+      echo "✅ Source routing disabled."
+    fi
+
+    echo ""
+    if confirm "🔁 Enable reverse path filtering (anti-spoofing)?"; then
+      dryrun 'echo "net.ipv4.conf.all.rp_filter=1" | sudo tee -a /etc/sysctl.d/99-sysboost-network.conf > /dev/null'
+      echo "✅ Reverse path filtering enabled."
+    fi
+
+    echo ""
+    if confirm "📦 Tune TCP buffer sizes?"; then
+      dryrun 'echo "net.ipv4.tcp_rmem=4096 87380 16777216" | sudo tee -a /etc/sysctl.d/99-sysboost-network.conf > /dev/null'
+      dryrun 'echo "net.ipv4.tcp_wmem=4096 65536 16777216" | sudo tee -a /etc/sysctl.d/99-sysboost-network.conf > /dev/null'
+      echo "✅ TCP buffer sizes set."
+    fi
+
+    echo ""
+    if confirm "🔢 Set max number of incoming connections (somaxconn=1024)?"; then
+      dryrun 'echo "net.core.somaxconn=1024" | sudo tee -a /etc/sysctl.d/99-sysboost-network.conf > /dev/null'
+      echo "✅ Max number of connections configured."
+    fi
+
+    echo ""
+    if confirm "📵 Disable IPv6 on this system?"; then
+      dryrun 'echo "net.ipv6.conf.all.disable_ipv6=1" | sudo tee -a /etc/sysctl.d/99-sysboost-network.conf > /dev/null'
+      dryrun 'echo "net.ipv6.conf.default.disable_ipv6=1" | sudo tee -a /etc/sysctl.d/99-sysboost-network.conf > /dev/null'
+      dryrun 'echo "net.ipv6.conf.lo.disable_ipv6=1" | sudo tee -a /etc/sysctl.d/99-sysboost-network.conf > /dev/null'
+      echo "✅ IPv6 disabled."
+    fi
+
+    echo ""
+    dryrun sudo sysctl --system > /dev/null
+    echo "✅ Network sysctl hardening applied."
+  fi
+  
+  # 7. Veryfing AppArmor Status
   echo ""
   if confirm "🛡️ Do you want to check AppArmor status?"; then
     echo ""
