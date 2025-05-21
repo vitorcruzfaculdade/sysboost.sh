@@ -5,7 +5,7 @@
 # License: GPL v3.0
 # Downloaded from https://github.com/vitorcruzfaculdade/sysboost.sh
 
-VERSION="1.7.61"
+VERSION="1.7.63"
 set -e
 
 ### Helper Functions ###
@@ -168,7 +168,7 @@ if confirm "🎧 Do you want to install Spotify (Snap version)? Spotify is a pop
 fi    
 }
 
-disable_telemetry() {
+apply_hardening() {
   echo ""
   echo "🚫 Disabling telemetry and background reporting..."
   for service in apport whoopsie motd-news.timer; do
@@ -214,29 +214,30 @@ disable_telemetry() {
   }
 fi
 
+  # 3. Disable Avahi broadcasting
   echo ""
-  if confirm "🔒 Enable ASLR (Address Space Layout Randomization) by setting kernel.randomize_va_space=2 for increased memory security?"; then
-    dryrun 'echo "kernel.randomize_va_space = 2" | sudo tee -a /etc/sysctl.conf > /dev/null'
-    dryrun sudo sysctl -p
-    echo ""
-    echo "🧠 ASLR (Address Space Layout Randomization) enabled."
-  fi
-
-  echo ""
-  if confirm "🔒 Do you want to disable core dumps to improve security and privacy?"; then
-    dryrun sudo sysctl -w fs.suid_dumpable=0
-    dryrun 'echo "fs.suid_dumpable=0" | sudo tee /etc/sysctl.d/99-disable-coredump.conf > /dev/null'
-    echo ""
-    echo "🧠 Core dumps disabled."
-  fi
-
-  # Optional extra hardening
-  echo ""
-  if confirm "🔐 Do you want to disable Avahi (zeroconf/Bonjour/SSDP broadcasting)?"; then
+  if confirm "📡 Do you want to disable Avahi (zeroconf/Bonjour/SSDP broadcasting)?"; then
     dryrun sudo systemctl disable avahi-daemon.socket avahi-daemon.service --now
     echo "📡 Avahi broadcasting disabled."
   fi
 
+  # 4. Disable coredumps
+  echo ""
+  if confirm "🧠 Disable system coredumps (memory dumps)?"; then
+    dryrun 'echo "fs.suid_dumpable=0" | sudo tee /etc/sysctl.d/99-disable-coredump.conf > /dev/null'
+    dryrun sudo sysctl -p /etc/sysctl.d/99-disable-coredump.conf
+    echo "🧠 Coredumps disabled."
+  fi
+
+  # 5. Enable ASLR
+  echo ""
+  if confirm "🧠 Enable ASLR (Address Space Layout Randomization)?"; then
+    dryrun 'echo "kernel.randomize_va_space=2" | sudo tee /etc/sysctl.d/60-aslr.conf > /dev/null'
+    dryrun sudo sysctl -p /etc/sysctl.d/60-aslr.conf
+    echo "🧠 ASLR enabled (runtime memory randomization)."
+  fi
+
+  # 6. Veryfing AppArmor Status
   echo ""
   if confirm "🛡️ Do you want to check AppArmor status?"; then
     echo ""
@@ -244,7 +245,8 @@ fi
   fi
 
   echo ""
-  echo "✅ Additional optional hardening steps completed."
+  echo "✅ Harden complete — system hardened against common attack vectors."
+  echo ""
 }
 
 # Added code for checking and removing remote access servers
@@ -925,7 +927,7 @@ main() {
     case "$1" in
       --clean) full_cleanup ;;
       --update) update_system ;;
-      --harden) disable_telemetry; remove_remote_access_servers; setup_firewall ;;
+      --harden) apply_hardening; remove_remote_access_servers; setup_firewall ;;
       --vm) install_vm_tools ;;
       --gaming) install_gaming_tools ;;
       --trim) enable_trim ;;
@@ -944,7 +946,7 @@ main() {
       --all)
         full_cleanup
         update_system
-        disable_telemetry
+        apply_hardening
         remove_remote_access_servers
         setup_firewall
         install_flatpak_snap_store
