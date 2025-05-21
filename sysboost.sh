@@ -218,6 +218,7 @@ fi
   echo ""
   if confirm "📡 Do you want to disable Avahi (zeroconf/Bonjour/SSDP broadcasting)?"; then
     dryrun sudo systemctl disable avahi-daemon.socket avahi-daemon.service --now
+    echo ""
     echo "📡 Avahi broadcasting disabled."
   fi
 
@@ -226,6 +227,7 @@ fi
   if confirm "🧠 Disable system coredumps (memory dumps)?"; then
     dryrun 'echo "fs.suid_dumpable=0" | sudo tee /etc/sysctl.d/99-disable-coredump.conf > /dev/null'
     dryrun sudo sysctl -p /etc/sysctl.d/99-disable-coredump.conf
+    echo ""
     echo "🧠 Coredumps disabled."
   fi
 
@@ -234,6 +236,7 @@ fi
   if confirm "🧠 Enable ASLR (Address Space Layout Randomization)?"; then
     dryrun 'echo "kernel.randomize_va_space=2" | sudo tee /etc/sysctl.d/60-aslr.conf > /dev/null'
     dryrun sudo sysctl -p /etc/sysctl.d/60-aslr.conf
+    echo ""
     echo "🧠 ASLR enabled (runtime memory randomization)."
   fi
   
@@ -244,24 +247,28 @@ fi
     echo ""
     if confirm "🛡️ Enable SYN cookies (protection against SYN flood attacks)?"; then
       dryrun 'echo "net.ipv4.tcp_syncookies=1" | sudo tee -a /etc/sysctl.d/99-sysboost-network.conf > /dev/null'
+      echo ""
       echo "✅ SYN cookies enabled."
     fi
 
     echo ""
     if confirm "🚫 Ignore all ICMP ping requests (echo)?"; then
       dryrun 'echo "net.ipv4.icmp_echo_ignore_all=1" | sudo tee -a /etc/sysctl.d/99-sysboost-network.conf > /dev/null'
+      echo ""
       echo "✅ ICMP ping requests ignored."
     fi
 
     echo ""
     if confirm "🚫 Disable source routing (prevent IP spoofing)?"; then
       dryrun 'echo "net.ipv4.conf.all.accept_source_route=0" | sudo tee -a /etc/sysctl.d/99-sysboost-network.conf > /dev/null'
+      echo ""
       echo "✅ Source routing disabled."
     fi
 
     echo ""
     if confirm "🔁 Enable reverse path filtering (anti-spoofing)?"; then
       dryrun 'echo "net.ipv4.conf.all.rp_filter=1" | sudo tee -a /etc/sysctl.d/99-sysboost-network.conf > /dev/null'
+      echo ""
       echo "✅ Reverse path filtering enabled."
     fi
 
@@ -269,25 +276,32 @@ fi
     if confirm "📦 Tune TCP buffer sizes?"; then
       dryrun 'echo "net.ipv4.tcp_rmem=4096 87380 16777216" | sudo tee -a /etc/sysctl.d/99-sysboost-network.conf > /dev/null'
       dryrun 'echo "net.ipv4.tcp_wmem=4096 65536 16777216" | sudo tee -a /etc/sysctl.d/99-sysboost-network.conf > /dev/null'
+      echo ""
       echo "✅ TCP buffer sizes set."
     fi
 
     echo ""
     if confirm "🔢 Set max number of incoming connections (somaxconn=1024)?"; then
       dryrun 'echo "net.core.somaxconn=1024" | sudo tee -a /etc/sysctl.d/99-sysboost-network.conf > /dev/null'
+      echo ""
       echo "✅ Max number of connections configured."
     fi
 
     echo ""
     if confirm "📵 Disable IPv6 on this system?"; then
+      echo ""
       dryrun 'echo "net.ipv6.conf.all.disable_ipv6=1" | sudo tee -a /etc/sysctl.d/99-sysboost-network.conf > /dev/null'
+      echo ""
       dryrun 'echo "net.ipv6.conf.default.disable_ipv6=1" | sudo tee -a /etc/sysctl.d/99-sysboost-network.conf > /dev/null'
+      echo ""
       dryrun 'echo "net.ipv6.conf.lo.disable_ipv6=1" | sudo tee -a /etc/sysctl.d/99-sysboost-network.conf > /dev/null'
+      echo ""
       echo "✅ IPv6 disabled."
     fi
 
     echo ""
     dryrun sudo sysctl --system > /dev/null
+    echo ""
     echo "✅ Network sysctl hardening applied."
   fi
   
