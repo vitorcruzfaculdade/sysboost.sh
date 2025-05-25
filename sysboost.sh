@@ -5,7 +5,7 @@
 # License: GPL v3.0
 # Downloaded from https://github.com/vitorcruzfaculdade/sysboost.sh
 
-VERSION="1.7.64"
+VERSION="1.7.65"
 set -e
 
 ### Helper Functions ###
@@ -606,6 +606,41 @@ install_gaming_tools() {
     echo ""
     echo "✅ Steam installed from official .deb package (dependencies resolved)."
   fi
+
+  # 🔧 Performance sysctl tuning for gaming
+  echo ""
+  if confirm "⚙️ Apply system performance tuning for gaming (swappiness, dirty ratios)?"; then
+    dryrun 'echo "vm.swappiness=10" | sudo tee /etc/sysctl.d/90-gaming-performance.conf > /dev/null'
+    dryrun 'echo "vm.dirty_ratio=10" | sudo tee -a /etc/sysctl.d/90-gaming-performance.conf > /dev/null'
+    dryrun 'echo "vm.dirty_background_ratio=5" | sudo tee -a /etc/sysctl.d/90-gaming-performance.conf > /dev/null'
+    dryrun sudo sysctl --system > /dev/null
+    echo "✅ System memory tuned for low-latency gaming."
+  fi
+
+  # 🧹 Disable Tracker services (GNOME indexers)
+  echo ""
+  if confirm "🧹 Disable GNOME Tracker indexing services to reduce I/O during gaming?"; then
+    for svc in tracker-miner-fs tracker-store tracker-extract tracker-miner-apps; do
+      dryrun "systemctl --user mask $svc.service"
+    done
+    echo "✅ GNOME Tracker services disabled."
+  fi
+
+  # 🛑 Disable snap auto-refresh
+  echo ""
+  if confirm "📦 Disable Snap auto-refresh to avoid updates during gaming sessions?"; then
+    dryrun "sudo snap set system refresh.retain=2"
+    dryrun "sudo snap set system refresh.schedule=00:00-01:00"
+    echo "✅ Snap auto-refresh disabled during normal gaming hours."
+  fi
+
+  # 🔗 Create 'game' alias with MangoHUD and GameMode
+  echo ""
+  if confirm "🎯 Create a shell alias called 'game' that launches with GameMode + MangoHUD?"; then
+    dryrun 'echo "alias game=\'gamemoderun mangohud\'" >> ~/.bashrc'
+    dryrun 'echo "alias game=\'gamemoderun mangohud\'" >> ~/.zshrc'
+    echo "✅ Alias 'game' added. Use like: game ./MyGame"
+  fi  
 }
 
 install_vm_tools() {
