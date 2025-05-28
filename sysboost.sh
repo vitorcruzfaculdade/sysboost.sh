@@ -5,7 +5,7 @@
 # License: GPL v3.0
 # Downloaded from https://github.com/vitorcruzfaculdade/sysboost.sh
 
-VERSION="1.7.65"
+VERSION="1.7.66"
 set -e
 
 ### Helper Functions ###
