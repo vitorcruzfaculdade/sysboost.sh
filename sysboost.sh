@@ -616,31 +616,7 @@ install_gaming_tools() {
     dryrun sudo sysctl --system > /dev/null
     echo "✅ System memory tuned for low-latency gaming."
   fi
-
-  # 🧹 Disable Tracker services (GNOME indexers)
-  echo ""
-  if confirm "🧹 Disable GNOME Tracker indexing services to reduce I/O during gaming?"; then
-    for svc in tracker-miner-fs tracker-store tracker-extract tracker-miner-apps; do
-      dryrun "systemctl --user mask $svc.service"
-    done
-    echo "✅ GNOME Tracker services disabled."
-  fi
-
-  # 🛑 Disable snap auto-refresh
-  echo ""
-  if confirm "📦 Disable Snap auto-refresh to avoid updates during gaming sessions?"; then
-    dryrun "sudo snap set system refresh.retain=2"
-    dryrun "sudo snap set system refresh.schedule=00:00-01:00"
-    echo "✅ Snap auto-refresh disabled during normal gaming hours."
-  fi
-
-  # 🔗 Create 'game' alias with MangoHUD and GameMode
-  echo ""
-  if confirm "🎯 Create a shell alias called 'game' that launches with GameMode + MangoHUD?"; then
-    dryrun 'echo "alias game=\'gamemoderun mangohud\'" >> ~/.bashrc'
-    dryrun 'echo "alias game=\'gamemoderun mangohud\'" >> ~/.zshrc'
-    echo "✅ Alias 'game' added. Use like: game ./MyGame"
-  fi  
+  
 }
 
 install_vm_tools() {
