@@ -1,6 +1,6 @@
 # ⚡ sysboost.sh - Optimize. Harden. Upgrade. 🇺🇸
 
-**Version:** 1.7.61
+**Version:** 1.7.67
 **Author:** Vitor Cruz  
 **License:** GPL v3.0  
 **Scope:** Ubuntu 24.04+ (GNOME) — Laptops, Desktops & VMs  
@@ -76,12 +76,18 @@ chmod +x sysboost.sh
   --compression    Install zip, unzip, rar, unrar, 7z, xz-utils, bzip2, and lzma
   --preload        Detect RAM and hardware to suggest preload or configure ZRAM
   --remmina        Install Remmina with full plugin support (remote desktop client)
+  --sysadmin       ⚠️ Currently broken: exits with an error, installs nothing (see note below)
   --donate         Show donation options and author linktree
   --dryrun         Preview what each option will do (no actual changes)
   --all            Run all modules except --dryrun
   -v,  --version   Show current script version
   -h,  --help      Show help message
 ```
+
+> ⚠️ **Known issue (v1.7.67):** `--sysadmin` currently calls a function that does not exist (`setup_sysadmin_tools`).
+> The script stops with `setup_sysadmin_tools: command not found` (exit code 127): nothing is installed by this option,
+> and any options listed after it are not processed (options before it still run).
+> The sysadmin tools prompts (Remmina, htop, OpenSSH client, lftp, traceroute, mtr, whois, etc.) currently only run as part of `--all`.
 
 ## 🛡️ License
 This project is licensed under the GNU GPL v3.0.
