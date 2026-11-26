@@ -107,6 +107,6 @@ Want to support my work, check more tools, or donate?
 ## ⚠️ Disclaimer
 This script modifies system-level settings and installs packages.
 Use at your own risk. Always make a backup or snapshot beforehand.
-No guarantees — just results.
+No guarantees.
 
 ---
